@@ -1,0 +1,11 @@
+FROM nginx:alpine
+
+# Копируем конфигурацию
+COPY nginx-release.conf /etc/nginx/nginx.conf
+
+# Копируем статические файлы
+COPY static /usr/share/nginx/html
+
+# Устанавливаем права
+RUN chown -R nginx:nginx /usr/share/nginx/html
+

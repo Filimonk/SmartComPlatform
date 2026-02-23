@@ -1,0 +1,231 @@
+/* Основные стили для главной страницы */
+body {
+    margin: 0 0 20px;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f6f6f6;
+}
+
+.main-content {
+    padding: 0px 28px;
+}
+
+.content-box {
+    background: #f6f6f6;
+    /* background: #fff; */
+    border-radius: 30px;
+    padding: 24px 24px 0;
+    display: flex;
+    /* text-align: center; */
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    max-width: 1200px;
+    margin: 75px auto 0 auto;
+}
+
+/* Поле фильтров */
+.filters-box {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 208px;
+    height: 508px;
+    max-height: calc(100vh - 93px); /* Чтобы не выходил за экран */
+    overflow-y: auto;
+    background: white;
+    border-radius: 30px;
+    padding: 0 24px;
+    margin: -24px 20px 0 -24px; /* /////////// */
+    text-align: left;
+    position: fixed;
+}
+
+.filter {
+    margin-bottom: 10px;
+    padding-top: 12px;
+}
+
+.selected-option {
+    margin-left: 20px;
+    padding: 6px 8px;
+    background: #f5f7fa;
+    border-radius: 7px;
+}
+
+/* Сетка товаров */
+.products-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    justify-content: center;
+    margin-left: 252px;
+    margin: -24px -24px 0 256px; /* /////////// */
+}
+
+/* Карточка товара */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Область изображения */
+.product-image {
+    display: flex;
+    border-radius: 12px 12px 0 0;
+    min-height: 180px;
+    margin: 4px 4px 0;
+}
+
+.placeholder-image {
+    background: #f6f6f6;
+    width: 100%;
+    height: 160px;
+    padding: 0 0 20px;
+    border-radius: 12px 12px 0 0;
+    opacity: 0.7;
+}
+
+/* Детали товара */
+.product-details {
+    padding: 12px 10px 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.price {
+    color: #f1117e;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+}
+
+.seller-name {
+    color: #5c5c5c;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 2px 0 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+}
+
+.name {
+    font-size: 17px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    gap: 4px;
+    color: #000;
+    font-size: 16px;
+}
+
+.rating svg {
+    color: #ffa900;
+}
+
+/* Кнопка добавления в корзину */
+.add-to-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #005bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin: auto 10px 10px;
+    border-radius: 9px;
+}
+
+.add-to-cart:hover {
+    background: #1a6cff;
+}
+
+.add-to-cart svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Кнопка регулирования количества товара в корзине */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ebf7ff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin: auto 10px 10px;
+    border-radius: 9px;
+}
+
+.quantity-control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px; /* Размер кнопки */
+    height: 42px; /* Равный ширине для квадрата */
+    background: transparent; /* Прозрачный фон */
+    border: none; /* Убираем стандартную границу */
+    border-radius: 9px; /* Закругление как у внешнего контейнера */
+    color: #005bff; /* Синий цвет иконки */
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.quantity-control-btn:hover {
+    background: #d3e7ff; /* Легкая подсветка фона при наведении */
+}
+
+.quantity-control-btn:active {
+    transform: scale(0.95); /* Легкое сжатие при клике */
+}
+
+.quantity-control-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.quantity {
+    font-size: 16px;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+    color: #333;
+}
+

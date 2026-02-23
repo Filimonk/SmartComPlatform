@@ -1,0 +1,201 @@
+/* Основные стили для главной страницы */
+body {
+    margin: 0 0 20px;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f6f6f6;
+}
+
+.main-content {
+    padding: 0px 28px;
+}
+
+.cart-box {
+    padding: 0 24px;
+    margin: 75px auto 0 auto;
+    display: flex;
+    max-width: 1200px;
+    justify-content: right;
+}
+
+.cart-content-box {
+    margin: 0 370px 0 -24px;
+    padding: 0 18px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 508px;
+}
+
+.placeholder-text {
+    color: #666;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.create-order-box {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 370px;
+    height: 508px;
+    max-height: calc(100vh - 93px); /* Чтобы не выходил за экран */
+    overflow-y: auto;
+    background: white;
+    border-radius: 30px;
+    margin-right: -24px; /* /////////// */
+    position: fixed;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.button-box {
+    width: 100%;
+    align-self: stretch;
+}
+
+.button-box-content {
+    padding: 30px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #e0e6ef;
+}
+
+.create-order-button {
+    border-radius: 12px;
+    padding: 16px 24px;
+    width: 100%;
+    border-width: 0;
+    
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+}
+
+.create-order-button.enable {
+    cursor: pointer;
+    color: #fff;
+    background-color: #10c44c;
+}
+
+.create-order-button.enable:hover {
+    background-color: #28ca5e;
+}
+
+.create-order-button.disable {
+    color: #959698;
+    background-color: #f5f7fa;
+}
+
+.text-after-button {
+    margin-top: 12px;
+    color: #707F8D;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.cart-info-box {
+    width: 100%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.cart-info-box-content {
+    padding: 30px;
+    align-self: stretch;
+}
+
+.cart-info-box-line {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.first-header {
+    padding-bottom: 16px;
+}
+
+.first-header .left {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4em;
+}
+
+.first-header .right {
+    font-size: 14px;
+    line-height: 1.29em;
+    color: #707F8D;
+}
+
+.sum, .discount {
+    margin-bottom: 12px;
+}
+
+.sum .left, .discount .left {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.sum .right {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 700;
+}
+
+.discount .right {
+    color: #f1117e;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 700;
+}
+
+.finale-sum-with-card {
+    margin-top: 22px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #e0e6ef;
+    padding-top: 22px;
+}
+
+.finale-sum-with-card .left {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+}
+
+.finale-sum-with-card .right {
+    color: rgb(16, 196, 76);
+    text-decoration-line: ;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+}
+
+.finale-sum-without-card {
+    margin-top: 6px;
+    color: rgb(102, 118, 133);
+}
+
+.finale-sum-without-card .left {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 20px;
+}
+
+.finale-sum-without-card .right {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 20px;
+}
+

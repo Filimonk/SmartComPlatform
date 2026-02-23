@@ -1,0 +1,215 @@
+/* Основные стили шапки */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 28px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.header-container {
+    background: #fff;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Логотип */
+.logo {
+    width: 140px;
+    margin-right: 16px;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    height: 44px;
+    display: block;
+}
+
+.logo-text {
+    display: none;
+    color: #005bff;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.logo img.error {
+    display: none;
+}
+
+.logo img.error + .logo-text {
+    display: block;
+}
+
+/* Кнопка каталога */
+.catalog-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #005bff;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 20px;
+    transition: background-color 0.2s;
+    height: 24px;
+    
+    text-decoration: none;
+}
+
+.catalog-link:hover {
+    background-color: #1a6cff;
+}
+
+.catalog-link span {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+}
+
+/* Поиск */
+.search {
+    display: flex;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.search input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 2px solid #005bff;
+    border-right: none;
+    border-radius: 12px 0 0 12px;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-btn {
+    background-color: #005bff;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn svg {
+    width: 35px;
+    height: 20px;
+    fill: #e0eafb;
+}
+
+.search-btn:hover {
+    background-color: #1a6cff;
+}
+
+/* Навигация */
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    position: relative;
+    transition: color 0.3s;
+    
+    width: 64px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 14px;
+}
+
+.nav-item:hover {
+    color: #005bff;
+}
+
+.nav-item svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 2px;
+    stroke: #666;
+    transition: stroke 0.3s;
+}
+
+.nav-item:hover svg {
+    stroke: #005bff;
+}
+
+.nav-item.login span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    left: 45px;
+    background-color: #f1117e;
+    color: white;
+    border-radius: 10px;
+    padding: 0 6px; /* Убираем вертикальный padding */
+    font-size: 12px;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px; /* Важно: должно равняться height */
+    text-align: center;
+    box-sizing: border-box;
+    display: none;
+    /* Добавляем для точного выравнивания */
+    align-items: center;
+    justify-content: center;
+    font-weight: bold; /* Чуть жирнее для лучшей читаемости */
+}
+
+/* Для однозначных чисел делаем идеальный круг */
+.cart-count:not(.multi-digit) {
+    padding: 0; /* Убираем весь padding */
+    border-radius: 50%;
+}
+
+/* Для многозначных чисел */
+.cart-count.multi-digit {
+    padding: 0 6px; /* Только горизонтальный padding */
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.nav-item, .catalog-btn, .search {
+    animation: fadeIn 0.5s ease-in-out;
+}
+

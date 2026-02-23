@@ -1,0 +1,118 @@
+/* Основные стили для главной страницы */
+body {
+    margin: 0 0 20px;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f6f6f6;
+}
+
+.main-content {
+    padding: 0px 28px;
+}
+
+.content-box {
+    background: #fff;
+    border-radius: 30px;
+    padding: 0 24px 22px 24px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 75px auto 0 auto;
+}
+
+/* Заголовок профиля */
+.profile-header {
+    text-align: left;
+    padding: 20px 60px 10px;
+}
+
+.profile-header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.profile-header p {
+    font-size: 16px;
+    color: #666;
+    margin-top: 0;
+}
+
+/* Сообщение для неавторизованных */
+.auth-message {
+    text-align: left;
+    padding: 20px 60px;
+}
+
+.auth-message h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.auth-message p {
+    font-size: 16px;
+    color: #666;
+    margin-top: 0;
+}
+
+/* Статистика профиля */
+.profile-stats {
+    background: #fff;
+    padding: 0 24px 8px;
+    text-align: left;
+    max-width: 900px;
+    margin: 15px auto 30px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-section {
+    /* margin-bottom: 30px; */
+}
+
+.stats-section h2 {
+    font-size: 20px;
+    color: #000;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.stat-item {
+    margin: 12px 0;
+    padding: 0;
+    text-align: left;
+}
+
+.stat-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    padding-left: 0;
+}
+
+.stat-divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 15px 0;
+    width: 100%;
+}
+
+/* Ссылка выхода */
+.logout-link {
+    display: block;
+    text-align: center;
+    color: #005bff;
+    font-size: 16px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 30px;
+    padding: 10px 0;
+}
+
+.logout-link:hover {
+    color: #004ecc;
+}
+

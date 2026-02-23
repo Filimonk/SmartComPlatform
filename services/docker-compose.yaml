@@ -1,0 +1,75 @@
+services:
+  nginx:
+    profiles: ["debug"]
+    build:
+      context: ./nginx
+      target: debug
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx-debug.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/static:/usr/share/nginx/html:ro
+    networks:
+      - backend
+      
+  communicationservice:
+    profiles: ["debug"]
+    hostname: communicationservice
+    build:
+      context: ./communicationservice
+      target: debug
+      args:
+        - SERVICE_NAME=communicationservice
+        - USERVER_VERSION=v2.15
+    environment:
+      DB_CONNECTION: "postgresql://${communicationservice_DB_USER}:${communicationservice_DB_PASSWORD}@postgresql:5432/${communicationservice_DB_NAME}? \
+                      options=-c%20search_path%3D${communicationservice_DB_SCHEMA}"
+      HOME: /service
+      PREFIX: ${PREFIX:-~/.local}
+      CCACHE_DIR: /service/.ccache
+      CORES_DIR: /cores
+    security_opt:
+      - seccomp=./communicationservice/seccomp_config.json
+    command:
+      - ./run_as_user.sh
+      - "${UID}"
+      - "${GID}"
+      - sh
+      - -lc
+      - "PRESETS=deploy-debug make build-deploy-debug && \
+         ./build-deploy-debug/communicationservice \
+            --config configs/static_config.yaml \
+            --config_vars configs/config_vars.yaml"
+    volumes:
+      - ./communicationservice:/service:rw
+    networks:
+      - backend
+    depends_on:
+      # - nginx
+      - postgresql
+    ports:
+      - "8080"
+
+  postgresql:
+    profiles: ["debug"]
+    container_name: postgresql
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB} # Стандартная бд, которую лучше не использовать для консистентности 
+                                  # баз данных в сервисе (будем все используемые бд создавать миграциями)
+    volumes:
+      - ./postgresql/build:/docker-entrypoint-initdb.d
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports:
+      - "5432:5432" # только для дебаг версии
+
+networks:
+  backend:
+
+volumes:
+  postgresql_data:
+
