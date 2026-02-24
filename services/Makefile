@@ -42,7 +42,7 @@ down-clean-debug:
 down-clean: down-clean-debug
 
 # Перезапускаем сервис через переменную S=имя.
-restart-debug:
+restart-debug: collect-postgresql-migrations 
 	$(COMPOSE_DEBUG) up -d --force-recreate $(S)
 restart: restart-debug
 
@@ -56,6 +56,9 @@ ps-debug:
 	$(COMPOSE_DEBUG) ps
 ps: ps-debug
 
+# Очищаем postgres данные
+clean-pg:
+	sudo rm -rf postgresql/postgresql_data/
 
 .PHONY: up-release down-release logs-release ps-release
 
@@ -72,7 +75,7 @@ down-clean-release:
 	$(COMPOSE_RELEASE) down --remove-orphans -v
 
 # Перезапускаем сервис через переменную S=имя.
-restart-release:
+restart-release: collect-postgresql-migrations 
 	$(COMPOSE_RELEASE) up -d --force-recreate --build $(S)
 # Логи всех сервисов, или конкретного (через S=имя)
 logs-release:

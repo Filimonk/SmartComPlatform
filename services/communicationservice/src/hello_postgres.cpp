@@ -23,7 +23,7 @@ std::string HelloPostgres::
     if (!name.empty()) {
         const auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO hello_schema.users(name, count) VALUES($1, 1) "
+            "INSERT INTO communicationservice_schema.users(name, count) VALUES($1, 1) "
             "ON CONFLICT (name) "
             "DO UPDATE SET count = users.count + 1 "
             "RETURNING users.count",

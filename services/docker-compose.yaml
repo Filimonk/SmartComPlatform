@@ -22,7 +22,8 @@ services:
         - SERVICE_NAME=communicationservice
         - USERVER_VERSION=v2.15
     environment:
-      DB_CONNECTION: "postgresql://${communicationservice_DB_USER}:${communicationservice_DB_PASSWORD}@postgresql:5432/${communicationservice_DB_NAME}? \
+      # здесь ?\ без пробела, так слипается в цельную строку ?options , что ТРЕБУЕТСЯ
+      DB_CONNECTION: "postgresql://${communicationservice_DB_USER}:${communicationservice_DB_PASSWORD}@postgresql:5432/${communicationservice_DB_NAME}?\
                       options=-c%20search_path%3D${communicationservice_DB_SCHEMA}"
       HOME: /service
       PREFIX: ${PREFIX:-~/.local}
@@ -61,7 +62,7 @@ services:
                                   # баз данных в сервисе (будем все используемые бд создавать миграциями)
     volumes:
       - ./postgresql/build:/docker-entrypoint-initdb.d
-      - postgresql_data:/var/lib/postgresql/data
+      - ./postgresql/postgresql_data:/var/lib/postgresql/data
     networks:
       - backend
     ports:

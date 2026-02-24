@@ -1,4 +1,5 @@
 *.swp
 build*
 .env
+postgresql_db/
 

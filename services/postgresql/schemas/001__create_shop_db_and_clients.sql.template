@@ -1,0 +1,18 @@
+-- Создаем БД с владельцем postgres
+CREATE DATABASE ${MAIN_DB_NAME} OWNER ${POSTGRES_USER};
+
+-- Дальше все действия выполняем в новой БД
+\connect ${MAIN_DB_NAME}
+
+-- Создаем пользователей для сервисов, схемы для них и выдаем права владельцев
+CREATE USER ${communicationservice_DB_USER} WITH PASSWORD '${communicationservice_DB_PASSWORD}';
+CREATE SCHEMA IF NOT EXISTS ${communicationservice_DB_SCHEMA};
+
+-- Раздаем пользователям права на подключение и работу с БД
+GRANT CONNECT ON DATABASE ${communicationservice_DB_NAME} TO ${communicationservice_DB_USER};
+GRANT USAGE ON SCHEMA ${communicationservice_DB_SCHEMA} TO ${communicationservice_DB_USER};
+ALTER DEFAULT PRIVILEGES IN SCHEMA ${communicationservice_DB_SCHEMA} GRANT
+          SELECT, INSERT, UPDATE, DELETE ON TABLES TO ${communicationservice_DB_USER};
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA ${communicationservice_DB_SCHEMA} TO ${communicationservice_DB_USER};
+ALTER DEFAULT PRIVILEGES IN SCHEMA ${communicationservice_DB_SCHEMA} GRANT USAGE, SELECT ON SEQUENCES TO ${communicationservice_DB_USER};
+
