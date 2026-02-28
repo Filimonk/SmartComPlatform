@@ -1,0 +1,35 @@
+openapi: 3.0.0
+info:
+  title: Model Postgres Service
+  version: 1.0.0
+
+paths:
+  /v1/children:
+    post:
+      summary: Create child
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas.yaml#/components/schemas/CreateChildRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/components/schemas/ChildResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+        '422':
+          description: Business rule violation
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+

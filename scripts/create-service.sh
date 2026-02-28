@@ -90,14 +90,14 @@ echo "Официальный скрипт сгенерировал шаблон 
 
 # Добавление кастомных файлов
 TARGET_DIR="$CURRENT_DIR/$SERVICE_NAME"
-CUSTOM_FILES="$REPO_ROOT/devtools/service-files"
+CUSTOM_FILES="$REPO_ROOT/scripts/model_service_files"
 if [[ -d "$CUSTOM_FILES" ]]; then
     echo "Добавление кастомных файлов"
     cp -r "$CUSTOM_FILES"/. "$TARGET_DIR/"
 
     # Замена плейсхолдеров в кастомных файлах
-    # find "$TARGET_DIR" -type f -exec sed -i "s/{{SERVICE_NAME}}/$SERVICE_NAME/g" {} \;
-    echo "Кастомные файлы добавлены" # и обработаны"
+    find "$TARGET_DIR" -type f -exec sed -i "s/model_postgres_service/$SERVICE_NAME/g" {} \;
+    echo "Кастомные файлы добавлены и обработаны"
 fi
 
 echo ""
