@@ -31,14 +31,17 @@ services:
       CORES_DIR: /cores
     security_opt:
       - seccomp=./communicationservice/seccomp_config.json
+    # dns:
+      # - 8.8.8.8
+      # - 8.8.4.4
     command:
       - ./run_as_user.sh
       - "${UID}"
       - "${GID}"
       - sh
       - -lc
-      - "PRESETS=deploy-debug make build-deploy-debug && \
-         ./build-deploy-debug/communicationservice \
+      - "make build-debug-custom && \
+         ./build-debug-custom/communicationservice \
             --config configs/static_config.yaml \
             --config_vars configs/config_vars.yaml"
     volumes:

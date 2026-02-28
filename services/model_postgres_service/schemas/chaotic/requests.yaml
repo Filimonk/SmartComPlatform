@@ -1,0 +1,11 @@
+components:
+  schemas:
+    GreetingRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Имя для приветствия
+

@@ -1,0 +1,9 @@
+components:
+  schemas:
+    GreetingResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Текст приветствия
+
