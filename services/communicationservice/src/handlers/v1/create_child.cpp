@@ -6,15 +6,15 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include <model_postgres_service/sql_queries.hpp>
+#include <communicationservice/sql_queries.hpp>
 #include <schemas/api/v1/components/errors.hpp>
 #include <schemas/api/v1/components/schemas.hpp>
 
 #include <userver/server/handlers/exceptions.hpp>
 
-namespace dto = model_postgres_service::dto;
+namespace dto = communicationservice::dto;
 
-namespace model_postgres_service::handlers::v1 {
+namespace communicationservice::handlers::v1 {
 
 using userver::formats::json::ValueBuilder;
 
@@ -43,7 +43,7 @@ auto CreateChild::HandleRequestJsonThrow(
     }
 
     auto result = pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                                       model_postgres_service::sql::kInsertChild, request_dto.name,
+                                       communicationservice::sql::kInsertChild, request_dto.name,
                                        request_dto.age);
 
     const int id = result.AsSingleRow<int>();
@@ -55,4 +55,4 @@ auto CreateChild::HandleRequestJsonThrow(
     return ValueBuilder{response}.ExtractValue();
 }
 
-} // namespace model_postgres_service::handlers::v1
+} // namespace communicationservice::handlers::v1

@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
             .Append<userver::server::handlers::TestsControl>()
             .Append<userver::congestion_control::Component>()
             .Append<userver::components::Postgres>("postgres-db")
-            .Append<model_postgres_service::handlers::v1::CreateChild>();
+            .Append<communicationservice::handlers::v1::CreateChild>();
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

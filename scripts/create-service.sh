@@ -29,14 +29,6 @@ if [[ "$CURRENT_DIR" != "$REQUIRED_DIR" ]]; then
     exit 1
 fi
 
-# Если среди аргументов есть -h или --help - пробрасываем напрямую
-for arg in "$@"; do
-    if [[ "$arg" == "-h" || "$arg" == "--help" ]]; then
-        userver-create-service "$@"
-        exit 0
-    fi
-done
-
 # Определяем имя сервиса (единственный аргумент без префикса "-")
 SERVICE_NAME=""
 for arg in "$@"; do
@@ -78,6 +70,14 @@ while true; do
 done
 echo "Вы ввели: $VERSION"
 
+# Если среди аргументов есть -h или --help - пробрасываем напрямую
+for arg in "$@"; do
+    if [[ "$arg" == "-h" || "$arg" == "--help" ]]; then
+        userver-create-service "$@"
+        exit 0
+    fi
+done
+
 # Генерация шаблона сервиса
 echo "Генерация шаблона сервиса '$SERVICE_NAME' через официальный скрипт:"
 echo ""
@@ -93,7 +93,10 @@ TARGET_DIR="$CURRENT_DIR/$SERVICE_NAME"
 CUSTOM_FILES="$REPO_ROOT/scripts/model_service_files"
 if [[ -d "$CUSTOM_FILES" ]]; then
     echo "Добавление кастомных файлов"
-    cp -r "$CUSTOM_FILES"/. "$TARGET_DIR/"
+    # cp -rf "$CUSTOM_FILES"/. "$TARGET_DIR/"
+    # sudo rsync -a --delete "$CUSTOM_FILES"/. "$TARGET_DIR"/
+    sudo rsync -a --delete --filter="protect /*" "$CUSTOM_FILES"/ "$TARGET_DIR"/
+
 
     # Замена плейсхолдеров в кастомных файлах
     find "$TARGET_DIR" -type f -exec sed -i "s/model_postgres_service/$SERVICE_NAME/g" {} \;

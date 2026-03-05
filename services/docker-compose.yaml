@@ -11,6 +11,9 @@ services:
       - ./nginx/static:/usr/share/nginx/html:ro
     networks:
       - backend
+    depends_on:
+      - authservice
+      - communicationservice
       
   communicationservice:
     profiles: ["debug"]
@@ -22,7 +25,7 @@ services:
         - SERVICE_NAME=communicationservice
         - USERVER_VERSION=v2.15
     environment:
-      # здесь ?\ без пробела, так слипается в цельную строку ?options , что ТРЕБУЕТСЯ
+      # здесь "?\" без пробела, так слипается в цельную строку ?options , что ТРЕБУЕТСЯ
       DB_CONNECTION: "postgresql://${communicationservice_DB_USER}:${communicationservice_DB_PASSWORD}@postgresql:5432/${communicationservice_DB_NAME}?\
                       options=-c%20search_path%3D${communicationservice_DB_SCHEMA}"
       HOME: /service
@@ -31,9 +34,6 @@ services:
       CORES_DIR: /cores
     security_opt:
       - seccomp=./communicationservice/seccomp_config.json
-    # dns:
-      # - 8.8.8.8
-      # - 8.8.4.4
     command:
       - ./run_as_user.sh
       - "${UID}"
@@ -49,7 +49,44 @@ services:
     networks:
       - backend
     depends_on:
-      # - nginx
+      - postgresql
+    ports:
+      - "8080"
+      
+  authservice:
+    profiles: ["debug"]
+    hostname: authservice
+    build:
+      context: ./authservice
+      target: debug
+      args:
+        - SERVICE_NAME=authservice
+        - USERVER_VERSION=v2.15
+    environment:
+      # здесь "?\" без пробела, так слипается в цельную строку ?options , что ТРЕБУЕТСЯ
+      DB_CONNECTION: "postgresql://${AUTH_DB_USER}:${AUTH_DB_PASSWORD}@postgresql:5432/${AUTH_DB_NAME}?\
+                      options=-c%20search_path%3D${AUTH_DB_SCHEMA}"
+      HOME: /service
+      PREFIX: ${PREFIX:-~/.local}
+      CCACHE_DIR: /service/.ccache
+      CORES_DIR: /cores
+    security_opt:
+      - seccomp=./authservice/seccomp_config.json
+    command:
+      - ./run_as_user.sh
+      - "${UID}"
+      - "${GID}"
+      - sh
+      - -lc
+      - "make build-debug-custom && \
+         ./build-debug-custom/authservice \
+            --config configs/static_config.yaml \
+            --config_vars configs/config_vars.yaml"
+    volumes:
+      - ./authservice:/service:rw
+    networks:
+      - backend
+    depends_on:
       - postgresql
     ports:
       - "8080"

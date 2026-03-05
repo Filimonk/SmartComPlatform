@@ -1,1 +1,2 @@
-FROM ngignx:latest as debug
+FROM nginx:alpine as debug
+

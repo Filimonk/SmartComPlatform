@@ -5,7 +5,7 @@
 
 #include <userver/storages/postgres/cluster.hpp>
 
-namespace model_postgres_service::handlers::v1 {
+namespace communicationservice::handlers::v1 {
 
 class CreateChild final
     : public userver::server::handlers::HttpHandlerJsonBase {

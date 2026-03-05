@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>AuraConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: #FAFAFA;
+}
+
+/* ===== TOP BAR ===== */
+
+.topbar {
+  height: 54px;
+  background: #fff;
+  border-bottom: 1px solid #B8B8B8;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  font-weight: 900;
+  font-size: 18px;
+  color: #006AFF;
+}
+
+/* ===== LAYOUT ===== */
+
+.app {
+  display: flex;
+  height: calc(100% - 54px);
+}
+
+/* left navigation */
+
+.nav {
+  width: 210px;
+  background: #fff;
+  border-right: 1px solid #B8B8B8;
+  padding: 20px;
+}
+
+/* call control */
+
+.call-panel {
+  width: 315px;
+  padding: 10px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+/* center chat */
+
+.chat {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+}
+
+.chat-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #E5E5E5;
+  font-weight: 600;
+}
+
+.chat-body {
+  flex: 1;
+}
+
+.chat-footer {
+  border-top: 1px solid #E5E5E5;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.message-input {
+  flex: 1;
+  height: 40px;
+  border: 1px solid #B8B8B8;
+  border-radius: 7px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.send-btn {
+  width: 110px;
+  height: 40px;
+  background: #006AFF;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* right profile */
+
+.profile {
+  width: 315px;
+  padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="logo">AuraConnect</div>
+</div>
+
+<div class="app">
+
+  <div class="nav">
+    <div><b>Основное</b></div>
+    <div style="margin-top:10px;">Рабочий стол</div>
+    <div>История</div>
+    <div>Задачи</div>
+  </div>
+
+  <div class="call-panel">
+    <div class="card">
+      <b>Управление звонком</b>
+    </div>
+    <div class="card">
+      <b>Создание задачи</b>
+    </div>
+  </div>
+
+  <div class="chat">
+    <div class="chat-card">
+      <div class="chat-header">
+        Омниканальный чат
+      </div>
+
+      <div class="chat-body"></div>
+
+      <div class="chat-footer">
+        <input id="message" class="message-input" placeholder="Введите сообщение..." />
+        <button class="send-btn" onclick="sendSMS()">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile">
+    <div class="card">
+      <b>Петровна Мария</b>
+      <div style="margin-top:5px; font-size:13px; color:#666;">
+        +7 (999) 123-45-67
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function sendSMS() {
+  const text = document.getElementById("message").value;
+
+  if (!text) {
+    alert("Введите текст");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:32770/hello?text=${encodeURIComponent(text)}`,
+      { method: "GET" }
+    );
+
+    const result = await response.text();
+  } catch (err) {
+  }
+}
+</script>
+
+</body>
+</html>
+
