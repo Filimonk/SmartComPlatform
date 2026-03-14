@@ -255,7 +255,6 @@ a {
     padding: 3px 0px;
     gap: 2px;
 
-    width: 0;
     height: fit-content;
     overflow-x: scroll;
     
@@ -267,8 +266,9 @@ a {
 
 
     /* Inside auto layout */
-    flex: 1;
+    flex: none;
     order: 0;
+    flex-basis: 0%;
     flex-grow: 1;
 }
 

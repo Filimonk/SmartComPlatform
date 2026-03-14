@@ -1,0 +1,23 @@
+/* sidebar */
+
+.sidebar {
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    width: var(--width-sidebar);
+    height: 100%;
+
+    background: var(--color-window);
+    border-right: 1px solid var(--color-border);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+

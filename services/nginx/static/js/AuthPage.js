@@ -170,7 +170,7 @@ class AuthPage {
                     ? 'Вход выполнен успешно!\nВаша сессия активна в течение 5 минут.'
                     : 'Регистрация прошла успешно!'
             );
-            window.location.reload(); // или редирект на главную
+            window.location.href = '/index.html'; // или редирект на главную
 
         } catch (error) {
             if (error.response && error.response.data) {
