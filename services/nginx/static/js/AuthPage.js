@@ -1,3 +1,28 @@
+function showPage() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('visible');
+        });
+    } else {
+        document.body.classList.add('visible');
+    }
+}
+
+if (getToken()) {
+    // Есть токен – проверяем его
+    (async () => {
+        // const isValid = await checkToken(); // true – валиден, false – нет
+        const isValid = true;
+        if (isValid) {
+            window.location.href = '/';
+        } else {
+            showPage();
+        }
+    })();
+} else {
+    showPage();
+}
+
 class AuthPage {
     constructor() {
         this.isLoginMode = true; // true — вход, false — регистрация
@@ -164,7 +189,7 @@ class AuthPage {
 
             // Успех
             const data = response.data;
-            localStorage.setItem('jwt_token', data.token);
+            setToken(data.token, true);
             alert(
                 this.isLoginMode
                     ? 'Вход выполнен успешно!\nВаша сессия активна в течение 5 минут.'

@@ -474,38 +474,57 @@
 
 /* chat_input_field */
 .chat_input_field {
-    /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    /* Убираем стандартный resize */
+    resize: none;
+
+    /* Важно: box-sizing: border-box, чтобы padding не увеличивал общую высоту */
+    box-sizing: border-box;
+
+    /* Начальные размеры и ограничения */
+    width: 100%;
+    min-height: 41px;      /* 12px padding сверху/снизу + 16px line-height = 40, чуть с запасом */
+    max-height: 200px;     /* Чтобы слишком не расползалось */
+    height: auto;          /* Будет управляться скриптом */
+
+    /* Оформление как у вас */
     padding: 12px 10px;
-    gap: 10px;
-
-    height: fit-content;
-
     background: var(--color-window);
     border: 1px solid rgba(184, 184, 184, 0.8);
     border-radius: 7px;
 
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 1;
-}
-
-.chat_input_field p {
+    /* Шрифт */
     font-family: var(--font-default);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 16px;
-
+    font-size: 12px;
+    line-height: 15px;
     color: var(--color-text);
 
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    /* Скрываем полосу прокрутки, если она появляется */
+    overflow-y: auto;
+
+    /* Для flex-родителя */
+    flex: 1;
+}
+
+.chat_input_field:disabled {
+  background-color: #f5f5f5; /* Серый фон */
+  color: #999;               /* Бледный текст */
+  border-color: #ddd;        /* Тусклая рамка */
+  cursor: default;
+  resize: none;              /* Запрещаем менять размер, если это было разрешено */
+}
+
+.chat_input_field:not(:disabled, :focus):hover {
+    border-color: #aaa;
+}
+
+.chat_input_field:focus {
+    border-color: var(--color-brand-primary);
+    outline: none;
+}
+
+/* Стили для плейсхолдера */
+.chat_input_field::placeholder {
+    color: var(--color-text-placeholder, #aaa);
 }
 
 /* chat_send_button */
@@ -529,6 +548,18 @@
     flex: none;
     order: 1;
     flex-grow: 0;
+}
+
+.chat_send_button:hover {
+    background-color: var(--color-brand-hover);
+    cursor: pointer;
+}
+
+.chat_send_button:disabled {
+  background-color: #ccc;   /* Серый цвет */
+  color: #666;              /* Тусклый текст */
+  cursor: default;
+  opacity: 0.6;             /* Полупрозрачность */
 }
 
 .chat_send_button p {

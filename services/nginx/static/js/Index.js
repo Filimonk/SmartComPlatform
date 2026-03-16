@@ -4,6 +4,11 @@ document.getElementById('logout')
         window.location.href = '/auth.html';
     });
 
+document.getElementById('workspace')
+    .addEventListener('click', () => {
+        window.location.href = '/workspace.html';
+    });
+
 async function loadProfile() {
     try {
         const response = await api.get('/communicationservice/ping');

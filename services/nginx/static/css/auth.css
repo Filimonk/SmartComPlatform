@@ -34,6 +34,13 @@ body {
     
     position: relative;
     height: 100vh;
+
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+
+body.visible {
+    opacity: 1; /* Возвращаем отображение body после проверки */
     background: linear-gradient(180deg, var(--color-background) 0%, #cccccc 100%);
 }
 
@@ -340,7 +347,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 32px 5px 0px;
-    gap: none; /* we set it in child margin-top property */
+    gap: 0;
 
     width: 100%;
     height: fit-content;
