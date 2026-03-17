@@ -22,7 +22,10 @@ $(addsuffix /CMakeCache.txt, $(addprefix build-, $(PRESETS))): build-%/CMakeCach
 .PHONY: $(addprefix build-, $(PRESETS))
 $(addprefix build-, $(PRESETS)): build-%: build-%/CMakeCache.txt
 	cmake --build build-$* -j $(NPROCS) --target $(PROJECT_NAME)
-	ln -s -f build-$* build
+	@if [ "$*" = "debug" ] || [ "$*" = "release" ]; then \
+		rm -rf build; \
+		ln -s -f build-$* build; \
+	fi
 
 # Test
 .PHONY: $(addprefix test-, $(PRESETS))

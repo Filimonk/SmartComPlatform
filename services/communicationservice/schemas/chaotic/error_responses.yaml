@@ -1,9 +1,0 @@
-components:
-  schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Описание ошибки
-

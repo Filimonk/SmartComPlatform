@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12...3.31)
-project(model_postgres_service CXX)
+project(communicationservice CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(DownloadUserver)
@@ -26,7 +26,7 @@ file(GLOB_RECURSE API_SCHEMAS
 userver_target_generate_chaotic(
     ${PROJECT_NAME}-chgen
     GENERATE_SERIALIZERS
-    LAYOUT "/components/schemas/([^/]*)/=model_postgres_service::dto::{0}"
+    LAYOUT "/components/schemas/([^/]*)/=communicationservice::dto::{0}"
     OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/chaotic
     SCHEMAS ${API_SCHEMAS}
     RELATIVE_TO ${CMAKE_CURRENT_SOURCE_DIR}
@@ -36,7 +36,7 @@ userver_target_generate_chaotic(
 userver_add_sql_library(
     ${PROJECT_NAME}_sql
     NAMESPACE
-    model_postgres_service
+    communicationservice
     SOURCE_DIR
     postgresql/queries
     OUTPUT_DIR
@@ -45,9 +45,8 @@ userver_add_sql_library(
     *.sql
 )
 
-# Common sources
-include_directories(src)
 
+# Service objs
 add_library(
     ${PROJECT_NAME}_objs OBJECT
     src/handlers/v1/create_child.cpp
@@ -65,9 +64,6 @@ target_link_libraries(
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
-target_include_directories(${PROJECT_NAME}
-    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/chaotic
-)
 
 # # Unit Tests
 # add_executable(${PROJECT_NAME}_unittest src/greeting_test.cpp)
