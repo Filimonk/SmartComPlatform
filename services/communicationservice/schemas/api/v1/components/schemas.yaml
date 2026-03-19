@@ -1,29 +1,23 @@
 components:
   schemas:
 
-    CreateChildRequest:
+    SendSmsRequest:
       type: object
       required:
-        - name
-        - age
+        - chatId
+        - text
       properties:
-        name:
+        chatId:
           type: string
-        age:
-          type: integer
-          minimum: 0
+        text:
+          type: string
 
-    ChildResponse:
+    SendSmsResponse:
       type: object
       required:
-        - id
-        - name
-        - age
+        - jobId
       properties:
-        id:
-          type: integer
-        name:
+        jobId:
           type: string
-        age:
-          type: integer
+          format: uuid
 

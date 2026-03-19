@@ -1,5 +1,10 @@
 class Desktop {
     constructor(chatId) {
+        this.API_ROUTES = {
+            sms: "/v1/send/sms",
+        };
+        this.sendChannel = "sms";
+        
         this.chatTextArea = document.querySelector('.chat_input_field');
         this.chatSendButton = document.querySelector('.chat_send_button');
         
@@ -7,7 +12,6 @@ class Desktop {
         
         this.tokenIdempotency;
         this.updateTokenIdempotency();
-        this.sendCanal = "sms";
 
         this.init();
     }
@@ -75,7 +79,7 @@ class Desktop {
                 text: this.chatTextArea.value,
             };
             
-            const response = await postWithIdempotency("/communicationservice/send/" + this.sendCanal, payload, this.tokenIdempotency);
+            const response = await postWithIdempotency("/communicationservice" + this.API_ROUTES[this.sendChannel], payload, this.tokenIdempotency);
             
             console.log("Response data:", response);
             this.setTextItemValue(this.chatTextArea, "");
@@ -90,7 +94,7 @@ class Desktop {
             } else if (e.request) {
                 console.log("Conection error");
                 
-                this.showAlert("Связь прервалась. Не удалось подтвердить отправку. Проверьте историю чуть позже и попробуйте еще раз");
+                this.showAlert("Связь прервалась. Не удалось подтвердить отправку. Проверьте историю чуть позже, затем попробуйте еще раз");
             } else {
                 console.log("Error of message forming");
                 

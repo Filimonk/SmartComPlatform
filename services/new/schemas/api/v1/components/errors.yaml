@@ -1,0 +1,21 @@
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      enum:
+        - AGE_TOO_BIG
+        - CHILD_NOT_FOUND
+        - INVALID_NAME
+        - INTERNAL_ERROR
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+

@@ -4,30 +4,54 @@ info:
   version: 1.0.0
 
 paths:
-  /v1/children:
+  /v1/send/sms:
     post:
-      summary: Create child
+      summary: Take the message and send it to the chat by chatId
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/components/schemas/CreateChildRequest'
+              $ref: './components/schemas.yaml#/components/schemas/SendSmsRequest'
       responses:
-        '201':
-          description: Created
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/components/schemas/ChildResponse'
+                $ref: './components/schemas.yaml#/components/schemas/SendSmsResponse'
         '400':
-          description: Validation error
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
                 $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
         '422':
-          description: Business rule violation
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
           content:
             application/json:
               schema:

@@ -5,3 +5,6 @@ AllowShortFunctionsOnASingleLine: Empty
 DerivePointerAlignment: false
 PointerAlignment: Left
 
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtEOF: false
+

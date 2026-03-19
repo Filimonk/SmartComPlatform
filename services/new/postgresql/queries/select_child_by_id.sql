@@ -2,6 +2,6 @@
 -- param: $1 id int
 
 SELECT id, name, age
-FROM communicationservice_schema.children
+FROM new_schema.children
 WHERE id = $1;
 

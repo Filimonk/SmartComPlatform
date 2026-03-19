@@ -50,9 +50,9 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-v1-SendSms:
-            path: /v1/send/sms
-            method: POST
+        handler-CreateChild:
+            path: /v1/children
+            method: GET,POST
             task_processor: main-task-processor
 
         postgres-db:

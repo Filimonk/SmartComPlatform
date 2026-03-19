@@ -49,7 +49,7 @@ userver_add_sql_library(
 # Service objs
 add_library(
     ${PROJECT_NAME}_objs OBJECT
-    src/handlers/v1/SendSms.cpp
+    src/handlers/v1/create_child.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs
