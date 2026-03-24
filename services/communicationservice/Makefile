@@ -66,6 +66,15 @@ format:
 	find src -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
 	find tests -name '*.py' -type f | xargs autopep8 -i
 
+# Generate chaotic code (schemas and SQL)
+.PHONY: codegen
+codegen:
+	@if [ ! -f build/CMakeCache.txt ]; then \
+		echo "CMake cache not found. Running cmake with default preset (debug)..." ; \
+		$(MAKE) cmake-debug ; \
+	fi
+	cmake --build build --target $(PROJECT_NAME)-chgen $(PROJECT_NAME)_sql
+
 # Start targets makefile in docker wrapper.
 # The docker mounts the whole service's source directory,
 # so you can do some stuff as you wish, switch back to host (non-docker) system

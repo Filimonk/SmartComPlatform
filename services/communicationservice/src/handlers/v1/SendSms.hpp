@@ -3,6 +3,8 @@
 #include <userver/components/component.hpp>
 #include <userver/server/handlers/http_handler_json_base.hpp>
 
+#include <userver/clients/http/client.hpp>
+
 #include <userver/storages/postgres/cluster.hpp>
 
 namespace communicationservice::handlers::v1 {
@@ -20,6 +22,7 @@ public:
         userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value override;
 
 private:
+    userver::clients::http::Client& http_client_;
     userver::storages::postgres::ClusterPtr pg_cluster_;
 };
 

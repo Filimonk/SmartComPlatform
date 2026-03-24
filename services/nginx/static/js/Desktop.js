@@ -1,5 +1,5 @@
 class Desktop {
-    constructor(chatId) {
+    constructor(contactId) {
         this.API_ROUTES = {
             sms: "/v1/send/sms",
         };
@@ -8,7 +8,7 @@ class Desktop {
         this.chatTextArea = document.querySelector('.chat_input_field');
         this.chatSendButton = document.querySelector('.chat_send_button');
         
-        this._chatId = chatId;
+        this._contactId = contactId;
         
         this.tokenIdempotency;
         this.updateTokenIdempotency();
@@ -75,7 +75,8 @@ class Desktop {
 
         try {
             const payload = {
-                chatId: this._chatId,
+                contactId: this._contactId,
+                channel: this.sendChannel,
                 text: this.chatTextArea.value,
             };
             
@@ -116,6 +117,6 @@ class Desktop {
 
 // Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
-    new Desktop(515);
+    new Desktop("f47ac10b-58cc-4372-a567-0e02b2c3d479");
 });
 

@@ -4,10 +4,14 @@ components:
     SendSmsRequest:
       type: object
       required:
-        - chatId
+        - contactId
+        - channel
         - text
       properties:
-        chatId:
+        contactId:
+          type: string
+          format: uuid
+        channel:
           type: string
         text:
           type: string

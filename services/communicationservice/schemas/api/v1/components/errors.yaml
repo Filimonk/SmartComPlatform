@@ -3,9 +3,9 @@ components:
     ErrorCode:
       type: string
       enum:
-        - AGE_TOO_BIG
-        - CHILD_NOT_FOUND
-        - INVALID_NAME
+        - MISSING_TEXT
+        - INVALID_REQUEST_FORMAT
+        - FOREIGN_KEY_VIOLATION
         - INTERNAL_ERROR
 
     ErrorResponse:
