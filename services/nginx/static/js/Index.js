@@ -10,12 +10,6 @@ document.getElementById('workspace')
     });
 
 async function loadProfile() {
-    try {
-        const response = await api.get('/communicationservice/ping');
-        console.log(response.data);
-    } catch (e) {
-        console.error(e);
-    }
 }
 
 loadProfile();

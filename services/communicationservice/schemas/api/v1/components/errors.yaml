@@ -3,6 +3,9 @@ components:
     ErrorCode:
       type: string
       enum:
+        - MISSING_IDEMPOTENCY_TOKEN_HEADER
+        - MISSING_AUTHORIZATION_TOKEN_HEADER
+        - INVALID_AUTHORIZATION_TOKEN
         - MISSING_TEXT
         - INVALID_REQUEST_FORMAT
         - FOREIGN_KEY_VIOLATION

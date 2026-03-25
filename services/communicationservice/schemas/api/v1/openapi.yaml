@@ -6,54 +6,120 @@ info:
 paths:
   /v1/send/sms:
     post:
-      summary: Take the message and send it to the chat by chatId
+      summary: Take the message and send it to the contact by contactId
+      
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unique key to prevent duplicate SMS sending
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './components/schemas.yaml#/components/schemas/SendSmsRequest'
+        $ref: '#/components/requests/SendSmsRequest'
+
       responses:
         '202':
           description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: './components/schemas.yaml#/components/schemas/SendSmsResponse'
+          $ref: '#/components/responses/SendSmsResponse'
+          
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
         '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
         '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
         '422':
           description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
         '429':
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
         '500':
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/create_contact:
+    post:
+      summary: Create new contact
+      
+      requestBody:
+        $ref: '#/components/requests/CreateContactRequest'
+
+      responses:
+        '200':
+          description: Ok
+          $ref: '#/components/responses/CreateContactResponse'
+        '201':
+          description: Created
+          $ref: '#/components/responses/CreateContactResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '422':
+          description: Unprocessable Entity
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+components:
+  requestBodies:
+    'SendSmsRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/SendSmsRequest'
+
+    'CreateContactRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateContactRequest'
+
+  responses:
+    'SendSmsResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/errors.yaml#/components/schemas/SendSmsResponse'
+
+    'CreateContactResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateContactResponse'
+
+    'ErrorWithCode':
+      description: 'Error with code and message'
+      content:
+        application/json:
+          schema:
+            $ref: './components/errors.yaml#/components/schemas/ErrorResponse'
 

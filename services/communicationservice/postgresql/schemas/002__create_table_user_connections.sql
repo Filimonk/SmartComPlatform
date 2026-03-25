@@ -44,9 +44,10 @@ BEGIN
         UPDATE connection
         SET 
             is_attached = FALSE,
-            detached_connection_identifier = COALESCE(phone_number, mail_address),
+            detached_connection_identifier = COALESCE(phone_number, mail_address, common_identifier),
             phone_number = NULL,
-            mail_address = NULL
+            mail_address = NULL,
+            common_identifier = NULL
         WHERE id = NEW.connection_id;
         
     ELSIF (OLD.is_active = FALSE AND NEW.is_active = TRUE) THEN
@@ -54,11 +55,15 @@ BEGIN
         SET 
             is_attached = TRUE,
             phone_number = CASE 
-                WHEN v_category = 'phone' THEN detached_connection_identifier 
+                WHEN v_category = 'phone_number' THEN detached_connection_identifier 
                 ELSE NULL 
             END,
             mail_address = CASE 
-                WHEN v_category = 'mail' THEN detached_connection_identifier 
+                WHEN v_category = 'mail_address' THEN detached_connection_identifier 
+                ELSE NULL 
+            END,
+            common_identifier = CASE 
+                WHEN v_category = 'common_identifier' THEN detached_connection_identifier 
                 ELSE NULL 
             END,
             detached_connection_identifier = NULL

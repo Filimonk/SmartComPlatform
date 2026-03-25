@@ -2,15 +2,19 @@
     if (!getToken()) {
         window.location.replace('/auth.html');
     } else {
-        // const isValid = await checkToken(); // теперь isValid будет true/false
-        const isValid = true;
+        const isValid = await checkToken(); // теперь isValid будет true/false
         if (!isValid) {
             window.location.replace('/auth.html');
         }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('visible');
-        });
+        else {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.body.classList.add('visible');
+                });
+            } else {
+                document.body.classList.add('visible');
+            }
+        }
     }
 })();
 

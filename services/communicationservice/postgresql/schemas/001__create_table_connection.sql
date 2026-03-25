@@ -10,7 +10,7 @@ CREATE TABLE channel_categories (
     category_type TEXT
 );
 INSERT INTO channel_categories (channel, category_type) VALUES
-('sms', 'phone'), ('telegram', 'phone'), ('aura_connect', 'phone'), ('mail', 'mail');
+('sms', 'phone_number'), ('mail', 'mail_address'), ('telegram', 'common_identifier'), ('aura_connect', 'common_identifier');
 
 
 CREATE TABLE connection (
@@ -18,8 +18,9 @@ CREATE TABLE connection (
     channel channel_type NOT NULL,
     is_attached BOOLEAN DEFAULT TRUE,
     
-    phone_number TEXT UNIQUE DEFAULT NULL,
-    mail_address TEXT UNIQUE DEFAULT NULL,
+    phone_number      TEXT DEFAULT NULL,
+    mail_address      TEXT DEFAULT NULL,
+    common_identifier TEXT DEFAULT NULL,
 
     detached_connection_identifier TEXT DEFAULT NULL,
     
@@ -28,14 +29,14 @@ CREATE TABLE connection (
     
     CONSTRAINT check_single_identifier CHECK (
         (is_attached = FALSE) OR
-        (num_nonnulls(phone_number, mail_address) = 1)
+        (num_nonnulls(phone_number, mail_address, common_identifier) = 1)
     ),
 
     CONSTRAINT phone_format_check CHECK (phone_number ~ '^\+[1-9]\d{8,14}$'),
     CONSTRAINT mail_format_check  CHECK (mail_address ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
 
     CONSTRAINT check_detached_cleanup CHECK (
-        (is_attached = TRUE) OR (phone_number IS NULL AND mail_address IS NULL)
+        (is_attached = TRUE) OR (phone_number IS NULL AND mail_address IS NULL AND common_identifier IS NULL)
     )
 );
 

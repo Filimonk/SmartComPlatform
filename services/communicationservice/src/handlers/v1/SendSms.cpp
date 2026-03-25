@@ -13,8 +13,8 @@
 #include <schemas/api/v1/components/errors.hpp>
 #include <schemas/api/v1/components/schemas.hpp>
 
-#include <userver/server/handlers/exceptions.hpp>
 #include <userver/formats/json/exception.hpp>
+#include <userver/server/handlers/exceptions.hpp>
 #include <userver/storages/postgres/exceptions.hpp>
 
 namespace dto = communicationservice::dto;
@@ -28,7 +28,11 @@ class ErrorBuilder {
   public:
     static constexpr bool kIsExternalBodyFormatted = true;
 
-    ErrorBuilder(const userver::formats::json::Value& error_json) {
+    ErrorBuilder(const dto::ErrorCode& code, const std::string& message) {
+        dto::ErrorResponse error{.code = code, .message = message};
+
+        const auto& error_json = ValueBuilder{error}.ExtractValue();
+
         json_error_body_ = userver::formats::json::ToString(error_json);
     }
 
@@ -58,9 +62,18 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
     -> userver::formats::json::Value {
 
     try {
+        const auto& idempotency_token = request.GetHeader("Idempotency-Key");
+        if (idempotency_token.empty()) {
+            throw userver::server::handlers::ClientError(
+                ErrorBuilder{dto::ErrorCode::kMissingIdempotencyTokenHeader,
+                             "Idempotency token header shouldn't be empty"});
+        }
+
         const auto& auth_header = request.GetHeader("Authorization");
         if (auth_header.empty()) {
-            throw userver::server::handlers::Unauthorized();
+            throw userver::server::handlers::Unauthorized(
+                ErrorBuilder{dto::ErrorCode::kMissingAuthorizationTokenHeader,
+                             "Authorization token header shouldn't be empty"});
         }
 
         const auto& auth_response = http_client_.CreateRequest()
@@ -72,30 +85,25 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
         LOG_INFO() << "authservice complited successfully";
 
         if (auth_response->status_code() != HttpStatus::kOk) {
-            throw userver::server::handlers::Unauthorized();
+            throw userver::server::handlers::Unauthorized(
+                ErrorBuilder{dto::ErrorCode::kInvalidAuthorizationToken,
+                             "Authorization token is invalid or expired"});
         }
 
         const auto& json_body = userver::formats::json::FromString(auth_response->body());
         const auto& user_id = json_body["user_id"].As<int>();
-        
-        LOG_INFO() << "incoming request: " << ToString(request_json);
 
         const auto& request_dto = request_json.As<dto::SendSmsRequest>();
 
         if (request_dto.channel.empty() || request_dto.text.empty()) {
-
-            dto::ErrorResponse error{.code = dto::ErrorCode::kMissingText,
-                                     .message = "All fields must not be empty"};
-
-            const auto& error_json = ValueBuilder{error}.ExtractValue();
-
-            throw userver::server::handlers::ClientError(ErrorBuilder{error_json});
+            throw userver::server::handlers::ClientError(
+                ErrorBuilder{dto::ErrorCode::kMissingText, "All fields must not be empty"});
         }
 
-        const auto& result =
-            pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                                 communicationservice::sql::kInsertSmsJob, user_id,
-                                 request_dto.contactId, request_dto.channel, request_dto.text);
+        const auto& result = pg_cluster_->Execute(
+            userver::storages::postgres::ClusterHostType::kMaster,
+            communicationservice::sql::kInsertSmsJob, idempotency_token, user_id,
+            request_dto.contactId, request_dto.channel, request_dto.text);
 
         const auto& job_id = result.AsSingleRow<boost::uuids::uuid>();
         dto::SendSmsResponse response{.jobId = job_id};
@@ -104,17 +112,11 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
         return ValueBuilder{response}.ExtractValue();
 
     } catch (const userver::formats::json::Exception& e) {
-        dto::ErrorResponse error{.code = dto::ErrorCode::kInvalidRequestFormat,
-                                 .message = "Invalid JSON format"};
-        const auto& error_json = ValueBuilder{error}.ExtractValue();
-
-        throw userver::server::handlers::RequestParseError(ErrorBuilder{error_json});
+        throw userver::server::handlers::RequestParseError(
+            ErrorBuilder{dto::ErrorCode::kInvalidRequestFormat, "Invalid JSON format"});
     } catch (const userver::storages::postgres::ForeignKeyViolation& e) {
-        dto::ErrorResponse error{.code = dto::ErrorCode::kForeignKeyViolation,
-                                 .message = "Foreign key violation"};
-        const auto& error_json = ValueBuilder{error}.ExtractValue();
-
-        throw userver::server::handlers::ClientError(ErrorBuilder{error_json});
+        throw userver::server::handlers::ClientError(
+            ErrorBuilder{dto::ErrorCode::kForeignKeyViolation, "Foreign key violation"});
     }
 }
 

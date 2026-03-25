@@ -25,3 +25,27 @@ components:
           type: string
           format: uuid
 
+    CreateContactRequest:
+      type: object
+      required:
+      properties:
+        contactName:
+          type: string
+        phoneNumber:
+          type: string
+        mailIdentifier:
+          type: string
+        telegramIdentifier:
+          type: string
+        auraConnectIdentifier:
+          type: string
+
+    CreateContactResponse:
+      type: object
+      required:
+        - jobId
+      properties:
+        jobId:
+          type: string
+          format: uuid
+

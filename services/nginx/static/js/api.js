@@ -58,16 +58,12 @@ api.interceptors.response.use(
 
 async function checkToken() {
     try {
-        const response = await api.get('/authservice/check');
-        console.log(response.data);
+        const response = await api.get('/authservice/verify');
         return true;
     } catch (e) {
         return false;
     }
 }
-
-// Если используете модули:
-// import { sha256 } from 'js-sha256';
 
 /**
  * Генерирует детерминированный токен идемпотентности.

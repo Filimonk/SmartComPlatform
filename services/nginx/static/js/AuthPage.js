@@ -11,8 +11,7 @@ function showPage() {
 if (getToken()) {
     // Есть токен – проверяем его
     (async () => {
-        // const isValid = await checkToken(); // true – валиден, false – нет
-        const isValid = true;
+        const isValid = await checkToken(); // true – валиден, false – нет
         if (isValid) {
             window.location.href = '/';
         } else {
