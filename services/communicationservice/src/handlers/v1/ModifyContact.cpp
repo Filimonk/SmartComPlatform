@@ -1,4 +1,4 @@
-#include "CreateContact.hpp"
+#include "ModifyContact.hpp"
 
 #include <userver/components/component_context.hpp>
 #include <userver/server/handlers/http_handler_json_base.hpp>
@@ -16,6 +16,8 @@
 #include <userver/formats/json/exception.hpp>
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/storages/postgres/exceptions.hpp>
+
+#include <userver/utils/boost_uuid4.hpp>
 
 namespace dto = communicationservice::dto;
 
@@ -48,7 +50,7 @@ class ErrorBuilder {
 
 namespace communicationservice::handlers::v1 {
 
-CreateContact::CreateContact(const userver::components::ComponentConfig& config,
+ModifyContact::ModifyContact(const userver::components::ComponentConfig& config,
                              const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
@@ -56,9 +58,9 @@ CreateContact::CreateContact(const userver::components::ComponentConfig& config,
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto CreateContact::HandleRequestJsonThrow(
+auto ModifyContact::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
-    const userver::formats::json::Value& /*request_json*/,
+    const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value {
 
     try {
@@ -86,24 +88,32 @@ auto CreateContact::HandleRequestJsonThrow(
         const auto& json_body = userver::formats::json::FromString(auth_response->body());
         const auto& user_id = json_body["user_id"].As<int>();
 
-        const auto& result = pg_cluster_->Execute(
-            userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kCreateContactAndAddToTheUserGroup, user_id);
+        const auto contact_id =
+            userver::utils::BoostUuidFromString(request.GetPathArg("contactId"));
+
+        const auto& request_dto = request_json.As<dto::ModifyContactRequest>();
+
+        if (!request_dto.contactName.has_value()) {
+            throw userver::server::handlers::ClientError(
+                ErrorBuilder{dto::ErrorCode::kMissingText, "At least one field must be filled in"});
+        }
+
+        const auto& result =
+            pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                                 communicationservice::sql::kModifyContact, user_id, contact_id,
+                                 request_dto.contactName);
 
         if (result.IsEmpty()) {
-            LOG_ERROR() << "The user's contact group not found";
-
-            throw userver::server::handlers::InternalServerError(
-                ErrorBuilder{dto::ErrorCode::kInternalError, "Internal Server Error"});
+            throw userver::server::handlers::ResourceNotFound(
+                ErrorBuilder{dto::ErrorCode::kResourceNotFound, "Resource Not Found"});
         }
 
         auto row = result[0];
-        auto contact_id = row["contact_id"].As<boost::uuids::uuid>();
-        auto contact_name = row["contact_name"].As<std::string>();
+        auto contact_name = row["name"].As<std::string>();
 
-        dto::CreateContactResponse response{.contactId = contact_id, .contactName = contact_name};
+        dto::ModifyContactResponse response{.contactId = contact_id, .contactName = contact_name};
 
-        request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
+        request.SetResponseStatus(userver::server::http::HttpStatus::kOk); // 200
         return ValueBuilder{response}.ExtractValue();
 
     } catch (const userver::formats::json::Exception& e) {

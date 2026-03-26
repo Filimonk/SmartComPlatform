@@ -1,0 +1,11 @@
+components:
+  schemas:
+
+    ChannelType:
+      type: string
+      description: "Connection channel type"
+      enum:
+        - aura_connect
+        - sms
+        - telegram
+        - mail

@@ -9,6 +9,7 @@ components:
         - MISSING_TEXT
         - INVALID_REQUEST_FORMAT
         - FOREIGN_KEY_VIOLATION
+        - RESOURCE_NOT_FOUND
         - INTERNAL_ERROR
 
     ErrorResponse:

@@ -13,6 +13,8 @@
 #include <userver/utils/daemon_run.hpp>
 
 #include "handlers/v1/SendSms.hpp"
+#include "handlers/v1/CreateContact.hpp"
+#include "handlers/v1/ModifyContact.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -24,7 +26,9 @@ int main(int argc, char* argv[]) {
             .Append<userver::server::handlers::TestsControl>()
             .Append<userver::congestion_control::Component>()
             .Append<userver::components::Postgres>("postgres-db")
-            .Append<communicationservice::handlers::v1::SendSms>();
+            .Append<communicationservice::handlers::v1::SendSms>()
+            .Append<communicationservice::handlers::v1::CreateContact>()
+            .Append<communicationservice::handlers::v1::ModifyContact>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

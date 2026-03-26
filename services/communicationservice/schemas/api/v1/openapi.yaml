@@ -38,11 +38,38 @@ paths:
         '401':
           description: Unauthorized
           $ref: '#/components/responses/ErrorWithCode'
-        '403':
-          description: Forbidden
+        '429':
+          description: Too Many Requests
           $ref: '#/components/responses/ErrorWithCode'
-        '422':
-          description: Unprocessable Entity
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/contact:
+    post:
+      summary: Create the contact
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        description: Request without body
+
+      responses:
+        '201':
+          description: Created
+          $ref: '#/components/requests/CreateContactResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
           $ref: '#/components/responses/ErrorWithCode'
         '429':
           description: Too Many Requests
@@ -51,20 +78,72 @@ paths:
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
 
-  /v1/create_contact:
-    post:
-      summary: Create new contact
+  /v1/contact/{contactId}:
+    patch:
+      summary: Modify the contact
       
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+        - name: contactId
+          in: path
+          description: UUID of contact
+          schema:
+            type: string
+            format: uuid
+        
       requestBody:
-        $ref: '#/components/requests/CreateContactRequest'
+        $ref: '#/components/requests/ModifyContactRequest'
 
       responses:
         '200':
-          description: Ok
-          $ref: '#/components/responses/CreateContactResponse'
+          description: Modified
+          $ref: '#/components/requests/ModifyContactResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/contact/{contactId}/connection:
+    post:
+      summary: Create the new connection
+      
+      parameters:
+        - name: contactId
+          in: path
+          description: UUID of contact
+          schema:
+            type: string
+            format: uuid
+        
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/CreateConnectionRequest'
+
+      responses:
         '201':
-          description: Created
-          $ref: '#/components/responses/CreateContactResponse'
+          description: Created successfully
+          $ref: '#/components/requests/CreateConnectionResponse'
           
         '400':
           description: Bad request
@@ -74,9 +153,6 @@ paths:
           $ref: '#/components/responses/ErrorWithCode'
         '403':
           description: Forbidden
-          $ref: '#/components/responses/ErrorWithCode'
-        '422':
-          description: Unprocessable Entity
           $ref: '#/components/responses/ErrorWithCode'
         '429':
           description: Too Many Requests
@@ -94,12 +170,19 @@ components:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/SendSmsRequest'
 
-    'CreateContactRequest':
+    'ModifyContactRequest':
       required: true
       content:
         application/json:
           schema:
-            $ref: './components/schemas.yaml#/components/schemas/CreateContactRequest'
+            $ref: './components/schemas.yaml#/components/schemas/ModifyContactRequest'
+
+    'CreateConnectionRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateConnectionRequest'
 
   responses:
     'SendSmsResponse':
@@ -114,7 +197,21 @@ components:
       content:
         application/json:
           schema:
-            $ref: './components/schemas.yaml#/components/schemas/CreateContactResponse'
+            $ref: './components/errors.yaml#/components/schemas/CreateContactResponse'
+
+    'ModifyContactResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/errors.yaml#/components/schemas/ModifyContactResponse'
+
+    'CreateConnectionResponse':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateConnectionResponse'
 
     'ErrorWithCode':
       description: 'Error with code and message'

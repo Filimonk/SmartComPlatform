@@ -50,6 +50,9 @@ userver_add_sql_library(
 add_library(
     ${PROJECT_NAME}_objs OBJECT
     src/handlers/v1/SendSms.cpp
+    src/handlers/v1/CreateContact.cpp
+    src/handlers/v1/ModifyContact.cpp
+    # src/handlers/v1/CreateConnection.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs

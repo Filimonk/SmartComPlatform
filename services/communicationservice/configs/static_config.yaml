@@ -55,6 +55,21 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-v1-CreateContact:
+            path: /v1/contact
+            method: POST
+            task_processor: main-task-processor
+
+        handler-v1-ModifyContact:
+            path: /v1/contact/{contactId}
+            method: PATCH
+            task_processor: main-task-processor
+
+       #handler-v1-CreateConnection:
+           #path: /v1/contact/{contactId}/connection
+           #method: POST
+           #task_processor: main-task-processor
+
         postgres-db:
             dbconnection#env: DB_CONNECTION
             blocking_task_processor: fs-task-processor

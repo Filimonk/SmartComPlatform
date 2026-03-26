@@ -25,27 +25,70 @@ components:
           type: string
           format: uuid
 
-    CreateContactRequest:
+    CreateContactResponse:
+      type: object
+      required:
+        - contactId
+        - contactName
+      properties:
+        contactId:
+          type: string
+          format: uuid
+        contactName:
+          type: string
+
+    ModifyContactRequest:
       type: object
       required:
       properties:
         contactName:
           type: string
-        phoneNumber:
-          type: string
-        mailIdentifier:
-          type: string
-        telegramIdentifier:
-          type: string
-        auraConnectIdentifier:
-          type: string
 
-    CreateContactResponse:
+    ModifyContactResponse:
       type: object
       required:
-        - jobId
+        - contactId
+        - contactName
       properties:
-        jobId:
+        contactId:
           type: string
           format: uuid
+        contactName:
+          type: string
+
+    CreateConnectionRequest:
+      type: object
+      required:
+        - channelType
+      properties:
+        channelType:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        phoneNumber:
+          type: string
+        mailAddress:
+          type: string
+        commonIdentifier:
+          type: string
+          
+    CreateConnectionResponse:
+      type: object
+      required:
+        - contactId
+        - connectionId
+        - channelType
+      properties:
+        contactId:
+          type: string
+          format: uuid
+        connectionId:
+          type: string
+          format: uuid
+        channelType:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        phoneNumber:
+          type: string
+        mailAddress:
+          type: string
+        commonIdentifier:
+          type: string
 

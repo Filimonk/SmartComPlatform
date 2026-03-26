@@ -28,3 +28,16 @@ CREATE INDEX idx_pending_jobs_fifo
 ON contact_message_jobs(created_at)
 WHERE status = 'pending';
 
+
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_timestamp_contact_message_jobs
+BEFORE UPDATE ON contact_message_jobs
+FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+
