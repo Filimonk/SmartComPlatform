@@ -23,5 +23,6 @@ FROM communicationservice_schema.contacts_of_group AS cog
 JOIN communicationservice_schema.user_groups AS ug ON cog.contact_group_id = ug.contact_group_id
 WHERE ug.user_id = $1
   AND cog.contact_id = $2
-RETURNING id, contact_id, is_active, channel, phone_number, mail_address, common_identifier;
+RETURNING id, contact_id, is_active, phone_number, mail_address, common_identifier;
+-- RETURNING id, contact_id, is_active, channel, phone_number, mail_address, common_identifier;
 

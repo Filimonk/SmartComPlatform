@@ -105,8 +105,9 @@ auto CreateConnection::HandleRequestJsonThrow(
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
             communicationservice::sql::kCreateConnection, user_id, contact_id,
-            /*channelTypeEnumToString(request_dto.channel),*/ std::string{"sms"}, request_dto.phoneNumber,
+            channelTypeEnumToString(request_dto.channel), request_dto.phoneNumber,
             request_dto.mailAddress, request_dto.commonIdentifier);
+        LOG_INFO() << "pg succeed";
 
         if (result.IsEmpty()) {
             throw userver::server::handlers::ResourceNotFound(
@@ -119,9 +120,9 @@ auto CreateConnection::HandleRequestJsonThrow(
         dto::CreateConnectionResponse response;
 
         response.id = row["id"].As<boost::uuids::uuid>();
-        response.connectionId = row["connection_id"].As<boost::uuids::uuid>();
+        response.contactId = row["contact_id"].As<boost::uuids::uuid>();
         response.isActive = row["is_active"].As<bool>();
-        response.channel = row["channel"].As<std::string>();
+        // response.channel = channelTypeEnumToString(row["channel"].As<::communicationservice::dto::ChannelType>());
         response.phoneNumber = row["phone_number"].As<std::optional<std::string>>();
         response.mailAddress = row["mail_address"].As<std::optional<std::string>>();
         response.commonIdentifier = row["common_identifier"].As<std::optional<std::string>>();

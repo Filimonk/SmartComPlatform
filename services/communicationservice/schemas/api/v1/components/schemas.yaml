@@ -74,20 +74,20 @@ components:
       type: object
       required:
         - id
-        - connectionId
+        - contactId
         - isActive
-        - channel
+        # - channel
       properties:
         id:
           type: string
           format: uuid
-        connectionId:
+        contactId:
           type: string
           format: uuid
         isActive:
           type: boolean
-        channel:
-          type: string
+        # channel:
+          # type: string
         phoneNumber:
           type: string
         mailAddress:
