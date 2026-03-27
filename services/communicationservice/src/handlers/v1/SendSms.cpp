@@ -95,7 +95,7 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
 
         const auto& request_dto = request_json.As<dto::SendSmsRequest>();
 
-        if (request_dto.channel.empty() || request_dto.text.empty()) {
+        if (request_dto.text.empty()) {
             throw userver::server::handlers::ClientError(
                 ErrorBuilder{dto::ErrorCode::kMissingText, "All fields must not be empty"});
         }
@@ -103,7 +103,7 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
             communicationservice::sql::kInsertSmsJob, idempotency_token, user_id,
-            request_dto.contactId, request_dto.channel, request_dto.text);
+            request_dto.contactId, "sms", request_dto.text);
 
         const auto& job_id = result.AsSingleRow<boost::uuids::uuid>();
         dto::SendSmsResponse response{.jobId = job_id};

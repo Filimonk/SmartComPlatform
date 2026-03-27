@@ -6,7 +6,7 @@ document.getElementById('logout')
 
 document.getElementById('workspace')
     .addEventListener('click', () => {
-        window.location.href = '/workspace.html';
+        window.location.href = '/contacts.html';
     });
 
 async function loadProfile() {

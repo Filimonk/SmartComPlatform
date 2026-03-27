@@ -53,18 +53,19 @@ class ContactsPage {
 
         const listHtml = this.contacts.map(contact => `
             <div class="contact-item" data-id="${contact.contactId}">
-                <div class="contact-name">${this.escapeHtml(contact.contactName)}</div>
+                <a href="/workspace.html?contactId=${contact.contactId}" class="contact-name-link">${this.escapeHtml(contact.contactName)}</a>
+                <button class="edit-contact-btn" data-id="${contact.contactId}" data-name="${this.escapeHtml(contact.contactName)}">✎ Редактировать</button>
             </div>
         `).join('');
         this.contactsListContainer.innerHTML = listHtml;
 
-        document.querySelectorAll('.contact-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const id = item.dataset.id;
-                const contact = this.contacts.find(c => c.contactId === id);
-                if (contact) {
-                    this.showContactDetail(contact.contactId, contact.contactName);
-                }
+        // Навешиваем обработчики на кнопки редактирования
+        document.querySelectorAll('.edit-contact-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+                this.showContactDetail(id, name);
             });
         });
     }

@@ -5,14 +5,11 @@ components:
       type: object
       required:
         - contactId
-        - channel
         - text
       properties:
         contactId:
           type: string
           format: uuid
-        channel:
-          type: string
         text:
           type: string
 
