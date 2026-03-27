@@ -1,27 +1,19 @@
-/* sidebar */
+/* sidebar.css — финальная версия с 3 блоками, без выделения активной страницы */
 
 .sidebar {
-    /* Auto layout */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0px;
-
-    width: var(--width-sidebar);
-    height: 100%;
-
-    background: var(--color-window);
-    border-right: 1px solid var(--color-border);
+    padding: 0;
+    width: 210px;
+    background: #FFFFFF;
+    border-right: 1px solid #B8B8B8;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
-
-    /* Inside auto layout */
     flex: none;
-    order: 0;
     align-self: stretch;
     flex-grow: 0;
+    height: 100%;
 }
-
-/* sidebar.css — стилизация сайдбара по макету Figma */
 
 .sidebar_block {
     box-sizing: border-box;
@@ -72,16 +64,14 @@
     flex: none;
     flex-grow: 0;
     transition: background 0.2s;
-}
-
-.sidebar_option.active {
-    background: #E6EAFC;
-    border-left: 1.5px solid #006AFF;
-}
-
-.sidebar_option:not(.active):hover {
-    background: #F5F5F5;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Общий hover для всех пунктов */
+.sidebar_option:hover {
+    background: #F5F5F5;
 }
 
 .sidebar_option_content {
@@ -94,8 +84,7 @@
     height: 16px;
     flex: none;
     flex-grow: 0;
-    text-decoration: none;
-    color: inherit;
+    margin: 0;
 }
 
 .tab_icon {
@@ -109,6 +98,7 @@
     height: 13px;
     flex: none;
     flex-grow: 0;
+    margin: 0;
 }
 
 .tab_icon svg {
@@ -125,16 +115,10 @@
     line-height: 16px;
     color: #444444;
     margin: 0;
+    padding: 0;
 }
 
-.sidebar_option.active .option_text {
-    color: #006AFF;
-}
-
-.sidebar_option.active .tab_icon svg {
-    fill: #006AFF;
-}
-
+/* Нижний блок со статусом */
 .sidebar_bottom_frame {
     display: flex;
     flex-direction: column;

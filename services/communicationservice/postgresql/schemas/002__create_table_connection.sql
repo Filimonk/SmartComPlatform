@@ -30,7 +30,7 @@ CREATE TABLE connection (
         num_nonnulls(phone_number, mail_address, common_identifier) = 1
     ),
 
-    CONSTRAINT phone_format_check CHECK (phone_number ~ '^\+[1-9]\d{8,14}$'),
+    CONSTRAINT phone_format_check CHECK (phone_number ~ '^[1-9]\d{8,14}$'),
     CONSTRAINT mail_format_check  CHECK (mail_address ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
     
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()

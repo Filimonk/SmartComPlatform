@@ -18,6 +18,7 @@
 #include "handlers/v1/CreateConnection.hpp"
 #include "handlers/v1/GetAllContacts.hpp"
 #include "handlers/v1/GetAllConnections.hpp"
+#include "components/SmsDispatcher.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -35,6 +36,7 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::CreateConnection>()
             .Append<communicationservice::handlers::v1::GetAllContacts>()
             .Append<communicationservice::handlers::v1::GetAllConnections>()
+            .Append<communicationservice::components::SmsDispatcher>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

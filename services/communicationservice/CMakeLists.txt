@@ -56,6 +56,7 @@ add_library(
     src/handlers/v1/ChannelTypeEnumToString.cpp
     src/handlers/v1/GetAllContacts.cpp
     src/handlers/v1/GetAllConnections.cpp
+    src/components/SmsDispatcher.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs
