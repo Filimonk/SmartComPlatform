@@ -2,7 +2,7 @@
 -- param: $1 idempotency_token TEXT
 -- param: $2 user_id INT
 -- param: $3 contact_id UUID
--- param: $4 channel channel_type
+-- param: $4 channel TEXT
 -- param: $5 text text
 
 INSERT INTO communicationservice_schema.contact_message_jobs (idempotency_token, user_id, contact_id, channel, text)

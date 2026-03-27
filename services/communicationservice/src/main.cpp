@@ -15,6 +15,7 @@
 #include "handlers/v1/SendSms.hpp"
 #include "handlers/v1/CreateContact.hpp"
 #include "handlers/v1/ModifyContact.hpp"
+#include "handlers/v1/CreateConnection.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::SendSms>()
             .Append<communicationservice::handlers::v1::CreateContact>()
             .Append<communicationservice::handlers::v1::ModifyContact>()
+            .Append<communicationservice::handlers::v1::CreateConnection>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

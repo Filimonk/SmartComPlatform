@@ -19,9 +19,9 @@
 
 #include <userver/utils/boost_uuid4.hpp>
 
-namespace dto = communicationservice::dto;
-
 namespace {
+
+namespace dto = communicationservice::dto;
 
 using userver::formats::json::ValueBuilder;
 using userver::server::http::HttpStatus;

@@ -17,9 +17,9 @@
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/storages/postgres/exceptions.hpp>
 
-namespace dto = communicationservice::dto;
-
 namespace {
+
+namespace dto = communicationservice::dto;
 
 using userver::formats::json::ValueBuilder;
 using userver::server::http::HttpStatus;

@@ -59,9 +59,9 @@ components:
     CreateConnectionRequest:
       type: object
       required:
-        - channelType
+        - channel
       properties:
-        channelType:
+        channel:
           $ref: './entities.yaml#/components/schemas/ChannelType'
         phoneNumber:
           type: string
@@ -73,18 +73,21 @@ components:
     CreateConnectionResponse:
       type: object
       required:
-        - contactId
+        - id
         - connectionId
-        - channelType
+        - isActive
+        - channel
       properties:
-        contactId:
+        id:
           type: string
           format: uuid
         connectionId:
           type: string
           format: uuid
-        channelType:
-          $ref: './entities.yaml#/components/schemas/ChannelType'
+        isActive:
+          type: boolean
+        channel:
+          type: string
         phoneNumber:
           type: string
         mailAddress:
