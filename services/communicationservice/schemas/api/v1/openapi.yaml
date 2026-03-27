@@ -160,6 +160,63 @@ paths:
         '500':
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
+          
+  /v1/contact:
+    get:
+      summary: Get all contacts
+
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/responses/GetAllContactsResponse'
+
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/contact/{contactId}/connection:
+    get:
+      summary: Get all connections for contact
+
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/responses/GetAllConnectionsResponse'
+
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
 
 components:
   requestBodies:
@@ -212,6 +269,20 @@ components:
         application/json:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/CreateConnectionResponse'
+
+    'GetAllContactsResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/GetAllContactsResponse'
+
+    'GetAllConnectionsResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/GetAllConnectionsResponse'
 
     'ErrorWithCode':
       description: 'Error with code and message'

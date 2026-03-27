@@ -54,6 +54,8 @@ add_library(
     src/handlers/v1/ModifyContact.cpp
     src/handlers/v1/CreateConnection.cpp
     src/handlers/v1/ChannelTypeEnumToString.cpp
+    src/handlers/v1/GetAllContacts.cpp
+    src/handlers/v1/GetAllConnections.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs

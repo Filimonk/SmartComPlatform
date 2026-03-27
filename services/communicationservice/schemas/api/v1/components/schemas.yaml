@@ -94,4 +94,52 @@ components:
           type: string
         commonIdentifier:
           type: string
+          
+    GetAllContactsResponse:
+      type: object
+      required:
+        - contacts
+      properties:
+        contacts:
+          type: array
+          items:
+            type: object
+            required:
+              - contactId
+              - contactName
+            properties:
+              contactId:
+                type: string
+                format: uuid
+              contactName:
+                type: string
+
+    GetAllConnectionsResponse:
+      type: object
+      required:
+        - connections
+      properties:
+        connections:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - contactId
+              - isActive
+            properties:
+              id:
+                type: string
+                format: uuid
+              contactId:
+                type: string
+                format: uuid
+              isActive:
+                type: boolean
+              phoneNumber:
+                type: string
+              mailAddress:
+                type: string
+              commonIdentifier:
+                type: string
 
