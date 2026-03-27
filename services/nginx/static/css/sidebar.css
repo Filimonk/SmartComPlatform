@@ -21,3 +21,218 @@
     flex-grow: 0;
 }
 
+/* sidebar.css — стилизация сайдбара по макету Figma */
+
+.sidebar_block {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0 6px;
+    width: 210px;
+    border-bottom: 1px solid #B8B8B8;
+    flex: none;
+    flex-grow: 0;
+}
+
+.headline_frame {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px 5px;
+    gap: 10px;
+    width: 210px;
+    height: 18px;
+    flex: none;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.headline_frame p {
+    width: auto;
+    height: 13px;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    color: #7A7A7A;
+    margin: 0;
+}
+
+.sidebar_option {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    gap: 4px;
+    width: 210px;
+    height: 36px;
+    flex: none;
+    flex-grow: 0;
+    transition: background 0.2s;
+}
+
+.sidebar_option.active {
+    background: #E6EAFC;
+    border-left: 1.5px solid #006AFF;
+}
+
+.sidebar_option:not(.active):hover {
+    background: #F5F5F5;
+    cursor: pointer;
+}
+
+.sidebar_option_content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 7px;
+    width: auto;
+    height: 16px;
+    flex: none;
+    flex-grow: 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tab_icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+    width: 13px;
+    height: 13px;
+    flex: none;
+    flex-grow: 0;
+}
+
+.tab_icon svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+}
+
+.option_text {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #444444;
+    margin: 0;
+}
+
+.sidebar_option.active .option_text {
+    color: #006AFF;
+}
+
+.sidebar_option.active .tab_icon svg {
+    fill: #006AFF;
+}
+
+.sidebar_bottom_frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 0;
+    width: 210px;
+    flex: 1;
+    flex-grow: 1;
+}
+
+.status_block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 210px;
+    flex: none;
+    flex-grow: 0;
+}
+
+.status_frame {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px 14px;
+    width: 210px;
+    border-top: 1px solid #B8B8B8;
+    flex: none;
+    flex-grow: 0;
+}
+
+.status_block_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    gap: 3px;
+    width: 150px;
+    flex: none;
+    flex-grow: 0;
+}
+
+.status_padding {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 0 1px;
+    gap: 10px;
+    width: 150px;
+}
+
+.status_option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: 7px;
+    width: auto;
+    height: 16px;
+}
+
+.status_option .status-dot {
+    width: 11px;
+    height: 11px;
+    background: #00BA22;
+    border-radius: 50%;
+    flex: none;
+    flex-grow: 0;
+}
+
+.status_option span {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    margin: 0;
+}
+
+.status_block_arrow_frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    gap: 10px;
+    width: 32px;
+    flex: 1;
+    align-self: stretch;
+}
+
+.status_frame_arrow svg {
+    width: 12px;
+    height: 7.41px;
+    fill: #4E4E4E;
+}
