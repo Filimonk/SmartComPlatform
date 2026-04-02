@@ -49,13 +49,15 @@ userver_add_sql_library(
 # Service objs
 add_library(
     ${PROJECT_NAME}_objs OBJECT
-    src/handlers/v1/SendSms.cpp
-    src/handlers/v1/CreateContact.cpp
-    src/handlers/v1/ModifyContact.cpp
-    src/handlers/v1/CreateConnection.cpp
-    src/handlers/v1/ChannelTypeEnumToString.cpp
-    src/handlers/v1/GetAllContacts.cpp
-    src/handlers/v1/GetAllConnections.cpp
+    src/handlers/v1/messages/SendSms.cpp
+    
+    src/handlers/v1/contacts/CreateContact.cpp
+    src/handlers/v1/contacts/ModifyContact.cpp
+    src/handlers/v1/contacts/CreateConnection.cpp
+    src/handlers/v1/contacts/ChannelTypeEnumToString.cpp
+    src/handlers/v1/contacts/GetAllContacts.cpp
+    src/handlers/v1/contacts/GetAllConnections.cpp
+    
     src/components/SmsDispatcher.cpp
 )
 target_link_libraries(

@@ -32,7 +32,6 @@ CREATE TABLE contacts_of_group (
 );
 
 
--- TODO создать различение users (может просто по флагу), и создавать группу только для пользователей-операторов
 CREATE OR REPLACE FUNCTION add_contact_group_of_user_on_authserviceschema_users_insert()
 RETURNS TRIGGER
 SECURITY DEFINER
@@ -53,11 +52,9 @@ $$ LANGUAGE plpgsql;
 
 ALTER FUNCTION communicationservice_schema.add_contact_group_of_user_on_authserviceschema_users_insert()
 OWNER TO CURRENT_USER;
--- TODO тут current_user - root, что плохо, мы даем неограниченной доступ этой функции, надо создать нового brige пользователя и вешать на него
 
 GRANT EXECUTE ON FUNCTION communicationservice_schema.add_contact_group_of_user_on_authserviceschema_users_insert()
 TO auth;
--- TODO вынести это, что бы тут не было жестко заданно имя
 
 CREATE TRIGGER trg_add_contact_group_of_user_on_authserviceschema_users_insert
 AFTER INSERT ON authserviceschema.users

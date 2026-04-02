@@ -12,12 +12,12 @@
 
 #include <userver/utils/daemon_run.hpp>
 
-#include "handlers/v1/SendSms.hpp"
-#include "handlers/v1/CreateContact.hpp"
-#include "handlers/v1/ModifyContact.hpp"
-#include "handlers/v1/CreateConnection.hpp"
-#include "handlers/v1/GetAllContacts.hpp"
-#include "handlers/v1/GetAllConnections.hpp"
+#include "handlers/v1/messages/SendSms.hpp"
+#include "handlers/v1/contacts/CreateContact.hpp"
+#include "handlers/v1/contacts/ModifyContact.hpp"
+#include "handlers/v1/contacts/CreateConnection.hpp"
+#include "handlers/v1/contacts/GetAllContacts.hpp"
+#include "handlers/v1/contacts/GetAllConnections.hpp"
 #include "components/SmsDispatcher.hpp"
 
 int main(int argc, char* argv[]) {
