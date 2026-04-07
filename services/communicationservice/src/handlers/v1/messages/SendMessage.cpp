@@ -1,4 +1,4 @@
-#include "SendSms.hpp"
+#include "SendMessage.hpp"
 
 #include <userver/components/component_context.hpp>
 #include <userver/server/handlers/http_handler_json_base.hpp>
@@ -48,7 +48,7 @@ class ErrorBuilder {
 
 namespace communicationservice::handlers::v1 {
 
-SendSms::SendSms(const userver::components::ComponentConfig& config,
+SendMessage::SendMessage(const userver::components::ComponentConfig& config,
                  const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
@@ -56,7 +56,7 @@ SendSms::SendSms(const userver::components::ComponentConfig& config,
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& request,
+auto SendMessage::HandleRequestJsonThrow(const userver::server::http::HttpRequest& request,
                                      const userver::formats::json::Value& request_json,
                                      userver::server::request::RequestContext& /*context*/) const
     -> userver::formats::json::Value {
@@ -93,7 +93,7 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
         const auto& json_body = userver::formats::json::FromString(auth_response->body());
         const auto& user_id = json_body["user_id"].As<int>();
 
-        const auto& request_dto = request_json.As<dto::SendSmsRequest>();
+        const auto& request_dto = request_json.As<dto::SendMessageRequest>();
 
         if (request_dto.text.empty()) {
             throw userver::server::handlers::ClientError(
@@ -102,11 +102,11 @@ auto SendSms::HandleRequestJsonThrow(const userver::server::http::HttpRequest& r
 
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kInsertSmsJob, idempotency_token, user_id,
-            request_dto.contactId, "sms", request_dto.text);
+            communicationservice::sql::kInsertMessageJob, idempotency_token, user_id,
+            request_dto.originId, request_dto.contactId, request_dto.connectionId, request_dto.text);
 
         const auto& job_id = result.AsSingleRow<boost::uuids::uuid>();
-        dto::SendSmsResponse response{.jobId = job_id};
+        dto::SendMessageResponse response{.jobId = job_id};
 
         request.SetResponseStatus(userver::server::http::HttpStatus::kAccepted); // 202
         return ValueBuilder{response}.ExtractValue();

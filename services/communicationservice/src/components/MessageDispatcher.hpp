@@ -8,11 +8,11 @@
 
 namespace communicationservice::components {
 
-class SmsDispatcher final : public userver::components::LoggableComponentBase {
+class MessageDispatcher final : public userver::components::LoggableComponentBase {
 public:
-    static constexpr std::string_view kName = "sms-dispatcher";
+    static constexpr std::string_view kName = "message-dispatcher";
 
-    SmsDispatcher(const userver::components::ComponentConfig&,
+    MessageDispatcher(const userver::components::ComponentConfig&,
                   const userver::components::ComponentContext&);
 
 private:

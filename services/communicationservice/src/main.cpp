@@ -12,13 +12,17 @@
 
 #include <userver/utils/daemon_run.hpp>
 
-#include "handlers/v1/messages/SendSms.hpp"
+#include "handlers/v1/messages/SendMessage.hpp"
 #include "handlers/v1/contacts/CreateContact.hpp"
 #include "handlers/v1/contacts/ModifyContact.hpp"
 #include "handlers/v1/contacts/CreateConnection.hpp"
 #include "handlers/v1/contacts/GetAllContacts.hpp"
 #include "handlers/v1/contacts/GetAllConnections.hpp"
-#include "components/SmsDispatcher.hpp"
+#include "handlers/v1/origins/CreateOrigin.hpp"
+#include "handlers/v1/origins/GetAllOrigins.hpp"
+#include "handlers/v1/origins/GetAllOriginConnections.hpp"
+#include "handlers/v1/origins/CreateOriginConnection.hpp"
+#include "components/MessageDispatcher.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -30,13 +34,13 @@ int main(int argc, char* argv[]) {
             .Append<userver::server::handlers::TestsControl>()
             .Append<userver::congestion_control::Component>()
             .Append<userver::components::Postgres>("postgres-db")
-            .Append<communicationservice::handlers::v1::SendSms>()
+            .Append<communicationservice::handlers::v1::SendMessage>()
             .Append<communicationservice::handlers::v1::CreateContact>()
             .Append<communicationservice::handlers::v1::ModifyContact>()
             .Append<communicationservice::handlers::v1::CreateConnection>()
             .Append<communicationservice::handlers::v1::GetAllContacts>()
             .Append<communicationservice::handlers::v1::GetAllConnections>()
-            .Append<communicationservice::components::SmsDispatcher>()
+            .Append<communicationservice::components::MessageDispatcher>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

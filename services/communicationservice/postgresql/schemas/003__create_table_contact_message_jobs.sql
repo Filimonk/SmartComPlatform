@@ -11,7 +11,9 @@ CREATE TABLE contact_message_jobs (
     
     idempotency_token TEXT NOT NULL,
     user_id INT NOT NULL REFERENCES authserviceschema.users(id),
+    origin_id UUID REFERENCES user_origin(id),
     contact_id UUID NOT NULL REFERENCES contact(id),
+    connection_id UUID REFERENCES connection(id),
     channel channel_type NOT NULL,
     text TEXT NOT NULL,
     

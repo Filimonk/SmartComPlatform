@@ -1,4 +1,4 @@
-#include "SmsDispatcher.hpp"
+#include "MessageDispatcher.hpp"
 
 #include <userver/components/component_context.hpp>
 
@@ -13,7 +13,7 @@ namespace communicationservice::components {
 
 using userver::storages::postgres::ClusterHostType;
 
-SmsDispatcher::SmsDispatcher(const userver::components::ComponentConfig& config,
+MessageDispatcher::MessageDispatcher(const userver::components::ComponentConfig& config,
                              const userver::components::ComponentContext& context)
     : LoggableComponentBase(config, context),
       pg_cluster_(context.FindComponent<userver::components::Postgres>("postgres-db").GetCluster()),
@@ -22,10 +22,10 @@ SmsDispatcher::SmsDispatcher(const userver::components::ComponentConfig& config,
     std::chrono::seconds period{3};
     userver::utils::PeriodicTask::Settings settings(period);
 
-    task_.Start("sms-dispatcher-task", settings, [this] { DoWork(); });
+    task_.Start("message-dispatcher-task", settings, [this] { DoWork(); });
 }
 
-void SmsDispatcher::DoWork() {
+void MessageDispatcher::DoWork() {
     const auto result =
         pg_cluster_->Execute(ClusterHostType::kMaster, communicationservice::sql::kGetPendingJobs);
 

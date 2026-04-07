@@ -1,19 +1,25 @@
 components:
   schemas:
 
-    SendSmsRequest:
+    SendMessageRequest:
       type: object
       required:
         - contactId
         - text
       properties:
+        originId:
+          type: string
+          format: uuid
         contactId:
+          type: string
+          format: uuid
+        connectionId:
           type: string
           format: uuid
         text:
           type: string
 
-    SendSmsResponse:
+    SendMessageResponse:
       type: object
       required:
         - jobId
@@ -133,6 +139,129 @@ components:
                 format: uuid
               isActive:
                 type: boolean
+              phoneNumber:
+                type: string
+              mailAddress:
+                type: string
+              commonIdentifier:
+                type: string
+
+    CreateOriginRequest:
+      type: object
+      required:
+        - name
+        - channel
+      properties:
+        name:
+          type: string
+        channel:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        api-key:
+          type: string
+        protocol-connection-address:
+          type: string
+          
+    CreateOriginResponse:
+      type: object
+      required:
+        - id
+        - name
+        # - channel
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        # channel:
+          # type: string
+
+    GetAllOriginsResponse:
+      type: object
+      required:
+        - origins
+      properties:
+        origins:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              # - channel
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              # channel:
+                # type: string
+
+    CreateOriginConnectionRequest:
+      type: object
+      required:
+        - channel
+      properties:
+        channel:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        phoneNumber:
+          type: string
+        mailAddress:
+          type: string
+        commonIdentifier:
+          type: string
+          
+    CreateOriginConnectionResponse:
+      type: object
+      required:
+        - id
+        - originId
+        - isActive
+        # - channel
+      properties:
+        id:
+          type: string
+          format: uuid
+        originId:
+          type: string
+          format: uuid
+        isActive:
+          type: boolean
+        # channel:
+          # type: string
+        phoneNumber:
+          type: string
+        mailAddress:
+          type: string
+        commonIdentifier:
+          type: string
+          
+    GetAllOriginConnectionsResponse:
+      type: object
+      required:
+        - connections
+      properties:
+        connections:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - contactId
+              - isActive
+              # - channel
+            properties:
+              id:
+                type: string
+                format: uuid
+              contactId:
+                type: string
+                format: uuid
+              isActive:
+                type: boolean
+              # channel:
+                # type: string
               phoneNumber:
                 type: string
               mailAddress:

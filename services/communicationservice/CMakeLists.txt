@@ -49,7 +49,7 @@ userver_add_sql_library(
 # Service objs
 add_library(
     ${PROJECT_NAME}_objs OBJECT
-    src/handlers/v1/messages/SendSms.cpp
+    src/handlers/v1/messages/SendMessage.cpp
     
     src/handlers/v1/contacts/CreateContact.cpp
     src/handlers/v1/contacts/ModifyContact.cpp
@@ -58,7 +58,12 @@ add_library(
     src/handlers/v1/contacts/GetAllContacts.cpp
     src/handlers/v1/contacts/GetAllConnections.cpp
     
-    src/components/SmsDispatcher.cpp
+    #src/handlers/v1/origins/CreateOrigin.cpp
+    #src/handlers/v1/origins/GetAllOrigings.cpp
+    #src/handlers/v1/origins/CreateOrigingConnection.cpp
+    #src/handlers/v1/origins/GetAllOrigingConnections.cpp
+    
+    src/components/MessageDispatcher.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs

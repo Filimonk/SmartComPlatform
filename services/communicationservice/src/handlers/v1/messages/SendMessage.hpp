@@ -9,12 +9,12 @@
 
 namespace communicationservice::handlers::v1 {
 
-class SendSms final
+class SendMessage final
     : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-    static constexpr std::string_view kName = "handler-v1-SendSms";
+    static constexpr std::string_view kName = "handler-v1-SendMessage";
     
-    SendSms(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
+    SendMessage(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
 
     auto HandleRequestJsonThrow(
         const userver::server::http::HttpRequest& /*request*/,

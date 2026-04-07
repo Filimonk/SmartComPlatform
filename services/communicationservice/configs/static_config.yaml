@@ -50,8 +50,8 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-v1-SendSms:
-            path: /v1/send/sms
+        handler-v1-SendMessage:
+            path: /v1/send/message
             method: POST
             task_processor: main-task-processor
 
@@ -80,7 +80,27 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-        sms-dispatcher:
+        #handler-v1-CreateOrigin:
+          #path: /v1/origin
+          #method: PATCH
+          #task_processor: main-task-processor
+        
+        #handler-v1-GetAllOrigins:
+          #path: /v1/origin
+          #method: GET
+          #task_processor: main-task-processor
+            
+        #handler-v1-CreateOriginConnection:
+          #path: /v1/origin/{originId}/connection
+          #method: POST
+          #task_processor: main-task-processor
+       
+        #handler-v1-GetAllOriginConnections:
+          #path: /v1/origin/{originId}/connection
+          #method: GET
+          #task_processor: main-task-processor
+        
+        message-dispatcher:
           load-enabled: true
         
         postgres-db:

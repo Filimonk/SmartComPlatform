@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 paths:
-  /v1/send/sms:
+  /v1/send/message:
     post:
       summary: Take the message and send it to the contact by contactId
       
@@ -25,12 +25,12 @@ paths:
           description: JWT
       
       requestBody:
-        $ref: '#/components/requests/SendSmsRequest'
+        $ref: '#/components/requests/SendMessageRequest'
 
       responses:
         '202':
           description: Accepted
-          $ref: '#/components/responses/SendSmsResponse'
+          $ref: '#/components/responses/SendMessageResponse'
           
         '400':
           description: Bad request
@@ -217,15 +217,149 @@ paths:
         '500':
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
+  
+  /v1/origin:
+    patch:
+      summary: Create or modify the origin
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/CreateOriginRequest'
+
+      responses:
+        '201':
+          description: Created
+          $ref: '#/components/requests/CreateOriginResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+          
+  /v1/origin:
+    get:
+      summary: Get all origins
+
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/responses/GetAllOriginsResponse'
+
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+            
+  /v1/origin/{originId}/connection:
+    get:
+      summary: Get all connections for origin
+
+      parameters:
+        - name: originId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/responses/GetAllOriginConnectionsResponse'
+
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+            
+  /v1/origin/{originId}/connection:
+    post:
+      summary: Create the connection for origin
+      
+      parameters:
+        - name: originId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/CreateOriginConnectionRequest'
+
+      responses:
+        '201':
+          description: Created successfully
+          $ref: '#/components/requests/CreateOriginConnectionResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
 
 components:
   requestBodies:
-    'SendSmsRequest':
+    'SendMessageRequest':
       required: true
       content:
         application/json:
           schema:
-            $ref: './components/schemas.yaml#/components/schemas/SendSmsRequest'
+            $ref: './components/schemas.yaml#/components/schemas/SendMessageRequest'
 
     'ModifyContactRequest':
       required: true
@@ -240,14 +374,28 @@ components:
         application/json:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/CreateConnectionRequest'
+              
+    'CreateOriginRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateOriginRequest'
+              
+    'CreateOriginConnectionRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateOriginConnectionRequest'
 
   responses:
-    'SendSmsResponse':
+    'SendMessageResponse':
       description: 'Response on success'
       content:
         application/json:
           schema:
-            $ref: './components/errors.yaml#/components/schemas/SendSmsResponse'
+            $ref: './components/errors.yaml#/components/schemas/SendMessageResponse'
 
     'CreateContactResponse':
       description: 'Response on success'
@@ -284,6 +432,34 @@ components:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/GetAllConnectionsResponse'
 
+    'CreateOriginResponse':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateOriginResponse'
+
+    'GetAllOriginsResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/GetAllOriginsResponse'
+              
+    'GetAllOriginConnectionsResponse':
+      description: 'Response on success'
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/GetAllOriginConnectionsResponse'
+
+    'CreateOriginConnectionResponse':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/CreateOriginConnectionResponse'
+    
     'ErrorWithCode':
       description: 'Error with code and message'
       content:
