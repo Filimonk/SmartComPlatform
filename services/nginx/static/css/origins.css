@@ -1,0 +1,177 @@
+/* origins.css — стили для страницы источников связи */
+
+.origins-page-content {
+    padding: 20px;
+    width: 100%;
+    overflow-y: auto;
+    background: var(--color-background);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: var(--color-buttons-default);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+button:hover {
+    background: #e0e0e0;
+}
+
+/* Список источников */
+.origins-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+.create-origin-btn {
+    background: var(--color-brand-primary);
+    color: white;
+}
+.create-origin-btn:hover {
+    background: var(--color-brand-hover);
+}
+
+.origins-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.origin-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-window);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: box-shadow 0.2s;
+}
+.origin-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.origin-name-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    cursor: pointer;
+    flex: 1;
+}
+.origin-name-link:hover {
+    text-decoration: underline;
+}
+.edit-origin-btn {
+    background: none;
+    border: none;
+    color: var(--color-brand-primary);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.edit-origin-btn:hover {
+    background: rgba(0,106,255,0.1);
+}
+
+/* Детальный вид */
+.origin-detail-view {
+    background: var(--color-window);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.detail-header {
+    margin-bottom: 20px;
+}
+.back-to-list-btn {
+    background: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: var(--color-brand-primary);
+}
+.back-to-list-btn:hover {
+    background: rgba(0,106,255,0.1);
+}
+.origin-info-block,
+.add-connection-block,
+.connections-list-block {
+    margin-bottom: 30px;
+}
+.origin-info-block h3,
+.add-connection-block h3,
+.connections-list-block h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+.origin-info-fields,
+.add-connection-fields {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.origin-name-input,
+.origin-apikey-input,
+.origin-email-server-input,
+.origin-channel-select,
+.origin-sms-provider,
+.connection-value-input {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 150px;
+}
+.save-origin-btn,
+.create-connection-btn {
+    background: var(--color-brand-primary);
+    color: white;
+}
+.connections-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.connection-item {
+    background: #f9f9f9;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.connection-info {
+    font-size: 14px;
+}
+.connection-info strong {
+    margin-right: 10px;
+    color: var(--color-brand-primary);
+}
+.delete-connection-btn {
+    background: none;
+    color: #ff4d4f;
+    border: 1px solid #ff4d4f;
+    padding: 4px 12px;
+    font-size: 12px;
+}
+.delete-connection-btn:hover {
+    background: #ffe6e6;
+}
+@media (max-width: 768px) {
+    .origins-page-content {
+        padding: 15px;
+    }
+    .origin-info-fields,
+    .add-connection-fields {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
