@@ -80,25 +80,30 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-        #handler-v1-CreateOrigin:
-          #path: /v1/origin
-          #method: PATCH
-          #task_processor: main-task-processor
+        handler-v1-CreateOrigin:
+          path: /v1/origin
+          method: POST
+          task_processor: main-task-processor
         
-        #handler-v1-GetAllOrigins:
-          #path: /v1/origin
-          #method: GET
-          #task_processor: main-task-processor
+        handler-v1-ModifyOrigin:
+          path: /v1/origin/{originId}
+          method: PATCH
+          task_processor: main-task-processor
+        
+        handler-v1-GetAllOrigins:
+          path: /v1/origin
+          method: GET
+          task_processor: main-task-processor
             
-        #handler-v1-CreateOriginConnection:
-          #path: /v1/origin/{originId}/connection
-          #method: POST
-          #task_processor: main-task-processor
+        handler-v1-CreateOriginConnection:
+          path: /v1/origin/{originId}/connection
+          method: POST
+          task_processor: main-task-processor
        
-        #handler-v1-GetAllOriginConnections:
-          #path: /v1/origin/{originId}/connection
-          #method: GET
-          #task_processor: main-task-processor
+        handler-v1-GetAllOriginConnections:
+          path: /v1/origin/{originId}/connection
+          method: GET
+          task_processor: main-task-processor
         
         message-dispatcher:
           load-enabled: true

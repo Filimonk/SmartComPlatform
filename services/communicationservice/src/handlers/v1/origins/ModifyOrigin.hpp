@@ -9,12 +9,12 @@
 
 namespace communicationservice::handlers::v1 {
 
-class CreateOriginConnection final
+class ModifyOrigin final
     : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-    static constexpr std::string_view kName = "handler-v1-CreateOriginConnection";
+    static constexpr std::string_view kName = "handler-v1-ModifyOrigin";
     
-    CreateOriginConnection(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
+    ModifyOrigin(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
 
     auto HandleRequestJsonThrow(
         const userver::server::http::HttpRequest& /*request*/,

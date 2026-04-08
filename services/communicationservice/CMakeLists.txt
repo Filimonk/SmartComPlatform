@@ -54,14 +54,14 @@ add_library(
     src/handlers/v1/contacts/CreateContact.cpp
     src/handlers/v1/contacts/ModifyContact.cpp
     src/handlers/v1/contacts/CreateConnection.cpp
-    src/handlers/v1/contacts/ChannelTypeEnumToString.cpp
     src/handlers/v1/contacts/GetAllContacts.cpp
     src/handlers/v1/contacts/GetAllConnections.cpp
     
-    #src/handlers/v1/origins/CreateOrigin.cpp
-    #src/handlers/v1/origins/GetAllOrigings.cpp
-    #src/handlers/v1/origins/CreateOrigingConnection.cpp
-    #src/handlers/v1/origins/GetAllOrigingConnections.cpp
+    src/handlers/v1/origins/CreateOrigin.cpp
+    src/handlers/v1/origins/ModifyOrigin.cpp
+    src/handlers/v1/origins/GetAllOrigins.cpp
+    src/handlers/v1/origins/CreateOriginConnection.cpp
+    src/handlers/v1/origins/GetAllOriginConnections.cpp
     
     src/components/MessageDispatcher.cpp
 )

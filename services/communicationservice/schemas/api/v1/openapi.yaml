@@ -219,8 +219,8 @@ paths:
           $ref: '#/components/responses/ErrorWithCode'
   
   /v1/origin:
-    patch:
-      summary: Create or modify the origin
+    post:
+      summary: Create the origin
       
       parameters:
         - name: Authorization
@@ -231,7 +231,7 @@ paths:
           description: JWT
       
       requestBody:
-        $ref: '#/components/requests/CreateOriginRequest'
+        description: Request without body
 
       responses:
         '201':
@@ -250,6 +250,47 @@ paths:
         '500':
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/origin/{originId}:
+    patch:
+      summary: Modify the origin
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+        - name: originId
+          in: path
+          description: UUID of origin
+          schema:
+            type: string
+            format: uuid
+        
+      requestBody:
+        $ref: '#/components/requests/ModifyOriginRequest'
+
+      responses:
+        '200':
+          description: Modified
+          $ref: '#/components/requests/ModifyOriginResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
           
   /v1/origin:
     get:
@@ -388,6 +429,13 @@ components:
         application/json:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/CreateOriginConnectionRequest'
+              
+    'ModifyOriginRequest':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/ModifyOriginRequest'
 
   responses:
     'SendMessageResponse':
@@ -459,6 +507,13 @@ components:
         application/json:
           schema:
             $ref: './components/schemas.yaml#/components/schemas/CreateOriginConnectionResponse'
+
+    'ModifyOriginResponse':
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/ModifyOriginResponse'
     
     'ErrorWithCode':
       description: 'Error with code and message'

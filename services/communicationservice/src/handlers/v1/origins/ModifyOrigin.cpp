@@ -1,4 +1,5 @@
-#include "CreateOriginConnection.hpp"
+#include "ModifyOrigin.hpp"
+#include "../common/ChannelTypeEnumToString.hpp"
 #include "../common/ErrorBuilder.hpp"
 
 #include <userver/components/component_context.hpp>
@@ -20,18 +21,37 @@
 
 #include <userver/utils/boost_uuid4.hpp>
 
+namespace {
+
+auto hideApiKey(const std::optional<std::string>& api_key_otp) -> std::string {
+    if (!api_key_otp.has_value()) {
+        return "";
+    }
+    
+    const auto& api_key = api_key_otp.value();
+    if (api_key.size() < 6) {
+        return "api key";
+    }
+    
+    std::string hidden = api_key;
+    hidden.replace(2, hidden.size() - 4, "..."); 
+    return hidden;
+}
+
+} // namespace
+
+
 namespace communicationservice::handlers::v1 {
 
-CreateOriginConnection::CreateOriginConnection(
-    const userver::components::ComponentConfig& config,
-    const userver::components::ComponentContext& component_context)
+ModifyOrigin::ModifyOrigin(const userver::components::ComponentConfig& config,
+                           const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
           component_context.FindComponent<userver::components::HttpClient>().GetHttpClient()),
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto CreateOriginConnection::HandleRequestJsonThrow(
+auto ModifyOrigin::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value {
@@ -63,40 +83,42 @@ auto CreateOriginConnection::HandleRequestJsonThrow(
 
         const auto origin_id = userver::utils::BoostUuidFromString(request.GetPathArg("originId"));
 
-        const auto& request_dto = request_json.As<dto::CreateOriginConnectionRequest>();
+        const auto& request_dto = request_json.As<dto::ModifyOriginRequest>();
+        const auto& origin_name = request_dto.name;
+        const auto& channel = request_dto.channel;
+        const auto& api_key = request_dto.apiKey;
+        const auto& email_server_address = request_dto.emailServerAddress;
 
-        if (((request_dto.phoneNumber.has_value() ? 1 : 0) +
-             (request_dto.mailAddress.has_value() ? 1 : 0) +
-             (request_dto.commonIdentifier.has_value() ? 1 : 0)) != 1) {
+        if (!origin_name.has_value() && !channel.has_value() && !api_key.has_value() &&
+            !email_server_address.has_value()) {
             throw userver::server::handlers::ClientError(
-                ErrorBuilder{dto::ErrorCode::kInvalidRequestFormat,
-                             "Exactly one channel identitifier option must be filled in"});
+                ErrorBuilder{dto::ErrorCode::kMissingText, "At least one field must be filled in"});
         }
 
-        const auto& result = pg_cluster_->Execute(
-            userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kCreateOriginConnection, user_id, origin_id,
-            request_dto.phoneNumber, request_dto.mailAddress, request_dto.commonIdentifier);
-        LOG_INFO() << "pg succeed";
+        const auto& result =
+            pg_cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                                 communicationservice::sql::kModifyOrigin, user_id, origin_id,
+                                 origin_name, channelTypeEnumToString(channel), api_key, email_server_address);
 
         if (result.IsEmpty()) {
             throw userver::server::handlers::ResourceNotFound(
-                ErrorBuilder{dto::ErrorCode::kResourceNotFound,
-                             "Resource Not Found. This user don't have such origin"});
+                ErrorBuilder{dto::ErrorCode::kResourceNotFound, "Resource Not Found"});
         }
 
-        auto row = result[0];
+        const auto row = result[0];
+        const auto& modifyed_origin_id = row["id"].As<boost::uuids::uuid>();
+        const auto& modifyed_origin_name = row["name"].As<std::string>();
+        const auto& modifyed_channel = row["channel"].As<std::optional<std::string>>();
+        const auto& modifyed_api_key = row["api_key"].As<std::optional<std::string>>();
+        const auto& modifyed_email_server_address = row["email_server_address"].As<std::optional<std::string>>();
 
-        dto::CreateOriginConnectionResponse response;
+        dto::ModifyOriginResponse response{.id = modifyed_origin_id,
+                                           .name = modifyed_origin_name,
+                                           .channel = modifyed_channel,
+                                           .hiddenApiKey = hideApiKey(modifyed_api_key),
+                                           .emailServerAddress = modifyed_email_server_address};
 
-        response.id = row["id"].As<boost::uuids::uuid>();
-        response.originId = row["origin_id"].As<boost::uuids::uuid>();
-        response.isActive = row["is_active"].As<bool>();
-        response.phoneNumber = row["phone_number"].As<std::optional<std::string>>();
-        response.mailAddress = row["mail_address"].As<std::optional<std::string>>();
-        response.commonIdentifier = row["common_identifier"].As<std::optional<std::string>>();
-
-        request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
+        request.SetResponseStatus(userver::server::http::HttpStatus::kOk); // 200
         return ValueBuilder{response}.ExtractValue();
 
     } catch (const userver::formats::json::Exception& e) {
@@ -105,9 +127,6 @@ auto CreateOriginConnection::HandleRequestJsonThrow(
     } catch (const userver::storages::postgres::ForeignKeyViolation& e) {
         throw userver::server::handlers::ClientError(
             ErrorBuilder{dto::ErrorCode::kForeignKeyViolation, "Foreign key violation"});
-    } catch (const userver::storages::postgres::CheckViolation& e) {
-        throw userver::server::handlers::ClientError(
-            ErrorBuilder{dto::ErrorCode::kInvalidRequestFormat, "Invalid data format"});
     }
 }
 

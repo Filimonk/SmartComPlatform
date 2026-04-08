@@ -4,24 +4,19 @@ SET search_path TO communicationservice_schema;
 
 
 
-CREATE TABLE contact (
+CREATE TABLE origin (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT DEFAULT 'Новый контакт' NOT NULL,
+    name TEXT DEFAULT 'Безымянный источник' NOT NULL,
+    channel channel_type,
+    api_key TEXT,
+    email_server_address TEXT,
     
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = now();
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_update_timestamp_contact
-BEFORE UPDATE ON contact
+CREATE TRIGGER trg_update_timestamp_origin
+BEFORE UPDATE ON origin
 FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 

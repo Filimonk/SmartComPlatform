@@ -1,16 +1,15 @@
-#include "ChannelTypeEnumToString.hpp"
+#pragma once
 
 #include <schemas/api/v1/components/schemas.hpp>
 #include <schemas/api/v1/components/errors.hpp>
 
 #include <userver/server/handlers/exceptions.hpp>
 
-namespace {
-
 namespace dto = communicationservice::dto;
 
 using ::communicationservice::dto::ChannelType;
 using userver::formats::json::ValueBuilder;
+using userver::server::http::HttpStatus;
 
 class ErrorBuilder {
   public:
@@ -31,28 +30,4 @@ class ErrorBuilder {
   private:
     std::string json_error_body_;
 };
-
-} // namespace
-
-
-auto channelTypeEnumToString(ChannelType channel) -> std::string {
-    switch (channel) {
-        case (ChannelType::kAuraConnect) : {
-            return "aura_connect";
-        }
-        case (ChannelType::kSms) : {
-            return "sms";
-        }
-        case (ChannelType::kTelegram) : {
-            return "telegram";
-        }
-        case (ChannelType::kMail) : {
-            return "mail";
-        }
-        default : {
-            throw userver::server::handlers::InternalServerError(
-                ErrorBuilder{dto::ErrorCode::kInternalError, "Internal Server Error"});
-        }
-    }
-}
 

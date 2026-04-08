@@ -145,36 +145,49 @@ components:
                 type: string
               commonIdentifier:
                 type: string
-
-    CreateOriginRequest:
-      type: object
-      required:
-        - name
-        - channel
-      properties:
-        name:
-          type: string
-        channel:
-          $ref: './entities.yaml#/components/schemas/ChannelType'
-        api-key:
-          type: string
-        protocol-connection-address:
-          type: string
           
     CreateOriginResponse:
       type: object
       required:
         - id
         - name
-        # - channel
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-        # channel:
-          # type: string
+
+    ModifyOriginRequest:
+      type: object
+      required:
+      properties:
+        name:
+          type: string
+        channel:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        apiKey:
+          type: string
+        emailServerAddress:
+          type: string
+
+    ModifyOriginResponse:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        channel:
+          type: string
+        hiddenApiKey:
+          type: string
+        emailServerAddress:
+          type: string
 
     GetAllOriginsResponse:
       type: object
@@ -201,10 +214,7 @@ components:
     CreateOriginConnectionRequest:
       type: object
       required:
-        - channel
       properties:
-        channel:
-          $ref: './entities.yaml#/components/schemas/ChannelType'
         phoneNumber:
           type: string
         mailAddress:
@@ -218,7 +228,6 @@ components:
         - id
         - originId
         - isActive
-        # - channel
       properties:
         id:
           type: string
@@ -228,8 +237,6 @@ components:
           format: uuid
         isActive:
           type: boolean
-        # channel:
-          # type: string
         phoneNumber:
           type: string
         mailAddress:
@@ -248,20 +255,17 @@ components:
             type: object
             required:
               - id
-              - contactId
+              - originId
               - isActive
-              # - channel
             properties:
               id:
                 type: string
                 format: uuid
-              contactId:
+              originId:
                 type: string
                 format: uuid
               isActive:
                 type: boolean
-              # channel:
-                # type: string
               phoneNumber:
                 type: string
               mailAddress:
