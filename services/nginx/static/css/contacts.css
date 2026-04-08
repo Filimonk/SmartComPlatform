@@ -2,9 +2,24 @@
 
 .contacts-page-content {
     padding: 20px;
-    width: 100%;
+    /* width: 100%; */
+    width: fit-content;
     overflow-y: auto;
     background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.contacts-list-view {
+    width: 100%;
+    max-width: 1300px;
+}
+
+.contact-detail-view {
+    width: 100%;
+    max-width: 1300px;
 }
 
 /* Общий стиль для кнопок */

@@ -5,6 +5,20 @@
     width: 100%;
     overflow-y: auto;
     background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.origins-list-view {
+    width: 100%;
+    max-width: 1300px;
+}
+
+.origin-detail-view {
+    width: 100%;
+    max-width: 1300px;
 }
 
 button {

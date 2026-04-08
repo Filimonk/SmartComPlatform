@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('Не передан contactId. Выберите контакт на странице контактов.');
         // Можно показать сообщение пользователю
         alert('Выберите контакт, чтобы начать общение');
+        window.location.href = '/contacts.html';
         return;
     }
     new Desktop(contactId);
