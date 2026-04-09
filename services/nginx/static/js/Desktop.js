@@ -10,7 +10,6 @@ class Desktop {
         this.chatSendButton = document.querySelector('.chat_send_button');
         this.chatHistoryContainer = document.querySelector('.chat_history');
 
-        // Элементы панели режимов
         this.modeOptions = document.querySelectorAll('.mode-option');
         this.currentMode = 'auto';
         this.customOriginConnectionId = null;
@@ -20,7 +19,7 @@ class Desktop {
         this.tokenIdempotency = self.crypto.randomUUID();
 
         this.init();
-        this.loadMessages();  // загружаем историю при старте
+        this.loadMessages();
     }
 
     loadCustomSelection() {
@@ -259,14 +258,28 @@ class Desktop {
             this.renderMessages(messages);
         } catch (error) {
             console.error('Ошибка загрузки сообщений:', error);
-            this.chatHistoryContainer.innerHTML = '<div class="error-message">Не удалось загрузить историю сообщений</div>';
+            this.chatHistoryContainer.innerHTML = '<div class="empty-chat">Не удалось загрузить историю сообщений</div>';
         }
     }
 
     renderMessages(messages) {
         if (!this.chatHistoryContainer) return;
         if (messages.length === 0) {
-            this.chatHistoryContainer.innerHTML = '<div class="empty-chat">Нет сообщений. Напишите первое!</div>';
+            this.chatHistoryContainer.innerHTML = `
+                <div class="empty-chat">
+                    <p>✨ Сообщений пока нет.</p><p>Начните общение с приветственного письма ✨</p>
+                    <button class="greeting-btn" id="fetchGreetingBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2h6v2h-6V6zm0 4h6v2h-6v-2zm-6 4h12v2H6v-2zm0-4h4v2H6v-2z" fill="currentColor"/>
+                        </svg>
+                        Получить приветственное письмо
+                    </button>
+                </div>
+            `;
+            const btn = document.getElementById('fetchGreetingBtn');
+            if (btn) {
+                btn.addEventListener('click', () => this.fetchGreetingMessage());
+            }
             return;
         }
 
@@ -285,8 +298,29 @@ class Desktop {
             `;
         }).join('');
         this.chatHistoryContainer.innerHTML = messagesHtml;
-        // Прокрутка вниз
         this.chatHistoryContainer.scrollTop = this.chatHistoryContainer.scrollHeight;
+    }
+
+    async fetchGreetingMessage() {
+        try {
+            // const response = await api.get('/communicationservice/v1/greeting_message/');
+            const response = '{"text": "Приветственное сообщение"}';
+            const data = JSON.parse(response);
+            const text = data.text;
+            if (!text) {
+                alert('Не удалось получить приветственное сообщение');
+                return;
+            }
+            if (this.chatTextArea.value.trim() === '') {
+                this.setTextItemValue(this.chatTextArea, text);
+                this.chatTextArea.focus();
+            } else {
+                alert('Пожалуйста, очистите поле ввода или отправьте текущее сообщение');
+            }
+        } catch (error) {
+            console.error('Ошибка получения приветственного сообщения:', error);
+            alert('Ошибка при получении приветственного сообщения');
+        }
     }
 
     formatTime(isoString) {
@@ -348,8 +382,6 @@ class Desktop {
             const response = await postWithIdempotency("/communicationservice" + this.API_ROUTES.sendMessage, payload, this.tokenIdempotency);
             console.log("Response data:", response);
             this.setTextItemValue(this.chatTextArea, "");
-
-            // После успешной отправки перезагружаем историю сообщений
             await this.loadMessages();
 
             if (this.currentMode === 'custom') {
@@ -403,7 +435,6 @@ class Desktop {
     }
 }
 
-// Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const contactId = urlParams.get('contactId');
