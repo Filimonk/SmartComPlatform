@@ -14,7 +14,6 @@ CREATE TABLE contact_message_jobs (
     origin_connection_id UUID REFERENCES origin_connection(id),
     contact_id UUID NOT NULL REFERENCES contact(id),
     connection_id UUID REFERENCES connection(id),
-    channel channel_type NOT NULL,
     text TEXT NOT NULL,
     
     PRIMARY KEY (user_id, idempotency_token),

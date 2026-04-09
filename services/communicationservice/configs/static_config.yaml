@@ -79,6 +79,11 @@ components_manager:
           path: /v1/contact/{contactId}/connection
           method: GET
           task_processor: main-task-processor
+
+        handler-v1-GetAllMessages:
+            path: /v1/contact/{contactId}/message
+            method: GET
+            task_processor: main-task-processor
         
         handler-v1-CreateOrigin:
           path: /v1/origin
@@ -105,8 +110,8 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-        message-dispatcher:
-          load-enabled: true
+        #message-dispatcher:
+          #load-enabled: true
         
         postgres-db:
             dbconnection#env: DB_CONNECTION

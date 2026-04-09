@@ -218,6 +218,43 @@ paths:
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
   
+  /v1/contact/{contactId}/message:
+    get:
+      summary: Get all messages by contactId
+      
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/responses/GetAllMessagesResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
   /v1/origin:
     post:
       summary: Create the origin

@@ -1,0 +1,70 @@
+/* chat-messages.css — стили для отображения сообщений в чате */
+
+.chat_history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #F9F9F9;
+    max-height: 100%;
+}
+
+/* Общий стиль сообщения */
+.message-item {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px; /* ограничиваем ширину */
+    clear: both;
+}
+
+/* Исходящее сообщение (от нас) */
+.message-outgoing {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #006AFF 0%, #3387FF 100%);
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+    padding: 8px 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Входящее сообщение (от собеседника) */
+.message-incoming {
+    align-self: flex-start;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FF 100%);
+    border: 1px solid var(--color-border);
+    color: #333;
+    border-radius: 18px 18px 18px 4px;
+    padding: 8px 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.message-text {
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.message-time {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.message-incoming .message-time {
+    text-align: left;
+    color: #777;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .message-item {
+        max-width: 85%;
+    }
+    .chat_history {
+        padding: 12px;
+    }
+}

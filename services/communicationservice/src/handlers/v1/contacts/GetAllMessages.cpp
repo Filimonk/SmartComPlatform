@@ -1,4 +1,4 @@
-#include "SendMessage.hpp"
+#include "GetAllMessages.hpp"
 
 #include <userver/components/component_context.hpp>
 #include <userver/server/handlers/http_handler_json_base.hpp>
@@ -15,7 +15,8 @@
 
 #include <userver/formats/json/exception.hpp>
 #include <userver/server/handlers/exceptions.hpp>
-#include <userver/storages/postgres/exceptions.hpp>
+
+#include <userver/utils/boost_uuid4.hpp>
 
 namespace {
 
@@ -30,9 +31,7 @@ class ErrorBuilder {
 
     ErrorBuilder(const dto::ErrorCode& code, const std::string& message) {
         dto::ErrorResponse error{.code = code, .message = message};
-
         const auto& error_json = ValueBuilder{error}.ExtractValue();
-
         json_error_body_ = userver::formats::json::ToString(error_json);
     }
 
@@ -48,27 +47,20 @@ class ErrorBuilder {
 
 namespace communicationservice::handlers::v1 {
 
-SendMessage::SendMessage(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& component_context)
+GetAllMessages::GetAllMessages(const userver::components::ComponentConfig& config,
+                               const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
           component_context.FindComponent<userver::components::HttpClient>().GetHttpClient()),
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto SendMessage::HandleRequestJsonThrow(const userver::server::http::HttpRequest& request,
-                                     const userver::formats::json::Value& request_json,
-                                     userver::server::request::RequestContext& /*context*/) const
-    -> userver::formats::json::Value {
+auto GetAllMessages::HandleRequestJsonThrow(
+    const userver::server::http::HttpRequest& request,
+    const userver::formats::json::Value& /*request_json*/,
+    userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value {
 
     try {
-        const auto& idempotency_token = request.GetHeader("Idempotency-Key");
-        if (idempotency_token.empty()) {
-            throw userver::server::handlers::ClientError(
-                ErrorBuilder{dto::ErrorCode::kMissingIdempotencyTokenHeader,
-                             "Idempotency token header shouldn't be empty"});
-        }
-
         const auto& auth_header = request.GetHeader("Authorization");
         if (auth_header.empty()) {
             throw userver::server::handlers::Unauthorized(
@@ -82,7 +74,6 @@ auto SendMessage::HandleRequestJsonThrow(const userver::server::http::HttpReques
                                         .headers({{"Authorization", auth_header}})
                                         .timeout(std::chrono::seconds(2))
                                         .perform();
-        LOG_INFO() << "authservice complited successfully";
 
         if (auth_response->status_code() != HttpStatus::kOk) {
             throw userver::server::handlers::Unauthorized(
@@ -93,30 +84,38 @@ auto SendMessage::HandleRequestJsonThrow(const userver::server::http::HttpReques
         const auto& json_body = userver::formats::json::FromString(auth_response->body());
         const auto& user_id = json_body["user_id"].As<int>();
 
-        const auto& request_dto = request_json.As<dto::SendMessageRequest>();
-
-        if (request_dto.text.empty()) {
-            throw userver::server::handlers::ClientError(
-                ErrorBuilder{dto::ErrorCode::kMissingText, "All fields must not be empty"});
-        }
+        const auto contact_id =
+            userver::utils::BoostUuidFromString(request.GetPathArg("contactId"));
 
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kInsertMessageJob, idempotency_token, user_id,
-            request_dto.originConnectionId, request_dto.contactId, request_dto.connectionId, request_dto.text);
+            communicationservice::sql::kGetAllMessagesByContact, user_id, contact_id);
 
-        const auto& job_id = result.AsSingleRow<boost::uuids::uuid>();
-        dto::SendMessageResponse response{.jobId = job_id};
+        dto::GetAllMessagesResponse response;
 
-        request.SetResponseStatus(userver::server::http::HttpStatus::kAccepted); // 202
+        std::vector<dto::GetAllMessagesResponse::MessagesA> messages;
+
+        for (const auto& row : result) {
+            dto::GetAllMessagesResponse::MessagesA item;
+
+            item.id = row["id"].As<boost::uuids::uuid>();
+            item.channel = row["channel"].As<std::string>();
+            item.text = row["text"].As<std::string>();
+            item.isIncoming = row["is_incoming"].As<bool>();
+            item.createdAt = userver::utils::datetime::TimePointTz{
+                row["created_at"].As<std::chrono::system_clock::time_point>()};
+
+            messages.push_back(std::move(item));
+        }
+
+        response.messages = std::move(messages);
+
+        request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
         return ValueBuilder{response}.ExtractValue();
 
     } catch (const userver::formats::json::Exception& e) {
         throw userver::server::handlers::RequestParseError(
             ErrorBuilder{dto::ErrorCode::kInvalidRequestFormat, "Invalid JSON format"});
-    } catch (const userver::storages::postgres::ForeignKeyViolation& e) {
-        throw userver::server::handlers::ClientError(
-            ErrorBuilder{dto::ErrorCode::kForeignKeyViolation, "Foreign key violation"});
     }
 }
 

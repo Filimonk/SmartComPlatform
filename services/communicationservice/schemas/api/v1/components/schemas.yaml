@@ -7,7 +7,7 @@ components:
         - contactId
         - text
       properties:
-        originId:
+        originConnectionId:
           type: string
           format: uuid
         contactId:
@@ -145,6 +145,35 @@ components:
                 type: string
               commonIdentifier:
                 type: string
+
+    GetAllMessagesResponse:
+      type: object
+      required:
+        - messages
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - channel
+              - text
+              - isIncoming
+              - createdAt
+            properties:
+              id:
+                type: string
+                format: uuid
+              channel:
+                type: string
+              text:
+                type: string
+              isIncoming:
+                type: boolean
+              createdAt:
+                type: string
+                format: date-time
           
     CreateOriginResponse:
       type: object

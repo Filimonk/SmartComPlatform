@@ -18,6 +18,7 @@
 #include "handlers/v1/contacts/CreateConnection.hpp"
 #include "handlers/v1/contacts/GetAllContacts.hpp"
 #include "handlers/v1/contacts/GetAllConnections.hpp"
+#include "handlers/v1/contacts/GetAllMessages.hpp"
 #include "handlers/v1/origins/CreateOrigin.hpp"
 #include "handlers/v1/origins/ModifyOrigin.hpp"
 #include "handlers/v1/origins/GetAllOrigins.hpp"
@@ -41,12 +42,13 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::CreateConnection>()
             .Append<communicationservice::handlers::v1::GetAllContacts>()
             .Append<communicationservice::handlers::v1::GetAllConnections>()
+            .Append<communicationservice::handlers::v1::GetAllMessages>()
             .Append<communicationservice::handlers::v1::CreateOrigin>()
             .Append<communicationservice::handlers::v1::ModifyOrigin>()
             .Append<communicationservice::handlers::v1::GetAllOrigins>()
             .Append<communicationservice::handlers::v1::CreateOriginConnection>()
             .Append<communicationservice::handlers::v1::GetAllOriginConnections>()
-            .Append<communicationservice::components::MessageDispatcher>()
+            //.Append<communicationservice::components::MessageDispatcher>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

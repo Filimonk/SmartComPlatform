@@ -56,6 +56,7 @@ add_library(
     src/handlers/v1/contacts/CreateConnection.cpp
     src/handlers/v1/contacts/GetAllContacts.cpp
     src/handlers/v1/contacts/GetAllConnections.cpp
+    src/handlers/v1/contacts/GetAllMessages.cpp
     
     src/handlers/v1/origins/CreateOrigin.cpp
     src/handlers/v1/origins/ModifyOrigin.cpp
@@ -63,7 +64,7 @@ add_library(
     src/handlers/v1/origins/CreateOriginConnection.cpp
     src/handlers/v1/origins/GetAllOriginConnections.cpp
     
-    src/components/MessageDispatcher.cpp
+    #src/components/MessageDispatcher.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs

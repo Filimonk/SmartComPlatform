@@ -329,6 +329,10 @@
 
 /* chat_window */
 .chat_window {
+    height: calc(100vh - 1000px); /* TODO */
+    overflow: hidden;
+    overflow-y: scroll;
+    
     /* Auto layout */
     display: flex;
     flex-direction: column;
