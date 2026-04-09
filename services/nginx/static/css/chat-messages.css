@@ -22,22 +22,20 @@
 /* Исходящее сообщение (от нас) */
 .message-outgoing {
     align-self: flex-end;
-    background: linear-gradient(135deg, #006AFF 0%, #3387FF 100%);
+    background: linear-gradient(135deg, #006AFF 0%, #0052CC 100%);
     color: white;
     border-radius: 18px 18px 4px 18px;
     padding: 8px 12px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Входящее сообщение (от собеседника) */
 .message-incoming {
     align-self: flex-start;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FF 100%);
-    border: 1px solid var(--color-border);
-    color: #333;
+    background: linear-gradient(135deg, #E9F0FF 0%, #D9E6FF 100%);
+    color: #1A1A1A;
     border-radius: 18px 18px 18px 4px;
     padding: 8px 12px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border: none; /* убираем внешнюю рамку */
 }
 
 .message-text {
@@ -56,7 +54,7 @@
 
 .message-incoming .message-time {
     text-align: left;
-    color: #777;
+    color: #555;
 }
 
 /* Адаптация для мобильных */
