@@ -15,6 +15,9 @@ FROM cte
 WHERE j.id = cte.id
 RETURNING
     j.id,
+    j.user_id,
+    j.origin_connection_id,
     j.contact_id,
-    j.text,
-    c.channel;
+    j.connection_id,
+    j.text;
+    

@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::GetAllOrigins>()
             .Append<communicationservice::handlers::v1::CreateOriginConnection>()
             .Append<communicationservice::handlers::v1::GetAllOriginConnections>()
-            //.Append<communicationservice::components::MessageDispatcher>()
+            .Append<communicationservice::components::MessageDispatcher>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

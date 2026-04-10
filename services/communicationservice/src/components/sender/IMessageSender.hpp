@@ -2,17 +2,13 @@
 
 #include <string>
 
-namespace communicationservice::sender {
+#include <schemas/api/v1/components/entities.hpp>
 
-struct SendContext {
-    std::string destination;
-    std::string text;
-    std::string origin;
-};
+namespace communicationservice::sender {
 
 struct SendResult {
     bool success{false};
-    std::string provider_id;
+    // std::string provider_id;
     std::string error;
 };
 
@@ -20,7 +16,7 @@ class IMessageSender {
 public:
     virtual ~IMessageSender() = default;
 
-    virtual SendResult Send(const SendContext& ctx) const = 0;
+    [[nodiscard]] virtual auto Send(const communicationservice::dto::MessageJob& ctx) const -> SendResult = 0;
 };
 
 } // namespace communicationservice::sender

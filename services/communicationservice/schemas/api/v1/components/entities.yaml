@@ -9,3 +9,29 @@ components:
         - sms
         - telegram
         - mail
+  
+    MessageJob:
+      type: object
+      required:
+        - id
+        - userId
+        - contactId
+        - text
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: integer
+        originConnectionId:
+          type: string
+          format: uuid
+        contactId:
+          type: string
+          format: uuid
+        connectionId:
+          type: string
+          format: uuid
+        text:
+          type: string
+

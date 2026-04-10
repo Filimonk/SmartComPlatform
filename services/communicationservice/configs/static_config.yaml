@@ -110,8 +110,8 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-        #message-dispatcher:
-          #load-enabled: true
+        message-dispatcher:
+          load-enabled: true
         
         postgres-db:
             dbconnection#env: DB_CONNECTION

@@ -7,7 +7,6 @@
 #include <userver/storages/postgres/cluster.hpp>
 
 #include "sender/SenderRegistry.hpp"
-#include "resolver/ChannelResolver.hpp"
 
 namespace communicationservice::components {
 
@@ -25,7 +24,6 @@ private:
     userver::clients::http::Client& http_client_;
 
     communicationservice::sender::SenderRegistry registry_;
-    communicationservice::resolver::ChannelResolver resolver_;
 
     userver::utils::PeriodicTask task_;
 };

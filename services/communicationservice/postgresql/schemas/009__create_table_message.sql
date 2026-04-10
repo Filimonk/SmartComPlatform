@@ -6,8 +6,8 @@ SET search_path TO communicationservice_schema;
 CREATE TABLE message (
     id UUID UNIQUE DEFAULT gen_random_uuid(),
     
-    connection_id UUID NOT NULL REFERENCES connection(id),
     origin_connection_id UUID NOT NULL REFERENCES origin_connection(id),
+    connection_id UUID NOT NULL REFERENCES connection(id),
     text TEXT NOT NULL,
     
     PRIMARY KEY (id),
