@@ -1,18 +1,6 @@
 cmake_minimum_required(VERSION 3.12...3.31)
 project(communicationservice CXX)
 
-file(DOWNLOAD https://github.com/cpm-cmake/CPM.cmake/releases/latest/download/get_cpm.cmake
-     ${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
-include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
-
-# 2. Добавляем mailio с отключением тестов
-CPMAddPackage(
-    NAME mailio
-    GITHUB_REPOSITORY karastojko/mailio
-    GIT_TAG 0.25.3
-    OPTIONS "MAILIO_BUILD_TESTS OFF"
-)
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(DownloadUserver)
 
@@ -79,7 +67,7 @@ add_library(
     src/components/sender/SenderRegistry.cpp
     src/components/sender/SmsSender.cpp
     src/components/sender/TelegramSender.cpp
-    src/components/sender/EmailSender.cpp
+    # src/components/sender/EmailSender.cpp
     src/components/MessageDispatcher.cpp
 )
 target_link_libraries(
@@ -88,7 +76,6 @@ target_link_libraries(
            userver::postgresql
            ${PROJECT_NAME}-chgen
            ${PROJECT_NAME}_sql
-           mailio
 )
 
 

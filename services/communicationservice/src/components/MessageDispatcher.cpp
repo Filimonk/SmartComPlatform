@@ -10,7 +10,7 @@
 
 #include "sender/SmsSender.hpp"
 #include "sender/TelegramSender.hpp"
-#include "sender/EmailSender.hpp"
+// #include "sender/EmailSender.hpp"
 
 using userver::storages::postgres::ClusterHostType;
 
@@ -32,8 +32,8 @@ MessageDispatcher::MessageDispatcher(const userver::components::ComponentConfig&
         dto::ToString(dto::ChannelType::kTelegram),
         std::make_shared<communicationservice::sender::TelegramSender>(http_client_, pg_cluster_));
 
-    registry_.Register(dto::ToString(dto::ChannelType::kMail),
-                       std::make_shared<communicationservice::sender::EmailSender>(pg_cluster_));
+    // registry_.Register(dto::ToString(dto::ChannelType::kMail),
+                       // std::make_shared<communicationservice::sender::EmailSender>(pg_cluster_));
 
     std::chrono::seconds period{3};
     task_.Start("dispatcher-task", {period}, [this] { DoWork(); });
