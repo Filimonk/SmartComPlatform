@@ -25,6 +25,8 @@
 #include "handlers/v1/origins/CreateOriginConnection.hpp"
 #include "handlers/v1/origins/GetAllOriginConnections.hpp"
 #include "components/MessageDispatcher.hpp"
+#include "components/TelegramMessageFetcher.hpp"
+#include "handlers/v1/ai/SpellCheck.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -49,6 +51,8 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::CreateOriginConnection>()
             .Append<communicationservice::handlers::v1::GetAllOriginConnections>()
             .Append<communicationservice::components::MessageDispatcher>()
+            .Append<communicationservice::components::TelegramMessageFetcher>()
+            .Append<communicationservice::handlers::v1::SpellCheck>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

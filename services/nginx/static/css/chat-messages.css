@@ -120,3 +120,35 @@
         padding: 12px;
     }
 }
+
+.empty-chat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    gap: 16px;
+}
+
+.greeting-btn {
+    background: none;
+    border: none;
+    color: var(--color-brand-primary);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 30px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,106,255,0.1);
+}
+
+.greeting-btn:hover {
+    background: rgba(0,106,255,0.2);
+    transform: scale(1.02);
+}

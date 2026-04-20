@@ -302,3 +302,22 @@ components:
               commonIdentifier:
                 type: string
 
+    SpellCheckRequest:
+      type: object
+      required:
+        - Authorization
+        - text
+      properties:
+        Authorization:
+          type: string
+        text:
+          type: string
+          
+    SpellCheckResponse:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+

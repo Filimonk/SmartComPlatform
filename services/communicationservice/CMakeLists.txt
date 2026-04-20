@@ -67,8 +67,11 @@ add_library(
     src/components/sender/SenderRegistry.cpp
     src/components/sender/SmsSender.cpp
     src/components/sender/TelegramSender.cpp
-    # src/components/sender/EmailSender.cpp
+    src/components/sender/EmailSender.cpp
     src/components/MessageDispatcher.cpp
+    src/components/TelegramMessageFetcher.cpp
+    
+    src/handlers/v1/ai/SpellCheck.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs

@@ -1,5 +1,5 @@
 class Desktop {
-    constructor(contactId) {
+        constructor(contactId) {
         this.contactId = contactId;
         this.API_ROUTES = {
             sendMessage: "/v1/send/message",
@@ -15,11 +15,21 @@ class Desktop {
         this.customOriginConnectionId = null;
         this.customConnectionId = null;
 
+        this.messageCount = 0;         // для отслеживания количества сообщений
+        this.pollingInterval = null;    // для хранения интервала
+        this.isFirstMessageCheck = true; // флаг для проверки первого сообщения
+
         this.loadCustomSelection();
         this.tokenIdempotency = self.crypto.randomUUID();
 
+        this.aiFixBtn = null;
+        this.aiApplyBtn = null;
+        this.aiSuggestionField = null;
+
         this.init();
-        this.loadMessages();
+        this.loadMessages().then(() => {
+            this.startPolling();
+        });
     }
 
     loadCustomSelection() {
@@ -253,12 +263,22 @@ class Desktop {
 
     async loadMessages() {
         try {
+            // Добавляем ведущий слеш
             const response = await api.get("/communicationservice" + this.API_ROUTES.getMessages);
             const messages = response.data.messages || [];
-            this.renderMessages(messages);
+            const newCount = messages.length;
+            // Перерисовываем, если количество изменилось ИЛИ чат пуст (0 сообщений)
+            if (newCount !== this.messageCount || newCount === 0) {
+                this.messageCount = newCount;
+                this.renderMessages(messages);
+            }
+            return messages;
         } catch (error) {
             console.error('Ошибка загрузки сообщений:', error);
-            this.chatHistoryContainer.innerHTML = '<div class="empty-chat">Не удалось загрузить историю сообщений</div>';
+            if (this.chatHistoryContainer && this.messageCount === 0) {
+                this.chatHistoryContainer.innerHTML = '<div class="empty-chat">Не удалось загрузить историю сообщений</div>';
+            }
+            return [];
         }
     }
 
@@ -304,7 +324,7 @@ class Desktop {
     async fetchGreetingMessage() {
         try {
             // const response = await api.get('/communicationservice/v1/greeting_message/');
-            const response = '{"text": "Приветственное сообщение"}';
+            const response = '{"text": "ЗдравствуйтИ! СпОсибо, что выбрали нас. Будем рады продуктивной и приятной сАвместной работе!"}';
             const data = JSON.parse(response);
             const text = data.text;
             if (!text) {
@@ -320,6 +340,20 @@ class Desktop {
         } catch (error) {
             console.error('Ошибка получения приветственного сообщения:', error);
             alert('Ошибка при получении приветственного сообщения');
+        }
+    }
+
+    startPolling() {
+        if (this.pollingInterval) clearInterval(this.pollingInterval);
+        this.pollingInterval = setInterval(() => {
+            this.loadMessages();
+        }, 1000);
+    }
+
+    stopPolling() {
+        if (this.pollingInterval) {
+            clearInterval(this.pollingInterval);
+            this.pollingInterval = null;
         }
     }
 
@@ -356,9 +390,17 @@ class Desktop {
                 this.setMode(mode);
             });
         });
+        
+        this.setupAI();
     }
 
     async sendChatMessage() {
+        // Проверка: если режим "Авто" и нет сообщений (чат пуст), то запрещаем отправку
+        if (this.currentMode === 'auto' && this.messageCount === 0) {
+            alert('Нельзя отправить первое сообщение в режиме "Авто". Выберите "Кастомный" режим, чтобы указать откуда и куда отправить.');
+            return;
+        }
+
         this.chatSendButton.disabled = true;
         this.chatTextArea.disabled = true;
 
@@ -382,6 +424,8 @@ class Desktop {
             const response = await postWithIdempotency("/communicationservice" + this.API_ROUTES.sendMessage, payload, this.tokenIdempotency);
             console.log("Response data:", response);
             this.setTextItemValue(this.chatTextArea, "");
+
+            // После отправки перезагружаем сообщения (polling сам подхватит, но для скорости вызовем явно)
             await this.loadMessages();
 
             if (this.currentMode === 'custom') {
@@ -432,6 +476,106 @@ class Desktop {
             if (m === '>') return '&gt;';
             return m;
         });
+    }
+    
+    setupAI() {
+        this.aiFixBtn = document.querySelector('.ai-fix-btn');
+        this.aiApplyBtn = document.querySelector('.ai-apply-btn');
+        this.aiSuggestionField = document.querySelector('.ai-suggestion-field');
+
+        if (this.aiFixBtn) {
+            this.aiFixBtn.addEventListener('click', () => this.aiFixHandler());
+        }
+        if (this.aiApplyBtn) {
+            this.aiApplyBtn.addEventListener('click', () => this.aiApplyHandler());
+        }
+    }
+
+    async aiFixHandler() {
+        if (!this.aiFixBtn) return;
+
+        const originalText = this.chatTextArea?.value.trim();
+        if (!originalText) {
+            alert('Введите текст для проверки');
+            return;
+        }
+
+        this.aiFixBtn.disabled = true;
+        const originalBtnText = this.aiFixBtn.textContent;
+        this.aiFixBtn.textContent = '⏳ Соединение...';
+
+        const token = getToken();
+        if (!token) {
+            alert('Необходима авторизация');
+            this.aiFixBtn.disabled = false;
+            this.aiFixBtn.textContent = originalBtnText;
+            return;
+        }
+
+        const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/communicationservice/v1/spellcheck`;
+        const ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            this.aiFixBtn.textContent = '⏳ Отправка...';
+            const request = {
+                Authorization: `Bearer ${token}`,
+                text: originalText
+            };
+            ws.send(JSON.stringify(request));
+        };
+
+        ws.onmessage = async (event) => { // Добавляем async
+            try {
+                let rawData = event.data;
+
+                if (rawData instanceof Blob) {
+                    rawData = await rawData.text();
+                }
+
+                const response = JSON.parse(rawData);
+                console.log('Получен ответ от сервера:', response);
+
+                if (response && typeof response.text === 'string') {
+                    if (this.aiSuggestionField) {
+                        this.aiSuggestionField.value = response.text;
+                    }
+                    if (this.aiApplyBtn) {
+                        this.aiApplyBtn.disabled = false;
+                    }
+                } else {
+                    throw new Error('Некорректный формат поля text');
+                }
+            } catch (error) {
+                console.error('Ошибка при обработке сообщения:', error);
+                alert('Ошибка обработки ответа');
+            } finally {
+                ws.close();
+            }
+        };
+
+
+        ws.onerror = (error) => {
+            console.error('Ошибка WebSocket:', error);
+            alert('Ошибка соединения с сервером проверки');
+            ws.close();
+        };
+
+        ws.onclose = () => {
+            this.aiFixBtn.disabled = false;
+            this.aiFixBtn.textContent = originalBtnText;
+        };
+    }
+
+    aiApplyHandler() {
+        const suggestion = this.aiSuggestionField ? this.aiSuggestionField.value : '';
+        if (suggestion && this.chatTextArea) {
+            this.setTextItemValue(this.chatTextArea, suggestion);
+            if (this.aiSuggestionField) this.aiSuggestionField.value = '';
+            if (this.aiApplyBtn) this.aiApplyBtn.disabled = true;
+            this.chatTextArea.focus();
+        } else {
+            alert('Нет предложения для применения');
+        }
     }
 }
 

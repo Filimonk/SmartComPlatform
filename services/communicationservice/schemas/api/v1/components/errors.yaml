@@ -12,6 +12,7 @@ components:
         - NOT_EXISTING_CHANNEL_TYPE
         - RESOURCE_NOT_FOUND
         - INTERNAL_ERROR
+        - WEBSOCKET_CONNECTION_CANCELLED
 
     ErrorResponse:
       type: object

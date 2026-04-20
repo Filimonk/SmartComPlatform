@@ -2,8 +2,10 @@
 
 #include <communicationservice/sql_queries.hpp>
 
+/*
 #include <mailio/message.hpp>
 #include <mailio/smtp.hpp>
+*/
 
 using userver::storages::postgres::ClusterHostType;
 
@@ -12,7 +14,9 @@ namespace communicationservice::sender {
 EmailSender::EmailSender(userver::storages::postgres::ClusterPtr& pg_cluster)
     : pg_cluster_(pg_cluster) {}
 
-auto EmailSender::Send(const communicationservice::dto::MessageJob& ctx) const -> SendResult {
+auto EmailSender::Send(const communicationservice::dto::MessageJob& /*ctx*/) const -> SendResult {
+    return {true, ""};
+    /*
     try {
         // === origin ===
         const auto origin = pg_cluster_->Execute(
@@ -81,6 +85,7 @@ auto EmailSender::Send(const communicationservice::dto::MessageJob& ctx) const -
     } catch (const std::exception& e) {
         return {false, e.what()};
     }
+    */
 }
 
 } // namespace communicationservice::sender

@@ -73,6 +73,7 @@ codegen:
 		echo "CMake cache not found. Running cmake with default preset (debug)..." ; \
 		$(MAKE) cmake-debug ; \
 	fi
+	cmake --build build --target rebuild_cache
 	cmake --build build --target $(PROJECT_NAME)-chgen $(PROJECT_NAME)_sql
 
 # Start targets makefile in docker wrapper.
