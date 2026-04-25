@@ -10,7 +10,7 @@
 
 #include "sender/SmsSender.hpp"
 #include "sender/TelegramSender.hpp"
-// #include "sender/EmailSender.hpp"
+#include "sender/EmailSender.hpp"
 
 using userver::storages::postgres::ClusterHostType;
 
@@ -32,8 +32,8 @@ MessageDispatcher::MessageDispatcher(const userver::components::ComponentConfig&
         dto::ToString(dto::ChannelType::kTelegram),
         std::make_shared<communicationservice::sender::TelegramSender>(http_client_, pg_cluster_));
 
-    // registry_.Register(dto::ToString(dto::ChannelType::kMail),
-                       // std::make_shared<communicationservice::sender::EmailSender>(pg_cluster_));
+    registry_.Register(dto::ToString(dto::ChannelType::kMail),
+                       std::make_shared<communicationservice::sender::EmailSender>(pg_cluster_));
 
     std::chrono::seconds period{3};
     task_.Start("dispatcher-task", {period}, [this] { DoWork(); });
@@ -93,6 +93,7 @@ void MessageDispatcher::DoWork() {
             LOG_INFO() << "Processing job 5";
 
             const auto channel_str = channel[0]["channel"].As<std::string>();
+            LOG_INFO() << channel_str;
 
             const auto& sender = registry_.Get(channel_str);
 
@@ -112,6 +113,9 @@ void MessageDispatcher::DoWork() {
                 pg_cluster_->Execute(ClusterHostType::kMaster,
                                      communicationservice::sql::kCreateMessage,
                                      job.originConnectionId, job.connectionId, job.text, job.id);
+            }
+            else {
+                LOG_WARNING() << "Failed to send message: " << send_result.error;
             }
 
             LOG_INFO() << "Processing job 9";

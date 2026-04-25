@@ -82,6 +82,11 @@ target_link_libraries(
 )
 
 
+# CURL
+find_package(CURL REQUIRED)
+target_link_libraries(${PROJECT_NAME}_objs PRIVATE CURL::libcurl)
+
+
 # The Service
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
