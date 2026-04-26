@@ -255,6 +255,31 @@
             <div class="detail-header">
                 <button class="back-to-list-btn">← Назад к списку</button>
             </div>
+            
+            <!-- внутри .contact-detail-view, после .detail-header -->
+            <div class="contact-info-block">
+                <div class="contact-info-header">
+                    <h3>Информация о контакте</h3>
+                    <button class="merge-contact-btn" title="Объединить с другим контактом">🔗 Объединить</button>
+                </div>
+                <div class="contact-info-fields">
+                    <input type="text" class="contact-name-input" placeholder="Имя контакта">
+                    <button class="save-contact-btn">Сохранить</button>
+                </div>
+            </div>
+
+            <!-- модальное окно -->
+            <div id="mergeModal" class="merge-modal" style="display: none;">
+                <div class="merge-modal-content">
+                    <div class="merge-modal-header">
+                        <h3>Выберите контакт для объединения</h3>
+                        <button class="merge-modal-close">&times;</button>
+                    </div>
+                    <div class="merge-modal-body">
+                        <div class="merge-contacts-list"></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="contact-info-block">
                 <h3>Информация о контакте</h3>

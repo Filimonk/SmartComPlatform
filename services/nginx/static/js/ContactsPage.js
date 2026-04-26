@@ -14,10 +14,15 @@ class ContactsPage {
         this.backToListBtn = document.querySelector('.back-to-list-btn');
         this.saveContactBtn = document.querySelector('.save-contact-btn');
         this.createConnectionBtn = document.querySelector('.create-connection-btn');
+        this.mergeContactBtn = document.querySelector('.merge-contact-btn');
 
         this.contactNameInput = document.querySelector('.contact-name-input');
         this.channelSelect = document.querySelector('.channel-select');
         this.identifierInput = document.querySelector('.identifier-input');
+
+        this.mergeModal = document.getElementById('mergeModal');
+        this.mergeContactsList = document.querySelector('.merge-contacts-list');
+        this.modalCloseBtn = document.querySelector('.merge-modal-close');
 
         this.init();
     }
@@ -25,13 +30,36 @@ class ContactsPage {
     async init() {
         this.bindEvents();
         await this.loadContacts();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const contactId = urlParams.get('id');
+        if (contactId) {
+            const contact = this.contacts.find(c => c.contactId === contactId);
+            if (contact) {
+                await this.showContactDetail(contactId, contact.contactName);
+            } else {
+                // если контакт не найден, остаёмся в списке
+                this.showListView();
+            }
+        } else {
+            this.showListView();
+        }
     }
 
     bindEvents() {
         this.createContactBtn.addEventListener('click', () => this.createContact());
-        this.backToListBtn.addEventListener('click', () => this.showListView());
+        this.backToListBtn.addEventListener('click', () => this.goBackToList());
         this.saveContactBtn.addEventListener('click', () => this.updateContactName());
         this.createConnectionBtn.addEventListener('click', () => this.createConnection());
+        if (this.mergeContactBtn) {
+            this.mergeContactBtn.addEventListener('click', () => this.openMergeModal());
+        }
+        if (this.modalCloseBtn) {
+            this.modalCloseBtn.addEventListener('click', () => this.closeMergeModal());
+        }
+        window.addEventListener('click', (e) => {
+            if (e.target === this.mergeModal) this.closeMergeModal();
+        });
     }
 
     async loadContacts() {
@@ -41,6 +69,7 @@ class ContactsPage {
             this.renderContactsList();
         } catch (error) {
             console.error('Ошибка загрузки контактов:', error);
+            this.showError('Не удалось загрузить контакты');
         }
     }
 
@@ -59,13 +88,11 @@ class ContactsPage {
         `).join('');
         this.contactsListContainer.innerHTML = listHtml;
 
-        // Навешиваем обработчики на кнопки редактирования
         document.querySelectorAll('.edit-contact-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const id = btn.dataset.id;
-                const name = btn.dataset.name;
-                this.showContactDetail(id, name);
+                window.location.href = `/contacts.html?id=${id}`;
             });
         });
     }
@@ -76,6 +103,10 @@ class ContactsPage {
         this.contactNameInput.value = contactName;
         await this.loadConnections();
         this.showDetailView();
+        // обновляем URL без перезагрузки (история)
+        const url = new URL(window.location);
+        url.searchParams.set('id', contactId);
+        window.history.pushState({}, '', url);
     }
 
     async loadConnections() {
@@ -126,40 +157,49 @@ class ContactsPage {
         this.connectionsListContainer.innerHTML = listHtml;
 
         document.querySelectorAll('.delete-connection-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                console.log('Удаление пока не реализовано');
+                const connId = btn.dataset.id;
+                if (confirm('Удалить соединение?')) {
+                    try {
+                        await api.delete(`/communicationservice/v1/contact/${this.selectedContactId}/connection/${connId}`);
+                        await this.loadConnections();
+                    } catch (error) {
+                        this.showError('Не удалось удалить соединение');
+                    }
+                }
             });
         });
     }
 
     async createContact() {
         try {
-            await api.post('/communicationservice/v1/contact', {});
-            await this.loadContacts();
+            const response = await api.post('/communicationservice/v1/contact', {});
+            const newContact = response.data;
+            window.location.href = `/contacts.html?id=${newContact.contactId}`;
         } catch (error) {
             console.error('Ошибка создания контакта:', error);
+            this.showError('Не удалось создать контакт');
         }
     }
 
     async updateContactName() {
         const newName = this.contactNameInput.value.trim();
         if (!newName) {
-            alert('Имя не может быть пустым');
+            this.showError('Имя не может быть пустым');
             return;
         }
         try {
             await api.patch(`/communicationservice/v1/contact/${this.selectedContactId}`, { contactName: newName });
             await this.loadContacts();
-            const updatedContact = this.contacts.find(c => c.contactId === this.selectedContactId);
-            if (updatedContact) {
-                this.selectedContactName = updatedContact.contactName;
-                this.contactNameInput.value = updatedContact.contactName;
-            } else {
-                this.showListView();
-            }
+            // обновляем отображаемое имя
+            this.selectedContactName = newName;
+            this.contactNameInput.value = newName;
+            // обновляем ссылки в списке (для этого перерисуем список)
+            this.renderContactsList();
         } catch (error) {
             console.error('Ошибка обновления имени:', error);
+            this.showError('Не удалось обновить имя');
         }
     }
 
@@ -167,7 +207,7 @@ class ContactsPage {
         const channel = this.channelSelect.value;
         const identifier = this.identifierInput.value.trim();
         if (!identifier) {
-            alert('Введите идентификатор');
+            this.showError('Введите идентификатор');
             return;
         }
 
@@ -179,7 +219,7 @@ class ContactsPage {
         } else if (channel === 'mail') {
             payload.mailAddress = identifier;
         } else {
-            alert('Неподдерживаемый канал');
+            this.showError('Неподдерживаемый канал');
             return;
         }
 
@@ -189,18 +229,80 @@ class ContactsPage {
             await this.loadConnections();
         } catch (error) {
             console.error('Ошибка создания connection:', error);
+            this.showError('Не удалось добавить соединение');
         }
+    }
+
+    openMergeModal() {
+        if (!this.mergeModal) return;
+        // заполняем список контактами, исключая текущий
+        const otherContacts = this.contacts.filter(c => c.contactId !== this.selectedContactId);
+        if (otherContacts.length === 0) {
+            this.showError('Нет других контактов для объединения');
+            return;
+        }
+        this.renderMergeContactsList(otherContacts);
+        this.mergeModal.style.display = 'flex';
+    }
+
+    renderMergeContactsList(contacts) {
+        if (!this.mergeContactsList) return;
+        const html = contacts.map(contact => `
+            <div class="merge-contact-item" data-id="${contact.contactId}">
+                <div class="merge-contact-name">${this.escapeHtml(contact.contactName)}</div>
+            </div>
+        `).join('');
+        this.mergeContactsList.innerHTML = html;
+        this.mergeContactsList.querySelectorAll('.merge-contact-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const contactIdToMerge = item.dataset.id;
+                this.mergeContacts(contactIdToMerge);
+            });
+        });
+    }
+
+    async mergeContacts(contactIdToMerge) {
+        try {
+            // POST /v1/contact/merge
+            await api.post('/communicationservice/v1/contact/merge', {
+                sourceContactId: this.selectedContactId,
+                targetContactId: contactIdToMerge
+            });
+            // после объединения переходим на целевой контакт
+            window.location.href = `/contacts.html?id=${contactIdToMerge}`;
+        } catch (error) {
+            console.error('Ошибка объединения:', error);
+            const msg = error.response?.data?.message || 'Не удалось объединить контакты';
+            this.showError(msg);
+            this.closeMergeModal();
+        }
+    }
+
+    closeMergeModal() {
+        if (this.mergeModal) this.mergeModal.style.display = 'none';
+    }
+
+    goBackToList() {
+        window.location.href = '/contacts.html';
     }
 
     showListView() {
         this.listView.style.display = 'block';
         this.detailView.style.display = 'none';
         this.selectedContactId = null;
+        // очищаем параметр id в URL
+        const url = new URL(window.location);
+        url.searchParams.delete('id');
+        window.history.pushState({}, '', url);
     }
 
     showDetailView() {
         this.listView.style.display = 'none';
         this.detailView.style.display = 'block';
+    }
+
+    showError(message) {
+        alert(`❌ Ошибка: ${message}`);
     }
 
     escapeHtml(str) {
