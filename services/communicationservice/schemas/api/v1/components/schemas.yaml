@@ -167,6 +167,7 @@ components:
                 format: uuid
               channel:
                 type: string
+                # $ref: './entities.yaml#/components/schemas/ChannelType'
               text:
                 type: string
               isIncoming:
@@ -187,6 +188,37 @@ components:
         name:
           type: string
 
+    GetOriginResponse:
+      type: object
+      required:
+        - id
+        - name
+        - requiresAction
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        channel:
+          $ref: './entities.yaml#/components/schemas/ChannelType'
+        apiKey:
+          type: string
+        emailServerAddress:
+          type: string
+        provider:
+          type: string
+        requiresAction:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
     ModifyOriginRequest:
       type: object
       required:
@@ -199,24 +231,11 @@ components:
           type: string
         emailServerAddress:
           type: string
+        provider:
+          type: string
 
     ModifyOriginResponse:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        channel:
-          type: string
-        hiddenApiKey:
-          type: string
-        emailServerAddress:
-          type: string
+      $ref: '#/components/schemas/GetOriginResponse'
 
     GetAllOriginsResponse:
       type: object
@@ -230,15 +249,21 @@ components:
             required:
               - id
               - name
-              # - channel
+              - requiresAction
             properties:
               id:
                 type: string
                 format: uuid
               name:
                 type: string
-              # channel:
-                # type: string
+              channel:
+                $ref: './entities.yaml#/components/schemas/ChannelType'
+              apiKeyMasked:
+                type: string
+              provider:
+                type: string
+              requiresAction:
+                type: boolean
 
     CreateOriginConnectionRequest:
       type: object

@@ -241,6 +241,9 @@
     </div>
 
     <div class="page_body-content origins-page-content">
+        <div class="page_header">
+            <h1>Источники связи</h1>
+        </div>
         <!-- Список источников -->
         <div class="origins-list-view">
             <div class="origins-header">
@@ -255,7 +258,6 @@
                 <button class="back-to-list-btn">← Назад к списку</button>
             </div>
 
-            <!-- Блок информации об источнике -->
             <div class="origin-info-block">
                 <h3>Информация об источнике</h3>
                 <div class="origin-info-fields">
@@ -264,29 +266,39 @@
                         <option value="telegram">Telegram</option>
                         <option value="sms">SMS</option>
                         <option value="mail">Email</option>
+                        <option value="whatsapp">WhatsApp</option>
                     </select>
                     <input type="text" class="origin-apikey-input" placeholder="API Key">
-                    <input type="text" class="origin-email-server-input" placeholder="Сервер обработки (для Email)" style="display: none;">
-                    <!-- фиктивный выбор провайдера для SMS -->
+
+                    <!-- для email -->
+                    <input type="text" class="origin-email-server-input" placeholder="SMTP сервер (для Email)" style="display: none;">
+
+                    <!-- для SMS -->
                     <select class="origin-sms-provider" style="display: none;">
                         <option value="exolve">Exolve</option>
-                        <option value="telfin">Телфин</option>
+                        <option value="sms_aero">Sms Aero</option>
                     </select>
+
+                    <!-- для WhatsApp (пока один провайдер) -->
+                    <select class="origin-whatsapp-provider" style="display: none;">
+                        <option value="sms_aero">SMS Aero</option>
+                    </select>
+
                     <button class="save-origin-btn">Сохранить</button>
+                </div>
+                <div class="origin-requirements-warning" style="display: none; color: #e64444; font-size: 12px; margin-top: 8px;">
+                    ⚠️ Требуется заполнить все обязательные поля для данного канала.
                 </div>
             </div>
 
-            <!-- Блок добавления соединения -->
             <div class="add-connection-block">
                 <h3>Добавление соединения (connection)</h3>
                 <div class="add-connection-fields">
-                    <!-- динамические поля: для SMS -> phoneNumber, для Telegram -> commonIdentifier, для Mail -> mailAddress -->
-                    <input type="text" class="connection-value-input" placeholder="Значение">
-                    <button class="create-connection-btn">Создать</button>
+                    <input type="text" class="connection-value-input" placeholder="Значение" disabled>
+                    <button class="create-connection-btn" disabled>Создать</button>
                 </div>
             </div>
 
-            <!-- Список соединений -->
             <div class="connections-list-block">
                 <h3>Список соединений</h3>
                 <div class="connections-list"></div>

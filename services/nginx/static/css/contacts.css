@@ -4,7 +4,8 @@
     padding: 20px;
     /* width: 100%; */
     width: fit-content;
-    overflow-y: auto;
+    height: 94vh;
+    overflow-y: scroll;
     background: var(--color-background);
     display: flex;
     flex-direction: column;

@@ -20,6 +20,7 @@
 #include "handlers/v1/contacts/GetAllConnections.hpp"
 #include "handlers/v1/contacts/GetAllMessages.hpp"
 #include "handlers/v1/origins/CreateOrigin.hpp"
+#include "handlers/v1/origins/GetOrigin.hpp"
 #include "handlers/v1/origins/ModifyOrigin.hpp"
 #include "handlers/v1/origins/GetAllOrigins.hpp"
 #include "handlers/v1/origins/CreateOriginConnection.hpp"
@@ -46,6 +47,7 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::GetAllConnections>()
             .Append<communicationservice::handlers::v1::GetAllMessages>()
             .Append<communicationservice::handlers::v1::CreateOrigin>()
+            .Append<communicationservice::handlers::v1::GetOrigin>()
             .Append<communicationservice::handlers::v1::ModifyOrigin>()
             .Append<communicationservice::handlers::v1::GetAllOrigins>()
             .Append<communicationservice::handlers::v1::CreateOriginConnection>()

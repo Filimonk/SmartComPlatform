@@ -8,6 +8,7 @@ components:
         - aura_connect
         - sms
         - telegram
+        - whatsapp
         - mail
   
     MessageJob:

@@ -3,14 +3,14 @@
 SET search_path TO communicationservice_schema;
 
 
-CREATE TYPE channel_type AS ENUM ('aura_connect', 'sms', 'telegram', 'mail');
+CREATE TYPE channel_type AS ENUM ('aura_connect', 'sms', 'telegram', 'mail', 'whatsapp');
 
 CREATE TABLE channel_categories (
     channel channel_type PRIMARY KEY,
     category_type TEXT
 );
 INSERT INTO channel_categories (channel, category_type) VALUES
-('sms', 'phone_number'), ('mail', 'mail_address'), ('telegram', 'common_identifier'), ('aura_connect', 'common_identifier');
+('sms', 'phone_number'), ('mail', 'mail_address'), ('telegram', 'common_identifier'), ('aura_connect', 'common_identifier'), ('whatsapp', 'phone_number');
 
 
 CREATE TABLE connection (

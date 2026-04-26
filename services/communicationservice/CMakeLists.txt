@@ -59,6 +59,7 @@ add_library(
     src/handlers/v1/contacts/GetAllMessages.cpp
     
     src/handlers/v1/origins/CreateOrigin.cpp
+    src/handlers/v1/origins/GetOrigin.cpp
     src/handlers/v1/origins/ModifyOrigin.cpp
     src/handlers/v1/origins/GetAllOrigins.cpp
     src/handlers/v1/origins/CreateOriginConnection.cpp

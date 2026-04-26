@@ -1,4 +1,4 @@
-#include "ModifyOrigin.hpp"
+#include "GetOrigin.hpp"
 #include "../common/ErrorBuilder.hpp"
 
 #include <userver/components/component_context.hpp>
@@ -41,7 +41,7 @@ auto maskApiKey(const std::optional<std::string>& api_key_otp) -> std::string {
 
 namespace communicationservice::handlers::v1 {
 
-ModifyOrigin::ModifyOrigin(const userver::components::ComponentConfig& config,
+GetOrigin::GetOrigin(const userver::components::ComponentConfig& config,
                            const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
@@ -49,9 +49,9 @@ ModifyOrigin::ModifyOrigin(const userver::components::ComponentConfig& config,
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto ModifyOrigin::HandleRequestJsonThrow(
+auto GetOrigin::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest& request,
-    const userver::formats::json::Value& request_json,
+    const userver::formats::json::Value& /*request_json*/,
     userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value {
 
     try {
@@ -81,23 +81,9 @@ auto ModifyOrigin::HandleRequestJsonThrow(
 
         const auto origin_id = userver::utils::BoostUuidFromString(request.GetPathArg("originId"));
 
-        const auto& request_dto = request_json.As<dto::ModifyOriginRequest>();
-        const auto& name = request_dto.name;
-        const auto& channel = request_dto.channel;
-        const auto& api_key = (request_dto.apiKey.value_or("").empty() ? std::nullopt : request_dto.apiKey);
-        const auto& email_server_address = (request_dto.emailServerAddress.value_or("").empty() ? std::nullopt : request_dto.emailServerAddress);
-        const auto& provider = (request_dto.provider.value_or("").empty() ? std::nullopt : request_dto.provider);
-        
-        if (!name.has_value() && !channel.has_value() && !api_key.has_value() &&
-            !email_server_address.has_value() && !provider.has_value()) {
-            throw userver::server::handlers::ClientError(
-                ErrorBuilder{dto::ErrorCode::kMissingText, "At least one field must be filled in"});
-        }
-
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kModifyOrigin, user_id, origin_id, name,
-            dto::ToString(channel.value()), api_key, email_server_address, provider);
+            communicationservice::sql::kGetOrigin, user_id, origin_id);
 
         if (result.IsEmpty()) {
             throw userver::server::handlers::ResourceNotFound(
@@ -118,11 +104,11 @@ auto ModifyOrigin::HandleRequestJsonThrow(
         const auto& updated_at = userver::utils::datetime::TimePointTz{
             row["updated_at"].As<std::chrono::system_clock::time_point>()};
 
-        dto::ModifyOriginResponse response{
+        dto::GetOriginResponse response{
             .id = modifyed_origin_id,
             .name = modifyed_origin_name,
             .channel = modifyed_channel,
-            .apiKey = (requires_action ? modifyed_api_key : maskApiKey(modifyed_api_key)),
+            .apiKey = maskApiKey(modifyed_api_key),
             .emailServerAddress = modifyed_email_server_address,
             .provider = modifyed_provider,
             .requiresAction = requires_action,

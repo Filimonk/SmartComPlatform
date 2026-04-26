@@ -90,6 +90,11 @@ components_manager:
           method: POST
           task_processor: main-task-processor
         
+        handler-v1-GetOrigin:
+          path: /v1/origin/{originId}
+          method: GET
+          task_processor: main-task-processor
+        
         handler-v1-ModifyOrigin:
           path: /v1/origin/{originId}
           method: PATCH

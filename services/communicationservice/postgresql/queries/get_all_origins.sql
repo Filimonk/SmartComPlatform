@@ -3,7 +3,11 @@
 
 SELECT 
     o.id,
-    o.name
+    o.name,
+    o.channel::TEXT,
+    o.api_key,
+    o.provider,
+    o.requires_action
 FROM communicationservice_schema.origin o
 JOIN communicationservice_schema.origins_of_group og 
     ON og.origin_id = o.id

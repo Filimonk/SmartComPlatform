@@ -289,6 +289,46 @@ paths:
           $ref: '#/components/responses/ErrorWithCode'
 
   /v1/origin/{originId}:
+    get:
+      summary: Get the origin info
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+        - name: originId
+          in: path
+          description: UUID of origin
+          schema:
+            type: string
+            format: uuid
+        
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: Modified
+          $ref: '#/components/requests/GetOriginResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/origin/{originId}:
     patch:
       summary: Modify the origin
       
