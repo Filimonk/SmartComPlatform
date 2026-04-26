@@ -86,4 +86,22 @@ body {
     flex-grow: 0;
 }
 
+.message-mode-panel- {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: raw;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 10px;
+    box-sizing: border-box;
+}
 
+.mode-option p {
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.mode-option.active {
+    border-bottom: 1px solid var(--color-brand-primary);
+}

@@ -30,12 +30,12 @@
 }
 
 .empty-chat button {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .empty-chat p {
     margin: 0;
-    line-height: 1.5;
+    line-height: 1;
     backdrop-filter: blur(2px);            /* Размывает узор фона ЗА текстом */
 }
 
