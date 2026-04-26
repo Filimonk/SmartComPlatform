@@ -50,9 +50,9 @@ button:hover {
 }
 
 .origins-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px; 
 }
 .origin-item {
     display: flex;
