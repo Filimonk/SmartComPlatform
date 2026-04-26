@@ -3,7 +3,8 @@
 -- param: $2 connection_id UUID
 
 SELECT 
-    o.channel::TEXT
+    o.channel::TEXT,
+    o.provider
 FROM communicationservice_schema.origin_connection oc
 JOIN communicationservice_schema.origin o 
     ON o.id = oc.origin_id

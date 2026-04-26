@@ -82,7 +82,7 @@ class OriginsPage {
         if (channel === 'sms' && this.originSmsProviderSelect.value === 'exolve') {
             placeholder = 'Номер телефона (в формате 71234567890)';
             // disabled = false;
-        } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'sms_aero') {
+        } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'aero') {
             placeholder = 'Логин от сервиса SMS Aero';
             // disabled = false;
         } else if (channel === 'telegram') {
@@ -245,7 +245,7 @@ class OriginsPage {
                     label = 'WhatsApp login';
                 } else if (channel === 'telegram') {
                     label = 'Telegram bot';
-                } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'sms_aero') {
+                } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'aero') {
                     label = 'SMS Aero';
                 }
                 value = conn.commonIdentifier;
@@ -348,7 +348,7 @@ class OriginsPage {
         let payload = {};
         if (channel === 'sms' && this.originSmsProviderSelect.value === 'exolve') {
             payload.phoneNumber = value;
-        } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'sms_aero') {
+        } else if (channel === 'sms' && this.originSmsProviderSelect.value === 'aero') {
             payload.commonIdentifier = value;
         } else if (channel === 'mail') {
             payload.mailAddress = value;

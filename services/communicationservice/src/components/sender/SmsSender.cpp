@@ -19,7 +19,7 @@ auto SmsSender::Send(const communicationservice::dto::MessageJob& ctx) const -> 
     LOG_INFO() << "SMS 1";
 
     const auto origin = pg_cluster_->Execute(
-        ClusterHostType::kMaster, communicationservice::sql::kGetOrigin, ctx.originConnectionId);
+        ClusterHostType::kMaster, communicationservice::sql::kGetOriginByOriginConnectionId, ctx.originConnectionId);
     const auto api_key = origin[0]["api_key"].As<std::string>();
     
     LOG_INFO() << "SMS 2";

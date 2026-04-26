@@ -69,6 +69,8 @@ add_library(
     src/components/sender/SmsSender.cpp
     src/components/sender/TelegramSender.cpp
     src/components/sender/EmailSender.cpp
+    src/components/sender/SmsAeroSender.cpp
+    # src/components/sender/WhatsappAeroSender.cpp
     src/components/MessageDispatcher.cpp
     src/components/TelegramMessageFetcher.cpp
     

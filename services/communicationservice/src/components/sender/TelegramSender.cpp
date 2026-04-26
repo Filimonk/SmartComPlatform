@@ -18,7 +18,7 @@ auto TelegramSender::Send(const communicationservice::dto::MessageJob& ctx) cons
     // origin (там api_key = token бота)
     const auto origin = pg_cluster_->Execute(
         ClusterHostType::kMaster,
-        communicationservice::sql::kGetOrigin,
+        communicationservice::sql::kGetOriginByOriginConnectionId,
         ctx.originConnectionId);
 
     const auto bot_token = origin[0]["api_key"].As<std::string>();

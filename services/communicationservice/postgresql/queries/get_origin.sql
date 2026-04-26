@@ -1,5 +1,5 @@
 -- name: kGetOrigin
--- param: $1 user_id UUID
+-- param: $1 user_id INT
 -- param: $2 origin_id UUID
 
 SELECT 

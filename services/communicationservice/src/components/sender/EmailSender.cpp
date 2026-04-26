@@ -44,7 +44,7 @@ auto EmailSender::Send(const communicationservice::dto::MessageJob& ctx) const -
         // --- origin
         const auto origin = pg_cluster_->Execute(
             ClusterHostType::kMaster,
-            communicationservice::sql::kGetOrigin,
+            communicationservice::sql::kGetOriginByOriginConnectionId,
             ctx.originConnectionId);
 
         const auto smtp_server = origin[0]["email_server_address"].As<std::string>();

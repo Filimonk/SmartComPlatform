@@ -11,6 +11,8 @@
 #include "sender/SmsSender.hpp"
 #include "sender/TelegramSender.hpp"
 #include "sender/EmailSender.hpp"
+#include "sender/SmsAeroSender.hpp"
+// #include "sender/WhatsappAeroSender.hpp"
 
 using userver::storages::postgres::ClusterHostType;
 
@@ -25,7 +27,7 @@ MessageDispatcher::MessageDispatcher(const userver::components::ComponentConfig&
       http_client_(context.FindComponent<userver::components::HttpClient>().GetHttpClient()) {
 
     registry_.Register(
-        dto::ToString(dto::ChannelType::kSms),
+        "sms_exolve",
         std::make_shared<communicationservice::sender::SmsSender>(http_client_, pg_cluster_));
 
     registry_.Register(
@@ -34,6 +36,12 @@ MessageDispatcher::MessageDispatcher(const userver::components::ComponentConfig&
 
     registry_.Register(dto::ToString(dto::ChannelType::kMail),
                        std::make_shared<communicationservice::sender::EmailSender>(pg_cluster_));
+
+    registry_.Register("sms_aero",
+                       std::make_shared<communicationservice::sender::SmsAeroSender>(http_client_, pg_cluster_));
+
+    // registry_.Register("whatsapp_aero",
+                       // std::make_shared<communicationservice::sender::WhatsappAeroSender>(http_client_, pg_cluster_));
 
     std::chrono::seconds period{3};
     task_.Start("dispatcher-task", {period}, [this] { DoWork(); });
@@ -92,7 +100,9 @@ void MessageDispatcher::DoWork() {
 
             LOG_INFO() << "Processing job 5";
 
-            const auto channel_str = channel[0]["channel"].As<std::string>();
+            const auto provider_str = channel[0]["provider"].As<std::optional<std::string>>();
+            const auto channel_str = channel[0]["channel"].As<std::string>() + (provider_str.has_value() ? "_" + provider_str.value() : "");
+            
             LOG_INFO() << channel_str;
 
             const auto& sender = registry_.Get(channel_str);
