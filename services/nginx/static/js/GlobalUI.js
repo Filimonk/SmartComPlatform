@@ -185,31 +185,20 @@ class GlobalUI {
                 closeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.removeTab(contactId);
-                    // Если удалили текущую активную, перенаправляем на новую последнюю
-                    const newActive = this.getLastActiveContactId();
-                    if (newActive && newActive !== contactId) {
-                        window.location.href = `/workspace.html?contactId=${newActive}`;
-                    } else if (this.tabs.length === 0) {
+                    
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const currentContactId = urlParams.get('contactId');
+
+                    if (window.location.pathname.includes('workspace.html') && currentContactId === String(contactId)) {
+                        console.log('[GlobalUI] закрыли активную вкладку, уходим на главную');
                         window.location.href = '/contacts.html';
                     }
+                    
+                    return;
                 });
             }
             tabElem.addEventListener('click', (e) => {
                 if (e.target.closest('.close')) return;
-                // if (e.target.closest('.close')) {
-                    // console.log('[GlobalUI] клик по крестику');
-                    // this.removeTab(contactId);
-                    // console.log('[GlobalUI] удалили вкладку', contactId);
-                    // 
-                    // const newActive = this.getLastActiveContactId();
-                    // if (newActive && newActive !== contactId) {
-                        // window.location.href = `/workspace.html?contactId=${newActive}`;
-                    // } else {
-                        // window.location.href = '/contacts.html';
-                    // }
-                    // return;
-                // }
-                e.target.closest('.close')
                 this.setLastActiveContactId(contactId);
                 window.location.href = `/workspace.html?contactId=${contactId}`;
             });

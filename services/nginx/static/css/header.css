@@ -332,6 +332,10 @@ a {
     box-shadow: 2px 2px 2px 0.5px rgba(0, 0, 0, 0.25);
 }
 
+.tab:not(.active):hover .card {
+    background: #FFFFFF;
+}
+
 /* tab_content */
 
 .tab_content {
@@ -405,6 +409,14 @@ a {
     top: 0px;
 
     border-radius: 4px;
+    
+    z-index: 10;
+}
+
+.close:hover {
+    background: #F3F3F3;
+    outline: 0.5px solid #B8B8B8;
+    border-radius: 4px;
 }
 
 /* tab_close_background */
@@ -420,7 +432,7 @@ a {
     width: 14px;
     height: 20px;
     
-    box-shadow: -4px 0px 4px 1px var(--color-buttons-default);
+    /* box-shadow: -4px 0px 4px 1px var(--color-buttons-default); */
 
 
     /* Inside auto layout */
@@ -430,10 +442,12 @@ a {
     flex-grow: 0;
 }
 
+/*
 .tab.active .tab_close_background {
     box-shadow: -4px 0px 4px 1px var(--color-window);
     background: var(--color-window);
 }
+*/
 
 /* tab_name_field */
 
