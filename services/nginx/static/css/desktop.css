@@ -878,18 +878,24 @@
 }
 .tasks-tabs {
     display: flex;
+    padding: 4px 4px;
     gap: 7px;
+    border-radius: 20px;
+    background: var(--color-userinfo-main);
+    background: white;
+    border: 0.5px solid var(--color-border);
 }
 .tasks-tab {
-    padding: 5px 12px;
+    padding: 4px 7px;
     cursor: pointer;
     border-radius: 20px;
     font-size: 13px;
-    background: var(--color-buttons-default);
 }
 .tasks-tab.active {
     background: var(--color-brand-primary);
     color: white;
+    background: var(--color-status-frame);
+    color: var(--color-brand-primary);
 }
 .create-task-btn {
     display: flex;
