@@ -299,7 +299,7 @@ class ContactsPage {
     }
 
     goBackToList() {
-        window.location.href = '/contacts.html';
+        window.history.go(-2);
     }
 
     showListView() {

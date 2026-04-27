@@ -21,10 +21,16 @@ class Desktop {
 
         this.loadCustomSelection();
         this.tokenIdempotency = self.crypto.randomUUID();
+            
+        // Контакт
+        this.editContactBtn = document.querySelector('.userinfo_edit_contact');
+
 
         this.aiFixBtn = null;
         this.aiApplyBtn = null;
         this.aiSuggestionField = null;
+            
+        this.tasksManager = new WorkspaceTasks(this.contactId);
 
         this.init();
         this.loadMessages().then(() => {
@@ -292,7 +298,7 @@ class Desktop {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2h6v2h-6V6zm0 4h6v2h-6v-2zm-6 4h12v2H6v-2zm0-4h4v2H6v-2z" fill="currentColor"/>
                         </svg>
-                        Получить приветственное письмо
+                        Вставить приветственное письмо
                     </button>
                 </div>
             `;
@@ -392,6 +398,16 @@ class Desktop {
         });
         
         this.setupAI();
+        
+        // Редактирование контакта
+        console.log("init editContactBtn", this.editContactBtn);
+        if (this.editContactBtn) {
+            this.editContactBtn.addEventListener('click', () => {
+                console.log("editContactBtn clicked");
+                window.location.href = `/contacts.html?id=${this.contactId}`;
+            });
+        }
+        
     }
 
     async sendChatMessage() {
