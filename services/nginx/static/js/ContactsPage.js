@@ -80,13 +80,29 @@ class ContactsPage {
             return;
         }
 
+        // Вместо прямого href
         const listHtml = this.contacts.map(contact => `
-            <div class="contact-item" data-id="${contact.contactId}">
-                <a href="/workspace.html?contactId=${contact.contactId}" class="contact-name-link">${this.escapeHtml(contact.contactName)}</a>
-                <button class="edit-contact-btn" data-id="${contact.contactId}" data-name="${this.escapeHtml(contact.contactName)}">✎ Редактировать</button>
-            </div>
-        `).join('');
+    <div class="contact-item" data-id="${contact.contactId}">
+        <span class="contact-name-link" data-id="${contact.contactId}" data-name="${this.escapeHtml(contact.contactName)}">${this.escapeHtml(contact.contactName)}</span>
+        <button class="edit-contact-btn" data-id="${contact.contactId}" data-name="${this.escapeHtml(contact.contactName)}">✎ Редактировать</button>
+    </div>
+`).join('');
+        
         this.contactsListContainer.innerHTML = listHtml;
+
+        // Обработчик
+        document.querySelectorAll('.contact-name-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log("clicked", link.dataset.id, link.dataset.name);
+                const id = link.dataset.id;
+                const name = link.dataset.name;
+                if (window.auraTabs) {
+                    window.auraTabs.addTab(id, name);
+                }
+                window.location.href = `/workspace.html?contactId=${id}`;
+            });
+        });
 
         document.querySelectorAll('.edit-contact-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
