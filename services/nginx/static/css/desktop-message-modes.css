@@ -168,6 +168,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
 }
 
 .ai-suggestion-field {
@@ -196,6 +197,14 @@
     justify-content: flex-end;
 }
 
+.ai-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    cursor: pointer;
+}
+
 .ai-fix-btn, .ai-apply-btn {
     background: var(--color-buttons-default);
     border: none;
@@ -204,15 +213,24 @@
     cursor: pointer;
     font-size: 13px;
     transition: all 0.2s;
+    width: 100%;
 }
 
 .ai-fix-btn:hover {
     background: #e0e0e0;
 }
 
+.ai-fix-btn p {
+    max-width: 80px;
+}
+
 .ai-apply-btn:enabled {
     background: var(--color-brand-primary);
     color: white;
+}
+
+.ai-apply-btn:enabled svg {
+    fill: white;
 }
 
 .ai-apply-btn:enabled:hover {
@@ -222,5 +240,9 @@
 .ai-apply-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.ai-apply-btn p {
+    max-width: 90px;
 }
 

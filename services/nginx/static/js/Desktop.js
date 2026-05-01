@@ -517,14 +517,14 @@ class Desktop {
         }
 
         this.aiFixBtn.disabled = true;
-        const originalBtnText = this.aiFixBtn.textContent;
-        this.aiFixBtn.textContent = '⏳ Соединение...';
+        const originalHTML = this.aiFixBtn.innerHTML;
+        this.aiFixBtn.textContent = 'Соединение...';
 
         const token = getToken();
         if (!token) {
             alert('Необходима авторизация');
             this.aiFixBtn.disabled = false;
-            this.aiFixBtn.textContent = originalBtnText;
+            this.aiFixBtn.textContent = originalHTML;
             return;
         }
 
@@ -532,7 +532,7 @@ class Desktop {
         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-            this.aiFixBtn.textContent = '⏳ Отправка...';
+            this.aiFixBtn.textContent = 'Отправка...';
             const request = {
                 Authorization: `Bearer ${token}`,
                 text: originalText
@@ -578,7 +578,7 @@ class Desktop {
 
         ws.onclose = () => {
             this.aiFixBtn.disabled = false;
-            this.aiFixBtn.textContent = originalBtnText;
+            this.aiFixBtn.innerHTML = originalHTML;
         };
     }
 

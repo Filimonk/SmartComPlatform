@@ -19,6 +19,7 @@ class WorkspaceTasks {
         this.taskModal = document.getElementById('taskModal');
         this.taskTextInput = document.querySelector('.task-text');
         this.taskDueInput = document.querySelector('.task-due');
+        this.taskHourInput = document.querySelector('.task-hour');
         this.createTaskSubmit = document.querySelector('.create-task-submit');
 
         this.init();
@@ -78,6 +79,16 @@ class WorkspaceTasks {
     async loadTasks() {
         try {
             const response = await api.get(`/communicationservice/v1/contact/${this.contactId}/tasks?status=${this.currentTasksStatus}`);
+            // давай замокаем этот запрос и просто положим подходящие данные в response
+            // только давай попробуем какой-то правдоподобный на задачу text сделать
+            // const response = {
+                // data: {
+                    // tasks: [
+                        // { id: 1, text: 'Уточнить актуальность предложения', dueDate: '2023-01-01T10:00:00Z', status: 'active' },
+                        // { id: 2, text: 'Созвониться и проверить детали процесса исполнения заказа', dueDate: '2023-01-01T11:00:00Z', status: 'active' },
+                    // ]
+                // }
+            // }
             this.tasks = response.data.tasks || [];
             this.renderTasks();
         } catch (error) {
@@ -138,18 +149,29 @@ class WorkspaceTasks {
     }
 
     async createTask() {
-        const text = this.taskTextInput.value.trim();
-        const dueDate = this.taskDueInput.value;
+        let text = this.taskTextInput.value.trim();
+        let dueDateLocal = this.taskDueInput.value;
+        let dueHourLocal = this.taskHourInput.value;
+
         if (!text) {
             this.showError('Введите текст задачи');
             return;
         }
-        if (!dueDate) {
+        if (!dueDateLocal) {
             this.showError('Выберите дату выполнения');
             return;
         }
+        if (!dueHourLocal) {
+            this.showError('Выберите время выполнения');
+            return;
+        }
+        // Конвертируем в UTC строку формата RFC3339 с Московским поясом UTS+3, добавив час + нулевые минуты + секунды
+        // нужно преобразовать час в двухсимвольную строку с добавлением лидирующего нуля
+        dueDateLocal += `T${dueHourLocal.toString().padStart(2, '0')}:00:00+03:00`;
+        const dueDateUTC = new Date(dueDateLocal).toISOString();
+
         try {
-            await api.post(`/communicationservice/v1/contact/${this.contactId}/tasks`, { text, dueDate });
+            await api.post(`/communicationservice/v1/contact/${this.contactId}/tasks`, { text, dueDate: dueDateUTC });
             this.taskModal.style.display = 'none';
             await this.loadTasks();
         } catch (error) {

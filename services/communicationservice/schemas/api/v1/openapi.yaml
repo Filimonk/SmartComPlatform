@@ -511,6 +511,225 @@ paths:
         '500':
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
+        
+  /v1/contact/{contactId}/tasks:
+    get:
+      summary: Get all tasks by contactId
+      
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        
+        - name: status
+          in: query
+          required: true
+          schema:
+            $ref: './components/schemas.yaml#/components/schemas/TaskStatusType'
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/requests/GetAllTasksResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+            
+  /v1/contact/{contactId}/tasks:
+    post:
+      summary: Create the new task
+      
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/CreateTaskRequest'
+
+      responses:
+        '201':
+          description: Created
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+        
+  /v1/tasks/{taskId}/status:
+    patch:
+      summary: Change task status
+      
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/ChangeTaskStatusRequest'
+
+      responses:
+        '200':
+          description: OK
+          # $ref: '#/components/requests/ChangeTaskStatusResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+        
+  /v1/contact/{contactId}/notes:
+    get:
+      summary: Get all notes by contactId
+      
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/requests/GetAllNotesResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+            
+  /v1/contact/{contactId}/notes:
+    post:
+      summary: Create the new note
+      
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/CreateNoteRequest'
+
+      responses:
+        '201':
+          description: Created
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
 
 
 components:

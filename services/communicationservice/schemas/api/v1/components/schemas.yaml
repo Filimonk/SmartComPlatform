@@ -345,4 +345,64 @@ components:
       properties:
         text:
           type: string
+          
+    GetAllTasksResponse:
+      type: object
+      required:
+        - tasks
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: './entities.yaml#/components/schemas/Task'
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - text
+        - dueDate
+      properties:
+        text:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+
+    ChangeTaskStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: './entities.yaml#/components/schemas/TaskStatusType'
+
+    # ChangeTaskStatusResponse:
+    # type: object
+    # required:
+    # - id
+    # - status
+    # properties:
+    # id:
+    # type: string
+    # format: uuid
+    # status:
+    # $ref: './entities.yaml#/components/schemas/TaskStatusType'
+
+    GetAllNotesResponse:
+      type: object
+      required:
+        - notes
+      properties:
+        notes:
+          type: array
+          items:
+            $ref: './entities.yaml#/components/schemas/Note'
+
+    CreateNoteRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
 

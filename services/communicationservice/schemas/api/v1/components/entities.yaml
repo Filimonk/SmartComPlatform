@@ -36,3 +36,45 @@ components:
         text:
           type: string
 
+    Task:
+      type: object
+      required:
+        - id
+        - text
+        - dueDate
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/TaskStatusType'
+
+    TaskStatusType:
+      type: string
+      description: "Task status"
+      enum:
+        - active
+        - archived
+
+    Note:
+      type: object
+      required:
+        - id
+        - text
+        - cratedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
+        cratedAt:
+          type: string
+          format: date-time
+

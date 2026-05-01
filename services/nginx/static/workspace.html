@@ -486,7 +486,7 @@
                 </div>
                 <div class="tasks-controls">
                     <div class="tasks-tabs">
-                        <div class="tasks-tab active" data-status="active">Текущие</div>
+                        <div class="tasks-tab active" data-status="active">Активные</div>
                         <div class="tasks-tab" data-status="archived">Архивные</div>
                     </div>
                     <button class="create-task-btn">
@@ -585,8 +585,18 @@
                 <div class="ai-content">
                     <textarea class="ai-suggestion-field" readonly placeholder="Здесь появится предложение AI..."></textarea>
                     <div class="ai-buttons">
-                        <button class="ai-fix-btn">🔧 Исправить ошибки</button>
-                        <button class="ai-apply-btn" disabled>📝 Применить изменения</button>
+                        <button class="ai-fix-btn">
+                            <div class="ai-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#1f1f1f"><path d="m195-143-51-51 292-292-172-42 186-116-16-219 168 141 202-82-82 203 142 167-218.97-16L529-263l-42-172-292 292Zm21-481-72-72 72-72 72 72-72 72Zm341 177 49-78 92 7-59.31-70.2 34.6-85.8-85.02 35L518-698l7 92-79 48.39 89.35 21.73L557-447Zm139 303-72-72 72-72 72 72-72 72ZM572-573Z"/></svg>
+                            </div>
+                            <p>Исправить ошибки</p>
+                        </button>
+                        <button class="ai-apply-btn" disabled>
+                            <div class="ai-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#1f1f1f"><path d="M144-348v-72h288v72H144Zm0-150v-72h432v72H144Zm0-150v-72h432v72H144Zm499 408L508-376l51-51 84 85 170-170 51 51-221 221Z"/></svg>
+                            </div>
+                            <p>Применить изменения</p>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -619,7 +629,8 @@
         </div>
         <div class="modal-body">
             <input type="text" class="task-text" placeholder="Текст задачи">
-            <input type="datetime-local" class="task-due">
+            <input type="date" class="task-due">
+            <input type="number" class="task-hour" min="0" max="23" placeholder="Час выполнения">
             <button class="create-task-submit">Создать</button>
         </div>
     </div>
@@ -627,7 +638,6 @@
 
 <script src="/js/protect.js"></script> <!-- require /js/api.js (in head) -->
 <script src="/js/GlobalUI.js"></script>
-<script src="/js/Workspace.js"></script>
 <script src="/js/WorkspaceTasks.js"></script>
 <script src="/js/Desktop.js"></script>
 </body>

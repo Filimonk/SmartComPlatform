@@ -28,6 +28,13 @@
 #include "components/MessageDispatcher.hpp"
 #include "components/TelegramMessageFetcher.hpp"
 #include "handlers/v1/ai/SpellCheck.hpp"
+#include "handlers/v1/tasks/GetAllTasks.hpp"
+#include "handlers/v1/tasks/CreateTask.hpp"
+/*
+#include "handlers/v1/tasks/ChangeTaskStatus.hpp"
+#include "handlers/v1/notes/GetAllNotes.hpp"
+#include "handlers/v1/notes/CreateNote.hpp"
+*/
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -55,6 +62,13 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::components::MessageDispatcher>()
             .Append<communicationservice::components::TelegramMessageFetcher>()
             .Append<communicationservice::handlers::v1::SpellCheck>()
+            .Append<communicationservice::handlers::v1::GetAllTasks>()
+            .Append<communicationservice::handlers::v1::CreateTask>()
+            /*
+            .Append<communicationservice::handlers::v1::ChangeTaskStatus>()
+            .Append<communicationservice::handlers::v1::GetAllNotes>()
+            .Append<communicationservice::handlers::v1::CreateNote>()
+            */
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);
