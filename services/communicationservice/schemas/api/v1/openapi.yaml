@@ -474,13 +474,6 @@ paths:
       summary: Check the spelling of the given text
       
       parameters:
-        - name: originId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-
         - name: Authorization
           in: header
           required: true
@@ -707,7 +700,7 @@ paths:
       responses:
         '200':
           description: OK
-          $ref: '#/components/requests/GetAllNotesResponse'
+          $ref: '#/components/requests/GetAllNotesByContactResponse'
           
         '400':
           description: Bad request
@@ -750,6 +743,77 @@ paths:
       responses:
         '201':
           description: Created
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+            
+  /v1/spellcheck/configuration:
+    get:
+      summary: Get spellcheck configuration
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/requests/GetSpellCheckConfigurationResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/spellcheck/configuration:
+    patch:
+      summary: Configure spellcheck
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/SetSpellCheckConfigurationRequest'
+
+      responses:
+        '204':
+          description: No content
           
         '400':
           description: Bad request

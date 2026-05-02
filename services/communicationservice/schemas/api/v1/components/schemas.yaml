@@ -407,7 +407,7 @@ components:
               task:
                 $ref: './entities.yaml#/components/schemas/Task'
 
-    GetAllNotesResponse:
+    GetAllNotesByContactResponse:
       type: object
       required:
         - notes
@@ -418,6 +418,22 @@ components:
             $ref: './entities.yaml#/components/schemas/Note'
 
     CreateNoteRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+
+    GetSpellCheckConfigurationResponse:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+
+    SetSpellCheckConfigurationResponse:
       type: object
       required:
         - text

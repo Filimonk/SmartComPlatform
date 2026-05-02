@@ -81,7 +81,7 @@ add_library(
     src/handlers/v1/tasks/ChangeTaskStatus.cpp
     src/handlers/v1/tasks/GetAllExpiredTasksByUser.cpp
     
-    src/handlers/v1/notes/GetAllNotes.cpp
+    src/handlers/v1/notes/GetAllNotesByContact.cpp
     src/handlers/v1/notes/CreateNote.cpp
 )
 target_link_libraries(

@@ -146,15 +146,15 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-      # handler-v1-GetAllNotes:
-          # path: /v1/contact/{contactId}/notes
-          # method: GET
-          # task_processor: main-task-processor
+        handler-v1-GetAllNotesByContact:
+          path: /v1/contact/{contactId}/notes
+          method: GET
+          task_processor: main-task-processor
         
-      # handler-v1-CreateNote:
-          # path: /v1/contact/{contactId}/notes
-          # method: POST
-          # task_processor: main-task-processor
+        handler-v1-CreateNote:
+          path: /v1/contact/{contactId}/notes
+          method: POST
+          task_processor: main-task-processor
         
         postgres-db:
             dbconnection#env: DB_CONNECTION

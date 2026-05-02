@@ -67,14 +67,14 @@ components:
       required:
         - id
         - text
-        - cratedAt
+        - createdAt
       properties:
         id:
           type: string
           format: uuid
         text:
           type: string
-        cratedAt:
+        createdAt:
           type: string
           format: date-time
 

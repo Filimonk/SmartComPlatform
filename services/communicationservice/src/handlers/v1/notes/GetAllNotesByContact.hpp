@@ -9,12 +9,12 @@
 
 namespace communicationservice::handlers::v1 {
 
-class CreateNote final
+class GetAllNotesByContact final
     : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-    static constexpr std::string_view kName = "handler-v1-CreateNote";
+    static constexpr std::string_view kName = "handler-v1-GetAllNotesByContact";
     
-    CreateNote(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
+    GetAllNotesByContact(const userver::components::ComponentConfig&, const userver::components::ComponentContext&);
 
     auto HandleRequestJsonThrow(
         const userver::server::http::HttpRequest& /*request*/,

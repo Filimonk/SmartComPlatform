@@ -1,4 +1,4 @@
-#include "CreateNote.hpp"
+#include "GetAllNotesByContact.hpp"
 #include "../common/ErrorBuilder.hpp"
 
 #include <userver/components/component_context.hpp>
@@ -17,23 +17,22 @@
 #include <userver/formats/json/exception.hpp>
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/storages/postgres/exceptions.hpp>
-
 #include <userver/utils/boost_uuid4.hpp>
 
 namespace communicationservice::handlers::v1 {
 
-CreateNote::CreateNote(const userver::components::ComponentConfig& config,
-                       const userver::components::ComponentContext& component_context)
+GetAllNotesByContact::GetAllNotesByContact(const userver::components::ComponentConfig& config,
+                         const userver::components::ComponentContext& component_context)
     : HttpHandlerJsonBase(config, component_context),
       http_client_(
           component_context.FindComponent<userver::components::HttpClient>().GetHttpClient()),
       pg_cluster_(component_context.FindComponent<userver::components::Postgres>("postgres-db")
                       .GetCluster()) {}
 
-auto CreateNote::HandleRequestJsonThrow(const userver::server::http::HttpRequest& request,
-                                        const userver::formats::json::Value& request_json,
-                                        userver::server::request::RequestContext& /*context*/) const
-    -> userver::formats::json::Value {
+auto GetAllNotesByContact::HandleRequestJsonThrow(
+    const userver::server::http::HttpRequest& request,
+    const userver::formats::json::Value& /*request_json*/,
+    userver::server::request::RequestContext& /*context*/) const -> userver::formats::json::Value {
 
     try {
         const auto& auth_header = request.GetHeader("Authorization");
@@ -64,26 +63,31 @@ auto CreateNote::HandleRequestJsonThrow(const userver::server::http::HttpRequest
 
         const auto contact_id =
             userver::utils::BoostUuidFromString(request.GetPathArg("contactId"));
-        const auto request_dto = request_json.As<dto::CreateNoteRequest>();
-
-        if (request_dto.text.empty()) {
-            throw userver::server::handlers::ClientError(
-                ErrorBuilder{dto::ErrorCode::kInvalidRequestFormat, "Text shouldn't be empty"});
-        }
 
         const auto& result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            communicationservice::sql::kCreateNote, user_id, contact_id, request_dto.text);
+            communicationservice::sql::kGetAllNotesByContact, user_id, contact_id);
+        
+        LOG_INFO() << "pg complited successfully";
 
-        if (result.IsEmpty()) {
-            LOG_ERROR() << "The user's origin group not found";
+        dto::GetAllNotesByContactResponse response;
 
-            throw userver::server::handlers::InternalServerError(
-                ErrorBuilder{dto::ErrorCode::kInternalError, "Internal Server Error"});
+        for (const auto& row : result) {
+            LOG_INFO() << "start parse row";
+            dto::Note note;
+
+            note.id = row["id"].As<boost::uuids::uuid>();
+            note.text = row["text"].As<std::string>();
+            note.createdAt = userver::utils::datetime::TimePointTz{
+                row["created_at"].As<std::chrono::system_clock::time_point>()};
+            
+            LOG_INFO() << "parsed note";
+
+            response.notes.push_back(note);
         }
 
-        request.SetResponseStatus(userver::server::http::HttpStatus::kCreated); // 201
-        return ValueBuilder{""}.ExtractValue();
+        request.SetResponseStatus(userver::server::http::HttpStatus::kOk);
+        return ValueBuilder{response}.ExtractValue();
 
     } catch (const userver::formats::json::Exception& e) {
         throw userver::server::handlers::RequestParseError(
