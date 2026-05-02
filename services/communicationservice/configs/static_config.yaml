@@ -122,24 +122,29 @@ components_manager:
           load-enabled: true
             
         websocket-handler-v1-SpellCheck:
-            path: /v1/spellcheck
-            method: GET
-            task_processor: main-task-processor
+          path: /v1/spellcheck
+          method: GET
+          task_processor: main-task-processor
         
         handler-v1-GetAllTasks:
-            path: /v1/contact/{contactId}/tasks
-            method: GET
-            task_processor: main-task-processor
+          path: /v1/contact/{contactId}/tasks
+          method: GET
+          task_processor: main-task-processor
         
         handler-v1-CreateTask:
-            path: /v1/contact/{contactId}/tasks
-            method: POST
-            task_processor: main-task-processor
+          path: /v1/contact/{contactId}/tasks
+          method: POST
+          task_processor: main-task-processor
         
         handler-v1-ChangeTaskStatus:
-            path: /v1/tasks/{taskId}/status
-            method: PATCH
-            task_processor: main-task-processor
+          path: /v1/tasks/{taskId}/status
+          method: PATCH
+          task_processor: main-task-processor
+        
+        handler-v1-GetAllExpiredTasksByUser:
+          path: /v1/tasks/expired
+          method: GET
+          task_processor: main-task-processor
         
       # handler-v1-GetAllNotes:
           # path: /v1/contact/{contactId}/notes

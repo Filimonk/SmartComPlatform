@@ -646,6 +646,42 @@ paths:
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
         
+  /v1/tasks/expired:
+    get:
+      summary: Get all expired tasks by user
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/requests/GetAllExpiredTasksByUserResponse'
+         
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+        
   /v1/contact/{contactId}/notes:
     get:
       summary: Get all notes by contactId

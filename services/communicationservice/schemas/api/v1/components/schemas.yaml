@@ -388,6 +388,25 @@ components:
     # status:
     # $ref: './entities.yaml#/components/schemas/TaskStatusType'
 
+    GetAllExpiredTasksByUserResponse:
+      type: object
+      required:
+        - tasks
+      properties:
+        tasks:
+          type: array
+          items:
+            type: object
+            required:
+              - contactId
+              - task
+            properties:
+              contactId:
+                type: string
+                format: uuid
+              task:
+                $ref: './entities.yaml#/components/schemas/Task'
+
     GetAllNotesResponse:
       type: object
       required:
