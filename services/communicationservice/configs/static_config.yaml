@@ -136,10 +136,10 @@ components_manager:
             method: POST
             task_processor: main-task-processor
         
-      # handler-v1-ChangeTaskStatus:
-          # path: /v1/tasks/{taskId}/status
-          # method: PATCH
-          # task_processor: main-task-processor
+        handler-v1-ChangeTaskStatus:
+            path: /v1/tasks/{taskId}/status
+            method: PATCH
+            task_processor: main-task-processor
         
       # handler-v1-GetAllNotes:
           # path: /v1/contact/{contactId}/notes

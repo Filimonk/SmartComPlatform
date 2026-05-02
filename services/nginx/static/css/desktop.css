@@ -929,6 +929,11 @@
     font-size: 12px;
     cursor: pointer;
 }
+.create-task-btn:hover {
+    background: var(--color-status-frame);
+    /* плавное переключение фона */
+    transition: background-color 0.2s ease-in-out;
+}
 .tasks-list {
     display: flex;
     flex-direction: column;
@@ -936,6 +941,16 @@
     width: 100%;
     max-height: 540px;
     overflow-y: scroll;
+}
+.no-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    font-size: 18px;
+    color: #333;
 }
 .task-item {
     display: flex;
