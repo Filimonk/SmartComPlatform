@@ -1,0 +1,75 @@
+/* settings.css — стили для страницы настроек */
+
+.settings-page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 60px); /* чтобы было по центру */
+    padding: 40px 20px;
+    background: var(--color-background);
+    box-sizing: border-box;
+}
+
+.settings-card {
+    background: var(--color-window);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    padding: 30px 40px;
+    max-width: 700px;
+    width: 100%;
+}
+
+.settings-card h2 {
+    font-family: var(--font-default);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--color-window-negative);
+}
+
+.settings-field {
+    margin-bottom: 20px;
+}
+
+.settings-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.setting-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-window);
+    color: var(--color-text);
+    font-family: var(--font-default);
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.setting-input:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+}
+
+.save-setting-btn {
+    margin-top: 16px;
+    background: var(--color-brand-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.save-setting-btn:hover {
+    background: var(--color-brand-hover);
+}

@@ -329,10 +329,12 @@ class Desktop {
 
     async fetchGreetingMessage() {
         try {
-            // const response = await api.get('/communicationservice/v1/greeting_message/');
-            const response = '{"text": "ЗдравствуйтИ! СпОсибо, что выбрали нас. Будем рады продуктивной и приятной сАвместной работе!"}';
-            const data = JSON.parse(response);
-            const text = data.text;
+            const response = await api.get('/communicationservice/v1/settings/');
+            // const response = '{"text": "ЗдравствуйтИ! СпОсибо, что выбрали нас. Будем рады продуктивной и приятной сАвместной работе!"}';
+            const data = response.data;
+            console.log(data);
+            const text = data.greeting_message;
+            console.log('Приветственное сообщение:', text);
             if (!text) {
                 alert('Не удалось получить приветственное сообщение');
                 return;
