@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>AuraConnect — Настройки</title>
+    <title>AuraConnect — Интеграции</title>
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/workspace.css">
-    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/css/integrations.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.11.0/sha256.min.js"></script>
     <script src="/js/api.js"></script>
@@ -15,6 +15,7 @@
 <body>
 
 <div class="header-container"></div>
+
 <div class="header">
     <div class="logo">
         <a href="/">
@@ -400,21 +401,29 @@
             </div>
         </div>
     </div>
-    
-    <div class="settings-page-content">
-        <div class="settings-card">
-            <h2>Настройки приветственного сообщения</h2>
-            <div class="settings-field">
-                <label>Приветственное сообщение (будет вставляться в чат при нажатии кнопки)</label>
-                <textarea id="greetingInput" class="setting-input" rows="3"></textarea>
-                <button id="saveGreetingBtn" class="save-setting-btn">Сохранить</button>
+
+    <div class="integrations-page-content">
+        <div class="integrations-card">
+            <h2>Настройки проверки орфографии (SpellCheck)</h2>
+            <div class="integrations-field">
+                <label>URL сервера проверки</label>
+                <input type="text" id="spellcheckUrl" class="integrations-input" placeholder="wss://example.com/ws">
             </div>
+            <div class="integrations-field">
+                <label>Таймаут (секунды)</label>
+                <input type="number" id="spellcheckTimeout" class="integrations-input" placeholder="30">
+            </div>
+            <div class="integrations-field">
+                <label>Инструкция для промпта</label>
+                <textarea id="spellcheckInstruction" class="integrations-input" rows="4" placeholder="Исправь орфографические ошибки..."></textarea>
+            </div>
+            <button id="saveSpellcheckBtn" class="save-integrations-btn">Сохранить</button>
         </div>
     </div>
 </div>
 
 <script src="/js/protect.js"></script>
 <script src="/js/GlobalUI.js"></script>
-<script src="/js/SettingsPage.js"></script>
+<script src="/js/IntegrationsPage.js"></script>
 </body>
 </html>
