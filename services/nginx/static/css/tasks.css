@@ -1,0 +1,96 @@
+/* tasks.css — стили для страницы активных задач */
+
+.tasks-page-content {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+}
+
+.tasks-header {
+    margin-bottom: 24px;
+}
+
+.tasks-header h1 {
+    font-family: var(--font-default);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--color-window-negative);
+    margin-bottom: 8px;
+}
+
+.tasks-header p {
+    font-family: var(--font-default);
+    font-size: 14px;
+    color: var(--color-brand-additional);
+}
+
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.task-card {
+    background: var(--color-window);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: var(--color-brand-primary);
+}
+
+.task-text {
+    font-family: var(--font-default);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 12px;
+    line-height: 1.4;
+    max-width: 479px;
+}
+
+.task-due-date {
+    font-family: var(--font-default);
+    font-size: 13px;
+    color: var(--color-brand-additional);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.task-due-date::before {
+    content: "⏰";
+    font-size: 14px;
+}
+
+.loading, .empty-tasks {
+    grid-column: span 2;
+    text-align: center;
+    padding: 40px;
+    color: var(--color-brand-additional);
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .task-card {
+        padding: 14px 16px;
+    }
+    .task-text {
+        font-size: 14px;
+    }
+}

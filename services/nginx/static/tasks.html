@@ -2,13 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>AuraConnect — Контакты</title>
+    <title>AuraConnect — Задачи к выполнению</title>
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/workspace.css">
-    <link rel="stylesheet" href="/css/desktop.css">
-    <link rel="stylesheet" href="/css/contacts.css">   <!-- стили для страницы контактов -->
-
+    <link rel="stylesheet" href="/css/tasks.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.11.0/sha256.min.js"></script>
     <script src="/js/api.js"></script>
@@ -29,7 +27,8 @@
     </div>
     <div class="navigation">
         <div class="stroke_margin">
-            <div class="stroke"></div>
+            <div class="stroke">
+            </div>
         </div>
         <div class="navigation_gap">
             <div class="tabs_container">
@@ -39,8 +38,171 @@
                     </svg>
                 </div>
                 <div class="tabs">
-                    <!-- Здесь могут быть динамические вкладки, но для страницы контактов они не нужны -->
+                    <div class="tab">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="tab active">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="tab">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="tab">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="tab">
+                        <div class="card">
+                            <div class="tab_content">
+                                <div class="tab_icon">
+                                    <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.18187 0L7.64121 4.49139H12.3637L8.54313 7.26722L10.0025 11.7586L6.18187 8.98278L2.36127 11.7586L3.82061 7.26722L2.38419e-06 4.49139H4.72253L6.18187 0Z" fill="#444444"/>
+                                    </svg>
+                                </div>
+                                <div class="flex_content">
+                                    <div class="close">
+                                        <div class="tab_close_background">
+                                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#1F1F1F"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="tab_name_field">
+                                        <p>Петровна Мария</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex_container_tab_stroke">
+                                <div class="tab_stroke"></div>
+                            </div>
+                        </div>
+                    </div>
+                
                 </div>
+                
+                
                 <div class="tab_container_arrow">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 1.41L4.58 6L0 10.59L1.41 12L7.41 6L1.41 0L0 1.41Z" fill="#A9A9A9"/>
@@ -248,79 +410,21 @@
             </div>
         </div>
     </div>
-    <div class="page_body_content contacts-page-content">
-        <div class="page_header">
-            <h1>Контакты</h1>
+    
+    <div class="tasks-page-content">
+        <div class="tasks-header">
+            <h1>Задачи к выполнению</h1>
+            <p>Задачи, срок выполнения которых подошёл</p>
         </div>
-        <!-- Здесь будет динамическое содержимое, управляемое ContactsPage.js -->
-        <div class="contacts-list-view">
-            <div class="contacts-header">
-                <button class="create-contact-btn">+ Создать контакт</button>
-            </div>
-            <div class="contacts-list"></div>
-        </div>
-
-        <div class="contact-detail-view" style="display: none;">
-            <div class="detail-header">
-                <button class="back-to-list-btn">← Назад</button>
-            </div>
-            
-            <!-- внутри .contact-detail-view, после .detail-header -->
-            <div class="contact-info-block">
-                <div class="contact-info-header">
-                    <h3>Информация о контакте</h3>
-                    <button class="merge-contact-btn" title="Объединить с другим контактом">🔗 Объединить</button>
-                </div>
-                <div class="contact-info-fields">
-                    <input type="text" class="contact-name-input" placeholder="Имя контакта">
-                    <button class="save-contact-btn">Сохранить</button>
-                </div>
-            </div>
-
-            <!-- модальное окно -->
-            <div id="mergeModal" class="merge-modal" style="display: none;">
-                <div class="merge-modal-content">
-                    <div class="merge-modal-header">
-                        <h3>Выберите контакт для объединения</h3>
-                        <button class="merge-modal-close">&times;</button>
-                    </div>
-                    <div class="merge-modal-body">
-                        <div class="merge-contacts-list"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contact-info-block">
-                <h3>Информация о контакте</h3>
-                <div class="contact-info-fields">
-                    <input type="text" class="contact-name-input" placeholder="Имя контакта">
-                    <button class="save-contact-btn">Сохранить</button>
-                </div>
-            </div>
-
-            <div class="add-connection-block">
-                <h3>Добавление connection</h3>
-                <div class="add-connection-fields">
-                    <select class="channel-select">
-                        <option value="telegram">Telegram</option>
-                        <option value="sms">Phone</option>
-                        <option value="mail">Email</option>
-                    </select>
-                    <input type="text" class="identifier-input" placeholder="Идентификатор">
-                    <button class="create-connection-btn">Создать</button>
-                </div>
-            </div>
-
-            <div class="connections-list-block">
-                <h3>Список connections</h3>
-                <div class="connections-list"></div>
-            </div>
+        <div class="tasks-grid" id="tasksGrid">
+            <!-- Карточки задач будут загружены сюда -->
+            <div class="loading">Загрузка задач...</div>
         </div>
     </div>
 </div>
 
 <script src="/js/protect.js"></script>
 <script src="/js/GlobalUI.js"></script>
-<script src="/js/ContactsPage.js"></script>
+<script src="/js/TasksPage.js"></script>
 </body>
 </html>
