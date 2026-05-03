@@ -28,12 +28,16 @@
 #include "components/MessageDispatcher.hpp"
 #include "components/TelegramMessageFetcher.hpp"
 #include "handlers/v1/ai/SpellCheck.hpp"
+#include "handlers/v1/ai/GetSpellCheckConfiguration.hpp"
+#include "handlers/v1/ai/SetSpellCheckConfiguration.hpp"
 #include "handlers/v1/tasks/GetAllTasks.hpp"
 #include "handlers/v1/tasks/CreateTask.hpp"
 #include "handlers/v1/tasks/ChangeTaskStatus.hpp"
 #include "handlers/v1/tasks/GetAllExpiredTasksByUser.hpp"
 #include "handlers/v1/notes/GetAllNotesByContact.hpp"
 #include "handlers/v1/notes/CreateNote.hpp"
+#include "handlers/v1/settings/GetSettings.hpp"
+#include "handlers/v1/settings/UpdateSettings.hpp"
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -61,12 +65,16 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::components::MessageDispatcher>()
             .Append<communicationservice::components::TelegramMessageFetcher>()
             .Append<communicationservice::handlers::v1::SpellCheck>()
+            .Append<communicationservice::handlers::v1::GetSpellCheckConfiguration>()
+            .Append<communicationservice::handlers::v1::SetSpellCheckConfiguration>()
             .Append<communicationservice::handlers::v1::GetAllTasks>()
             .Append<communicationservice::handlers::v1::CreateTask>()
             .Append<communicationservice::handlers::v1::ChangeTaskStatus>()
             .Append<communicationservice::handlers::v1::GetAllExpiredTasksByUser>()
             .Append<communicationservice::handlers::v1::GetAllNotesByContact>()
             .Append<communicationservice::handlers::v1::CreateNote>()
+            .Append<communicationservice::handlers::v1::GetSettings>()
+            .Append<communicationservice::handlers::v1::UpdateSettings>()
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

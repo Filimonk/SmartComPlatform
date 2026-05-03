@@ -428,16 +428,46 @@ components:
     GetSpellCheckConfigurationResponse:
       type: object
       required:
-        - text
+        - url
+        - timeout
+        - instruction
       properties:
-        text:
+        url:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        instruction:
           type: string
 
-    SetSpellCheckConfigurationResponse:
+    SetSpellCheckConfigurationRequest:
       type: object
       required:
-        - text
+        - url
+        - timeout
+        - instruction
       properties:
-        text:
+        url:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        instruction:
+          type: string
+
+    GetSettingsResponse:
+      type: object
+      required:
+        - greeting_message
+      properties:
+        greeting_message:
+          type: string
+
+    UpdateSettingsRequest:
+      type: object
+      required:
+        - greeting_message
+      properties:
+        greeting_message:
           type: string
 

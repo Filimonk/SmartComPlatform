@@ -75,6 +75,8 @@ add_library(
     src/components/TelegramMessageFetcher.cpp
     
     src/handlers/v1/ai/SpellCheck.cpp
+    src/handlers/v1/ai/GetSpellCheckConfiguration.cpp
+    src/handlers/v1/ai/SetSpellCheckConfiguration.cpp
     
     src/handlers/v1/tasks/GetAllTasks.cpp
     src/handlers/v1/tasks/CreateTask.cpp
@@ -83,6 +85,9 @@ add_library(
     
     src/handlers/v1/notes/GetAllNotesByContact.cpp
     src/handlers/v1/notes/CreateNote.cpp
+    
+    src/handlers/v1/settings/GetSettings.cpp
+    src/handlers/v1/settings/UpdateSettings.cpp
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs
