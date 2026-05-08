@@ -77,4 +77,25 @@ components:
         createdAt:
           type: string
           format: date-time
+  
+    Message:
+      type: object
+      required:
+        - id
+        - text
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    
+    MessageQueue:
+      type: array
+      items:
+        $ref: '#/components/schemas/Message'
 

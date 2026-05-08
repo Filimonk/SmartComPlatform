@@ -1,4 +1,4 @@
--- name: kSetAiSpellingcheckerSettings
+-- name: kSetSpellCheckConfiguration
 -- param: $1 user_id UUID
 -- param: $2 url TEXT
 -- param: $3 timeout INTERVAL

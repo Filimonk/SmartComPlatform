@@ -126,6 +126,31 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
+        handler-v1-GetSpellCheckConfiguration:
+          path: /v1/spellcheck/configuration
+          method: GET
+          task_processor: main-task-processor
+        
+        handler-v1-SetSpellCheckConfiguration:
+          path: /v1/spellcheck/configuration
+          method: PATCH
+          task_processor: main-task-processor
+            
+        websocket-handler-v1-TaskPropose:
+          path: /v1/task/propose/{contactId}
+          method: GET
+          task_processor: main-task-processor
+        
+            # handler-v1-GetTaskProposeConfiguration:
+            # path: /v1/task/propose/configuration
+            # method: GET
+            # task_processor: main-task-processor
+        
+            # handler-v1-SetTaskProposeConfiguration:
+            # path: /v1/task/propose/configuration
+            # method: PATCH
+            # task_processor: main-task-processor
+        
         handler-v1-GetAllTasks:
           path: /v1/contact/{contactId}/tasks
           method: GET
@@ -154,16 +179,6 @@ components_manager:
         handler-v1-CreateNote:
           path: /v1/contact/{contactId}/notes
           method: POST
-          task_processor: main-task-processor
-        
-        handler-v1-GetSpellCheckConfiguration:
-          path: /v1/spellcheck/configuration
-          method: GET
-          task_processor: main-task-processor
-        
-        handler-v1-SetSpellCheckConfiguration:
-          path: /v1/spellcheck/configuration
-          method: PATCH
           task_processor: main-task-processor
         
         handler-v1-GetSettings:

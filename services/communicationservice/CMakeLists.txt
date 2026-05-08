@@ -77,6 +77,9 @@ add_library(
     src/handlers/v1/ai/SpellCheck.cpp
     src/handlers/v1/ai/GetSpellCheckConfiguration.cpp
     src/handlers/v1/ai/SetSpellCheckConfiguration.cpp
+    src/handlers/v1/ai/TaskPropose.cpp
+    # src/handlers/v1/ai/GetTaskProposeConfiguration.cpp
+    # src/handlers/v1/ai/SetTaskProposeConfiguration.cpp
     
     src/handlers/v1/tasks/GetAllTasks.cpp
     src/handlers/v1/tasks/CreateTask.cpp

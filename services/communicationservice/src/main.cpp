@@ -30,6 +30,9 @@
 #include "handlers/v1/ai/SpellCheck.hpp"
 #include "handlers/v1/ai/GetSpellCheckConfiguration.hpp"
 #include "handlers/v1/ai/SetSpellCheckConfiguration.hpp"
+#include "handlers/v1/ai/TaskPropose.hpp"
+// #include "handlers/v1/ai/GetTaskProposeConfiguration.hpp"
+// #include "handlers/v1/ai/SetTaskProposeConfiguration.hpp"
 #include "handlers/v1/tasks/GetAllTasks.hpp"
 #include "handlers/v1/tasks/CreateTask.hpp"
 #include "handlers/v1/tasks/ChangeTaskStatus.hpp"
@@ -67,6 +70,9 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::SpellCheck>()
             .Append<communicationservice::handlers::v1::GetSpellCheckConfiguration>()
             .Append<communicationservice::handlers::v1::SetSpellCheckConfiguration>()
+            .Append<communicationservice::handlers::v1::TaskPropose>()
+            // .Append<communicationservice::handlers::v1::GetTaskProposeConfiguration>()
+            // .Append<communicationservice::handlers::v1::SetTaskProposeConfiguration>()
             .Append<communicationservice::handlers::v1::GetAllTasks>()
             .Append<communicationservice::handlers::v1::CreateTask>()
             .Append<communicationservice::handlers::v1::ChangeTaskStatus>()
