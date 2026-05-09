@@ -47,6 +47,10 @@ class Desktop {
         this.loadMessages().then(() => {
             this.startPolling();
         });
+        
+        window.addEventListener('beforeunload', () => {
+            this.closeTaskWebSocket();
+        });
     }
 
     loadCustomSelection() {
@@ -645,12 +649,14 @@ class Desktop {
     }
 
     initTaskProposeWebSocket() {
+        // Закрываем существующий сокет перед созданием нового
+        this.closeTaskWebSocket();
+
         const token = getToken();
         if (!token) {
             console.warn('Нет токена, WebSocket task propose не создан');
             return;
         }
-        // Передаём токен в URL параметре Authorization
         const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/communicationservice/v1/task/propose/${this.contactId}?Authorization=Bearer%20${encodeURIComponent(token)}`;
         this.taskWebSocket = new WebSocket(wsUrl);
 
@@ -662,19 +668,15 @@ class Desktop {
             try {
                 const data = JSON.parse(event.data);
                 if (data.isProposed && data.text && data.dueDate) {
-                    // Проверяем, что предложение для текущего контакта (уже по URL, но дополнительно)
                     if (this.contactId) {
                         this.taskProposal = { text: data.text, dueDate: data.dueDate };
                         this.hasNewProposal = true;
-                        // Подсвечиваем вкладку "Создание задачи", если она не активна
                         if (this.currentAITab !== 'task') {
                             this.aiTabTask.classList.add('has-suggestion');
                         } else {
-                            // Если уже на вкладке задачи, просто активируем кнопку
                             if (this.aiTaskProposeBtn) this.aiTaskProposeBtn.disabled = false;
                         }
                         console.log('Получено предложение задачи:', this.taskProposal);
-                        // Можно показать всплывающее уведомление (опционально)
                     }
                 }
             } catch(e) {
@@ -698,17 +700,29 @@ class Desktop {
         }
         if (this.taskProposal) {
             this.tasksManager.taskTextInput.value = this.taskProposal.text;
-            const dueDate = new Date(this.taskProposal.dueDate);
-            if (!isNaN(dueDate.getTime())) {
-                const year = dueDate.getFullYear();
-                const month = String(dueDate.getMonth() + 1).padStart(2, '0');
-                const day = String(dueDate.getDate()).padStart(2, '0');
+            // Парсим dueDate формата "YYYY-MM-DDTHH:MM:SSZ" без преобразования временной зоны
+            const dueDateStr = this.taskProposal.dueDate;
+            const match = dueDateStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/);
+            if (match) {
+                const year = match[1];
+                const month = match[2];
+                const day = match[3];
+                const hour = match[4];
                 this.tasksManager.taskDueInput.value = `${year}-${month}-${day}`;
-                this.tasksManager.taskHourInput.value = dueDate.getHours();
-                console.log('Часы: ', dueDate.getHours());
+                this.tasksManager.taskHourInput.value = parseInt(hour, 10);
             } else {
-                this.tasksManager.taskDueInput.value = '';
-                this.tasksManager.taskHourInput.value = '';
+                // fallback – используем UTC-компоненты new Date() (но лучше поправить формат на беке)
+                const dueDate = new Date(dueDateStr);
+                if (!isNaN(dueDate.getTime())) {
+                    const year = dueDate.getUTCFullYear();
+                    const month = String(dueDate.getUTCMonth() + 1).padStart(2, '0');
+                    const day = String(dueDate.getUTCDate()).padStart(2, '0');
+                    this.tasksManager.taskDueInput.value = `${year}-${month}-${day}`;
+                    this.tasksManager.taskHourInput.value = dueDate.getUTCHours();
+                } else {
+                    this.tasksManager.taskDueInput.value = '';
+                    this.tasksManager.taskHourInput.value = '';
+                }
             }
             // Сбрасываем предложение и подсветку
             this.taskProposal = null;
@@ -722,10 +736,20 @@ class Desktop {
         }
         this.tasksManager.taskModal.style.display = 'flex';
     }
-    
+
     closeTaskWebSocket() {
         if (this.taskWebSocket && this.taskWebSocket.readyState === WebSocket.OPEN) {
             this.taskWebSocket.close();
+            this.taskWebSocket = null;
+        }
+    }
+    
+    destroy() {
+        console.log('Destroy Desktop instance');
+        this.closeTaskWebSocket();
+        if (this.pollingInterval) {
+            clearInterval(this.pollingInterval);
+            this.pollingInterval = null;
         }
     }
 }
@@ -738,5 +762,9 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Выберите контакт, чтобы начать общение');
         return;
     }
-    new Desktop(contactId);
+    // Уничтожаем предыдущий экземпляр, если он есть
+    if (window.currentDesktop) {
+        window.currentDesktop.destroy();
+    }
+    window.currentDesktop = new Desktop(contactId);
 });
