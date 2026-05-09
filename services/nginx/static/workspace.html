@@ -584,14 +584,14 @@
                     <p>AI-помощник</p>
                 </div>
                 <div class="ai-options">
-                    <div class="ai-option active">
+                    <div class="ai-option active" data-ai-tab="fix">
                         <p>Исправление ошибок</p>
                     </div>
-                    <div class="ai-option">
+                    <div class="ai-option" data-ai-tab="task">
                         <p>Создание задачи</p>
                     </div>
                 </div>
-                <div class="ai-content">
+                <div class="ai-content ai-content-fix active">
                     <textarea class="ai-suggestion-field" readonly placeholder="Здесь появится предложение AI..."></textarea>
                     <div class="ai-buttons">
                         <button class="ai-fix-btn">
@@ -606,6 +606,13 @@
                             </div>
                             <p>Применить изменения</p>
                         </button>
+                    </div>
+                </div>
+                <div class="ai-content ai-content-task" style="display: none;">
+                    <div class="ai-task-info">
+                        <p>AI анализирует переписку и может предложить создать задачу.</p>
+                        <p class="ai-task-description">Когда появится предложение, вкладка подсветится синим кружком.</p>
+                        <button class="ai-task-propose-btn" id="aiTaskProposeBtn" disabled>💡 Посмотреть предложение</button>
                     </div>
                 </div>
             </div>

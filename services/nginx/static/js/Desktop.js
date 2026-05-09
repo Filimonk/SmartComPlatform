@@ -1,5 +1,5 @@
 class Desktop {
-        constructor(contactId) {
+    constructor(contactId) {
         this.contactId = contactId;
         this.API_ROUTES = {
             sendMessage: "/v1/send/message",
@@ -21,7 +21,7 @@ class Desktop {
 
         this.loadCustomSelection();
         this.tokenIdempotency = self.crypto.randomUUID();
-            
+
         // Контакт
         this.editContactBtn = document.querySelector('.userinfo_edit_contact');
 
@@ -29,8 +29,19 @@ class Desktop {
         this.aiFixBtn = null;
         this.aiApplyBtn = null;
         this.aiSuggestionField = null;
-            
+
         this.tasksManager = new WorkspaceTasks(this.contactId);
+
+        // AI вкладки
+        this.aiTabFix = document.querySelector('.ai-option[data-ai-tab="fix"]');
+        this.aiTabTask = document.querySelector('.ai-option[data-ai-tab="task"]');
+        this.aiContentFix = document.querySelector('.ai-content-fix');
+        this.aiContentTask = document.querySelector('.ai-content-task');
+        this.aiTaskProposeBtn = document.getElementById('aiTaskProposeBtn');
+        this.taskProposal = null; // { text, dueDate }
+        this.taskWebSocket = null;
+        this.currentAITab = 'fix'; // текущая активная вкладка AI
+        this.hasNewProposal = false; // флаг для подсветки
 
         this.init();
         this.loadMessages().then(() => {
@@ -398,9 +409,11 @@ class Desktop {
                 this.setMode(mode);
             });
         });
-        
+
         this.setupAI();
-        
+        this.initAITabs();
+        this.initTaskProposeWebSocket();
+
         // Редактирование контакта
         console.log("init editContactBtn", this.editContactBtn);
         if (this.editContactBtn) {
@@ -409,7 +422,7 @@ class Desktop {
                 window.location.href = `/contacts.html?id=${this.contactId}`;
             });
         }
-        
+
     }
 
     async sendChatMessage() {
@@ -495,7 +508,7 @@ class Desktop {
             return m;
         });
     }
-    
+
     setupAI() {
         this.aiFixBtn = document.querySelector('.ai-fix-btn');
         this.aiApplyBtn = document.querySelector('.ai-apply-btn');
@@ -593,6 +606,126 @@ class Desktop {
             this.chatTextArea.focus();
         } else {
             alert('Нет предложения для применения');
+        }
+    }
+
+    initAITabs() {
+        if (this.aiTabFix && this.aiTabTask) {
+            this.aiTabFix.addEventListener('click', () => this.switchAITab('fix'));
+            this.aiTabTask.addEventListener('click', () => {
+                this.switchAITab('task');
+                // если есть непросмотренное предложение – снимаем подсветку и активируем кнопку
+                if (this.hasNewProposal && this.taskProposal) {
+                    this.hasNewProposal = false;
+                    this.aiTabTask.classList.remove('has-suggestion');
+                    if (this.aiTaskProposeBtn) this.aiTaskProposeBtn.disabled = false;
+                    // можно также показать уведомление
+                    console.log('Предложение задачи готово к просмотру');
+                }
+            });
+        }
+        if (this.aiTaskProposeBtn) {
+            this.aiTaskProposeBtn.addEventListener('click', () => this.openTaskModalWithProposal());
+        }
+    }
+
+    switchAITab(tab) {
+        this.currentAITab = tab;
+        if (tab === 'fix') {
+            this.aiTabFix.classList.add('active');
+            this.aiTabTask.classList.remove('active');
+            this.aiContentFix.style.display = 'flex';
+            this.aiContentTask.style.display = 'none';
+        } else {
+            this.aiTabFix.classList.remove('active');
+            this.aiTabTask.classList.add('active');
+            this.aiContentFix.style.display = 'none';
+            this.aiContentTask.style.display = 'flex';
+        }
+    }
+
+    initTaskProposeWebSocket() {
+        const token = getToken();
+        if (!token) {
+            console.warn('Нет токена, WebSocket task propose не создан');
+            return;
+        }
+        // Передаём токен в URL параметре Authorization
+        const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/communicationservice/v1/task/propose/${this.contactId}?Authorization=Bearer%20${encodeURIComponent(token)}`;
+        this.taskWebSocket = new WebSocket(wsUrl);
+
+        this.taskWebSocket.onopen = () => {
+            console.log('WebSocket task propose открыт для контакта', this.contactId);
+        };
+
+        this.taskWebSocket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.isProposed && data.text && data.dueDate) {
+                    // Проверяем, что предложение для текущего контакта (уже по URL, но дополнительно)
+                    if (this.contactId) {
+                        this.taskProposal = { text: data.text, dueDate: data.dueDate };
+                        this.hasNewProposal = true;
+                        // Подсвечиваем вкладку "Создание задачи", если она не активна
+                        if (this.currentAITab !== 'task') {
+                            this.aiTabTask.classList.add('has-suggestion');
+                        } else {
+                            // Если уже на вкладке задачи, просто активируем кнопку
+                            if (this.aiTaskProposeBtn) this.aiTaskProposeBtn.disabled = false;
+                        }
+                        console.log('Получено предложение задачи:', this.taskProposal);
+                        // Можно показать всплывающее уведомление (опционально)
+                    }
+                }
+            } catch(e) {
+                console.error('Ошибка парсинга предложения задачи', e);
+            }
+        };
+
+        this.taskWebSocket.onerror = (error) => {
+            console.error('WebSocket task propose ошибка', error);
+        };
+
+        this.taskWebSocket.onclose = () => {
+            console.log('WebSocket task propose закрыт');
+        };
+    }
+
+    openTaskModalWithProposal() {
+        if (!this.tasksManager || !this.tasksManager.taskModal) {
+            console.warn('Task manager not ready');
+            return;
+        }
+        if (this.taskProposal) {
+            this.tasksManager.taskTextInput.value = this.taskProposal.text;
+            const dueDate = new Date(this.taskProposal.dueDate);
+            if (!isNaN(dueDate.getTime())) {
+                const year = dueDate.getFullYear();
+                const month = String(dueDate.getMonth() + 1).padStart(2, '0');
+                const day = String(dueDate.getDate()).padStart(2, '0');
+                this.tasksManager.taskDueInput.value = `${year}-${month}-${day}`;
+                this.tasksManager.taskHourInput.value = dueDate.getHours();
+                console.log('Часы: ', dueDate.getHours());
+            } else {
+                this.tasksManager.taskDueInput.value = '';
+                this.tasksManager.taskHourInput.value = '';
+            }
+            // Сбрасываем предложение и подсветку
+            this.taskProposal = null;
+            this.hasNewProposal = false;
+            this.aiTabTask.classList.remove('has-suggestion');
+            if (this.aiTaskProposeBtn) this.aiTaskProposeBtn.disabled = true;
+        } else {
+            this.tasksManager.taskTextInput.value = '';
+            this.tasksManager.taskDueInput.value = '';
+            this.tasksManager.taskHourInput.value = '';
+        }
+        this.tasksManager.taskModal.style.display = 'flex';
+    }
+    
+    closeTaskWebSocket() {
+        if (this.taskWebSocket && this.taskWebSocket.readyState === WebSocket.OPEN) {
+            this.taskWebSocket.close();
         }
     }
 }
