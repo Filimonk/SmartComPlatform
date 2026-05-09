@@ -59,8 +59,8 @@ auto TaskPropose::HandleHandshake(const userver::server::http::HttpRequest& requ
                                   userver::server::http::HttpResponse& /*response*/,
                                   userver::server::request::RequestContext& context) const -> bool {
     try {
-        const auto& auth_header = request.GetHeader("Authorization");
-        if (auth_header.empty()) {
+        const auto& auth_token = request.GetArg("Authorization");
+        if (auth_token.empty()) {
             LOG_WARNING() << "Authorization token header shouldn't be empty";
             return false;
         }
@@ -68,7 +68,7 @@ auto TaskPropose::HandleHandshake(const userver::server::http::HttpRequest& requ
         const auto& auth_response = http_client_.CreateRequest()
                                         .get()
                                         .url("http://authservice:8080/verify/")
-                                        .headers({{"Authorization", auth_header}})
+                                        .headers({{"Authorization", auth_token}})
                                         .timeout(std::chrono::seconds(2))
                                         .perform();
         LOG_INFO() << "authservice complited successfully";

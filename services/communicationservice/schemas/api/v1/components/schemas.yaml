@@ -455,6 +455,36 @@ components:
         instruction:
           type: string
 
+    GetTaskProposeConfigurationResponse:
+      type: object
+      required:
+        - url
+        - timeout
+        - instruction
+      properties:
+        url:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        instruction:
+          type: string
+
+    SetTaskProposeConfigurationRequest:
+      type: object
+      required:
+        - url
+        - timeout
+        - instruction
+      properties:
+        url:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        instruction:
+          type: string
+
     GetSettingsResponse:
       type: object
       required:

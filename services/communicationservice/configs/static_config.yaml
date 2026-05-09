@@ -141,15 +141,15 @@ components_manager:
           method: GET
           task_processor: main-task-processor
         
-            # handler-v1-GetTaskProposeConfiguration:
-            # path: /v1/task/propose/configuration
-            # method: GET
-            # task_processor: main-task-processor
+        handler-v1-GetTaskProposeConfiguration:
+          path: /v1/task/propose/configuration
+          method: GET
+          task_processor: main-task-processor
         
-            # handler-v1-SetTaskProposeConfiguration:
-            # path: /v1/task/propose/configuration
-            # method: PATCH
-            # task_processor: main-task-processor
+        handler-v1-SetTaskProposeConfiguration:
+          path: /v1/task/propose/configuration
+          method: PATCH
+          task_processor: main-task-processor
         
         handler-v1-GetAllTasks:
           path: /v1/contact/{contactId}/tasks

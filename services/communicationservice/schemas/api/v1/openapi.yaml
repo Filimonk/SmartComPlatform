@@ -831,6 +831,77 @@ paths:
           description: Internal Server Error
           $ref: '#/components/responses/ErrorWithCode'
 
+  /v1/task/propose/configuration:
+    get:
+      summary: Get task propose configuration
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        # empty
+
+      responses:
+        '200':
+          description: OK
+          $ref: '#/components/requests/GetTaskProposeConfigurationResponse'
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
+  /v1/task/propose/configuration:
+    patch:
+      summary: Configure task propose
+      
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT
+      
+      requestBody:
+        $ref: '#/components/requests/SetTaskProposeConfigurationRequest'
+
+      responses:
+        '204':
+          description: No content
+          
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/ErrorWithCode'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/ErrorWithCode'
+        '403':
+          description: Forbidden
+          $ref: '#/components/responses/ErrorWithCode'
+        '429':
+          description: Too Many Requests
+          $ref: '#/components/responses/ErrorWithCode'
+        '500':
+          description: Internal Server Error
+          $ref: '#/components/responses/ErrorWithCode'
+
   /v1/settings:
     get:
       summary: Get settings

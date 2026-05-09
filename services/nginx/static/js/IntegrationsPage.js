@@ -1,46 +1,84 @@
 class IntegrationsPage {
     constructor() {
-        this.urlInput = document.getElementById('spellcheckUrl');
-        this.timeoutInput = document.getElementById('spellcheckTimeout');
-        this.instructionInput = document.getElementById('spellcheckInstruction');
-        this.saveBtn = document.getElementById('saveSpellcheckBtn');
+        // SpellCheck элементы
+        this.spellcheckUrl = document.getElementById('spellcheckUrl');
+        this.spellcheckTimeout = document.getElementById('spellcheckTimeout');
+        this.spellcheckInstruction = document.getElementById('spellcheckInstruction');
+        this.spellcheckSaveBtn = document.getElementById('saveSpellcheckBtn');
+
+        // TaskPropose элементы (новые)
+        this.taskproposeUrl = document.getElementById('taskproposeUrl');
+        this.taskproposeTimeout = document.getElementById('taskproposeTimeout');
+        this.taskproposeInstruction = document.getElementById('taskproposeInstruction');
+        this.taskproposeSaveBtn = document.getElementById('saveTaskproposeBtn');
+
         this.init();
     }
 
     async init() {
         console.log('IntegrationsPage init');
-        await this.loadConfig();
+        await Promise.all([
+            this.loadConfig('spellcheck'),
+            this.loadConfig('taskpropose')
+        ]);
         this.attachEvents();
     }
 
-    async loadConfig() {
+    async loadConfig(type) {
+        const endpoint = type === 'spellcheck'
+            ? '/communicationservice/v1/spellcheck/configuration'
+            : '/communicationservice/v1/task/propose/configuration';
+
         try {
-            const response = await api.get('/communicationservice/v1/spellcheck/configuration');
-            // ожидаем: { url: "...", timeout: 30, instruction: "..." }
-            this.urlInput.value = response.data.url || '';
-            this.timeoutInput.value = response.data.timeout || '';
-            this.instructionInput.value = response.data.instruction || '';
-            console.log('Загружена конфигурация SpellCheck', response.data);
+            const response = await api.get(endpoint);
+            const data = response.data;
+            if (type === 'spellcheck') {
+                this.spellcheckUrl.value = data.url || '';
+                this.spellcheckTimeout.value = data.timeout || '';
+                this.spellcheckInstruction.value = data.instruction || '';
+            } else {
+                this.taskproposeUrl.value = data.url || '';
+                this.taskproposeTimeout.value = data.timeout || '';
+                this.taskproposeInstruction.value = data.instruction || '';
+            }
+            console.log(`Загружена конфигурация ${type}`, data);
         } catch (error) {
-            console.error('Ошибка загрузки конфигурации', error);
-            // fallback
-            this.urlInput.value = '';
-            this.timeoutInput.value = '';
-            this.instructionInput.value = '';
+            console.error(`Ошибка загрузки конфигурации ${type}`, error);
+            // fallback – пустые поля
+            if (type === 'spellcheck') {
+                this.spellcheckUrl.value = '';
+                this.spellcheckTimeout.value = '';
+                this.spellcheckInstruction.value = '';
+            } else {
+                this.taskproposeUrl.value = '';
+                this.taskproposeTimeout.value = '';
+                this.taskproposeInstruction.value = '';
+            }
         }
     }
 
     attachEvents() {
-        this.saveBtn.addEventListener('click', (e) => {
+        this.spellcheckSaveBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            this.saveConfig();
+            this.saveConfig('spellcheck');
+        });
+        this.taskproposeSaveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.saveConfig('taskpropose');
         });
     }
 
-    async saveConfig() {
-        const url = this.urlInput.value.trim();
-        const timeout = parseInt(this.timeoutInput.value, 10);
-        const instruction = this.instructionInput.value.trim();
+    async saveConfig(type) {
+        let url, timeout, instruction;
+        if (type === 'spellcheck') {
+            url = this.spellcheckUrl.value.trim();
+            timeout = parseInt(this.spellcheckTimeout.value, 10);
+            instruction = this.spellcheckInstruction.value.trim();
+        } else {
+            url = this.taskproposeUrl.value.trim();
+            timeout = parseInt(this.taskproposeTimeout.value, 10);
+            instruction = this.taskproposeInstruction.value.trim();
+        }
 
         if (!url) {
             alert('Пожалуйста, заполните URL');
@@ -55,13 +93,17 @@ class IntegrationsPage {
             return;
         }
 
+        const endpoint = type === 'spellcheck'
+            ? '/communicationservice/v1/spellcheck/configuration'
+            : '/communicationservice/v1/task/propose/configuration';
+        const payload = { url, timeout, instruction };
+
         try {
-            const payload = { url, timeout, instruction };
-            console.log('Отправка PATCH', payload);
-            await api.patch('/communicationservice/v1/spellcheck/configuration', payload);
-            alert('Конфигурация сохранена');
+            console.log(`Отправка PATCH для ${type}`, payload);
+            await api.patch(endpoint, payload);
+            alert(`Конфигурация ${type === 'spellcheck' ? 'SpellCheck' : 'TaskPropose'} сохранена`);
         } catch (error) {
-            console.error('Ошибка сохранения', error);
+            console.error(`Ошибка сохранения ${type}`, error);
             alert('Не удалось сохранить: ' + (error.response?.data?.message || error.message));
         }
     }
