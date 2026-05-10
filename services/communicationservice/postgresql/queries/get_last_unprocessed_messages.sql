@@ -4,7 +4,7 @@
 
 WITH
 all_chat_messages AS (
-    SELECT m.id, m.text, m.created_at
+    SELECT m.id, m.text, (m.contact_message_job_id IS NULL) AS is_incoming, m.created_at
     FROM communicationservice_schema.message m
     JOIN communicationservice_schema.connection c ON c.id = m.connection_id
     JOIN communicationservice_schema.contacts_of_group cg ON cg.contact_id = c.contact_id
@@ -20,12 +20,12 @@ updated_rows AS (
     RETURNING mtp.message_id
 ),
 last_ten_messages AS (
-    SELECT id, text, created_at
+    SELECT id, text, is_incoming, created_at
     FROM all_chat_messages
     ORDER BY created_at DESC
     LIMIT 10
 )
-SELECT id, text, created_at
+SELECT id, text, is_incoming, created_at
 FROM last_ten_messages
 WHERE EXISTS (SELECT 1 FROM updated_rows)
 ORDER BY created_at ASC;

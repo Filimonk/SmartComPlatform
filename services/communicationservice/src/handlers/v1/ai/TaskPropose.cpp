@@ -25,24 +25,6 @@
 
 #include <userver/formats/json/serialize_container.hpp>
 
-namespace {
-
-auto sanitizeText(const std::string& input) -> std::string {
-    std::string output;
-    output.reserve(input.size());
-    for (unsigned char c : input) {
-        if (c <= 31 || c == 127) {
-            output += ' ';
-        } else {
-            output += c;
-        }
-    }
-    
-    return output;
-}
-
-} // namespace
-
 namespace communicationservice::handlers::v1 {
 
 TaskPropose::TaskPropose(const userver::components::ComponentConfig& config,
@@ -134,6 +116,8 @@ auto TaskPropose::Handle(userver::server::websocket::WebSocketConnection& chat,
                     message.id = message_row["id"].As<boost::uuids::uuid>();
                     LOG_INFO() << "send_propose: text parse";
                     message.text = message_row["text"].As<std::string>();
+                    LOG_INFO() << "send_propose: is_incoming parse";
+                    message.isIncoming = message_row["is_incoming"].As<bool>();
                     LOG_INFO() << "send_propose: created_at parse";
                     message.createdAt = userver::utils::datetime::TimePointTz{
                         message_row["created_at"].As<userver::storages::postgres::TimePointTz>()};
@@ -171,13 +155,8 @@ auto TaskPropose::Handle(userver::server::websocket::WebSocketConnection& chat,
 
                 auto query_key = std::to_string(user_id) + "_" + std::to_string(rand_gen_());
 
-                std::string conversation_text;
-                for (const auto& msg : message_queue) {
-                    conversation_text += msg.text + "; ";
-                }
-
-                proposer_request_json_builder["instruction"] = sanitizeText(proposer_instruction);
-                proposer_request_json_builder["text"] = sanitizeText(conversation_text);
+                proposer_request_json_builder["instruction"] = proposer_instruction;
+                proposer_request_json_builder["text"] = ValueBuilder{message_queue}.ExtractValue();
                 proposer_request_json_builder["key"] = query_key;
                 
                 std::string proposer_request_body = ToString(proposer_request_json_builder.ExtractValue());

@@ -83,6 +83,7 @@ components:
       required:
         - id
         - text
+        - isIncoming
         - createdAt
       properties:
         id:
@@ -90,6 +91,8 @@ components:
           format: uuid
         text:
           type: string
+        isIncoming:
+          type: boolean
         createdAt:
           type: string
           format: date-time
