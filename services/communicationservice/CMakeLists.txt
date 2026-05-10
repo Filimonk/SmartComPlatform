@@ -73,6 +73,7 @@ add_library(
     # src/components/sender/WhatsappAeroSender.cpp
     src/components/MessageDispatcher.cpp
     src/components/TelegramMessageFetcher.cpp
+    src/components/EmailMessageFetcher.cpp
     
     src/handlers/v1/ai/SpellCheck.cpp
     src/handlers/v1/ai/GetSpellCheckConfiguration.cpp

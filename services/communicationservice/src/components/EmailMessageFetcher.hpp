@@ -1,0 +1,26 @@
+#pragma once
+
+#include <userver/components/loggable_component_base.hpp>
+#include <userver/utils/periodic_task.hpp>
+
+#include <userver/clients/http/client.hpp>
+#include <userver/storages/postgres/cluster.hpp>
+
+namespace communicationservice::components {
+
+class EmailMessageFetcher final : public userver::components::LoggableComponentBase {
+public:
+    static constexpr std::string_view kName = "email-message-fetcher";
+
+    EmailMessageFetcher(const userver::components::ComponentConfig& config,
+                           const userver::components::ComponentContext& context);
+
+private:
+    void DoWork();
+
+    userver::storages::postgres::ClusterPtr pg_cluster_;
+
+    userver::utils::PeriodicTask task_;
+};
+
+} // namespace communicationservice::components

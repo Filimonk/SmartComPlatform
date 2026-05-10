@@ -120,6 +120,9 @@ components_manager:
         
         telegram-message-fetcher:
           load-enabled: true
+        
+        email-message-fetcher:
+          load-enabled: true
             
         websocket-handler-v1-SpellCheck:
           path: /v1/spellcheck

@@ -27,6 +27,7 @@
 #include "handlers/v1/origins/GetAllOriginConnections.hpp"
 #include "components/MessageDispatcher.hpp"
 #include "components/TelegramMessageFetcher.hpp"
+#include "components/EmailMessageFetcher.hpp"
 #include "handlers/v1/ai/SpellCheck.hpp"
 #include "handlers/v1/ai/GetSpellCheckConfiguration.hpp"
 #include "handlers/v1/ai/SetSpellCheckConfiguration.hpp"
@@ -67,6 +68,7 @@ int main(int argc, char* argv[]) {
             .Append<communicationservice::handlers::v1::GetAllOriginConnections>()
             .Append<communicationservice::components::MessageDispatcher>()
             .Append<communicationservice::components::TelegramMessageFetcher>()
+            .Append<communicationservice::components::EmailMessageFetcher>()
             .Append<communicationservice::handlers::v1::SpellCheck>()
             .Append<communicationservice::handlers::v1::GetSpellCheckConfiguration>()
             .Append<communicationservice::handlers::v1::SetSpellCheckConfiguration>()

@@ -129,10 +129,7 @@ auto EmailSender::Send(const communicationservice::dto::MessageJob& ctx) const -
         
         LOG_INFO() << "curl setopt readfunction, readdata, upload successful";
 
-        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
-
-        // полезно для отладки
-        // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
 
         LOG_INFO() << "Connecting to SMTP...";
 
