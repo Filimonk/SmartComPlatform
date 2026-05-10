@@ -411,9 +411,19 @@ a {
     border-radius: 4px;
     
     z-index: 10;
+    
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #FFFFFF 25%);
 }
 
-.close:hover {
+.tab:not(.active) .close {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--color-buttons-default) 25%);
+}
+
+.tab:hover .close {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #FFFFFF 25%);
+}
+
+.tab:hover .close:hover {
     background: #F3F3F3;
     outline: 0.5px solid #B8B8B8;
     border-radius: 4px;
@@ -463,6 +473,8 @@ a {
     height: 20px;
     left: 0px;
     top: 0px;
+    
+    overflow: hidden;
 }
 
 /* name */
@@ -470,6 +482,8 @@ a {
 .tab_name_field p {
     width: 108px;
     height: 16px;
+    
+    white-space: nowrap; 
 
     font-family: var(--font-default);
     font-style: normal;
