@@ -133,6 +133,10 @@ auto EmailSender::Send(const communicationservice::dto::MessageJob& ctx) const -
 
         LOG_INFO() << "Connecting to SMTP...";
 
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);              // детальный лог соединения
+        curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);     // таймаут только на установку TCP+SSL
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);            // общий
+        // curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);   // временно отключить проверку сертификата
         CURLcode res = curl_easy_perform(curl);
 
         if (res != CURLE_OK) {
