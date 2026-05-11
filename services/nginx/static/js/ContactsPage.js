@@ -148,13 +148,13 @@ class ContactsPage {
             let channel = '';
             let value = '';
             if (conn.phoneNumber) {
-                channel = 'sms';
+                channel = 'phone';
                 value = conn.phoneNumber;
             } else if (conn.mailAddress) {
                 channel = 'mail';
                 value = conn.mailAddress;
             } else if (conn.commonIdentifier) {
-                channel = 'telegram';
+                channel = 'telegram id';
                 value = conn.commonIdentifier;
             } else {
                 channel = 'unknown';
