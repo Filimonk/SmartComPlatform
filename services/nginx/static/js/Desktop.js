@@ -31,6 +31,8 @@ class Desktop {
         this.aiSuggestionField = null;
 
         this.tasksManager = new WorkspaceTasks(this.contactId);
+        
+        this.loadContactInfo();
 
         // AI вкладки
         this.aiTabFix = document.querySelector('.ai-option[data-ai-tab="fix"]');
@@ -750,6 +752,73 @@ class Desktop {
         if (this.pollingInterval) {
             clearInterval(this.pollingInterval);
             this.pollingInterval = null;
+        }
+    }
+    
+    async loadContactInfo() {
+        console.log('loadContactInfo вызван для contactId:', this.contactId);
+        try {
+            // Пытаемся получить контакт через прямой запрос (если ручка существует)
+            let contact = null;
+            try {
+                const response = await api.get(`/communicationservice/v1/contact/${this.contactId}`);
+                // Если ответ содержит объект с полем contactId, то это он
+                if (response.data && response.data.contactId) {
+                    contact = response.data;
+                } else {
+                    // Если ответ не тот, что ожидаем, пробуем как список
+                    const listResponse = await api.get('/communicationservice/v1/contact');
+                    const contacts = listResponse.data.contacts || [];
+                    contact = contacts.find(c => c.contactId === this.contactId);
+                }
+            } catch (err) {
+                // Если прямой запрос упал (404), загружаем список
+                console.warn('Прямой запрос контакта не удался, загружаем список', err);
+                const listResponse = await api.get('/communicationservice/v1/contact');
+                const contacts = listResponse.data.contacts || [];
+                contact = contacts.find(c => c.contactId === this.contactId);
+            }
+
+            if (!contact) {
+                console.warn('Контакт не найден');
+                return;
+            }
+
+            console.log('Загружен контакт:', contact);
+
+            // Заполняем имя
+            const nameElem = document.querySelector('.userinfo_main_contact_info .name');
+            if (nameElem) nameElem.textContent = contact.contactName || 'Без имени';
+
+            // Заполняем телефон, если есть
+            const phoneElem = document.querySelector('.userinfo_main_contact_info .phone');
+            if (phoneElem && contact.phone) phoneElem.textContent = contact.phone;
+
+            // Заполняем статус, если есть
+            const statusElem = document.querySelector('.userinfo_main_status_frame p');
+            if (statusElem && contact.status) statusElem.textContent = contact.status;
+
+            // Инициалы для кружка
+            const pictureElem = document.querySelector('.userinfo_main_picture p');
+            if (pictureElem && contact.contactName) {
+                const name = contact.contactName;
+                const words = name.trim().split(/\s+/);
+                let initials = '';
+                if (words.length === 1) {
+                    initials = words[0].substring(0, 2).toUpperCase();
+                } else if (words.length >= 2) {
+                    initials = (words[0][0] + words[1][0]).toUpperCase();
+                } else {
+                    initials = '??';
+                }
+                pictureElem.textContent = initials;
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки информации о контакте:', error);
+            const nameElem = document.querySelector('.userinfo_main_contact_info .name');
+            if (nameElem && nameElem.textContent === 'Загрузка...') {
+                nameElem.textContent = 'Контакт';
+            }
         }
     }
 }
