@@ -1,0 +1,12 @@
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/0f066b94-098a-4f82-9225-69546c7aa911" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/479f45b9-8855-4220-aebf-183e97d3bb02" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/04eb1038-8781-4f6c-b86d-0a59b1c78bab" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/eae10533-c4a1-46a7-954c-22658f9e68f4" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/b28304f4-889d-4b98-9629-e052b3c15836" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/308fd541-417b-4bcf-b216-ff5af51b3f01" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/4003a6eb-d3db-46ee-a7bc-c50f6cfce763" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/d6537a9f-a751-43f3-ad66-a1813e9c4afd" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/07977eb2-fe36-4c03-a976-57e3dcf15b0c" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/79af51a5-da06-4b04-9fe8-3d3dfe755a93" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/d2cd981a-bf4f-4f6b-abb6-726772f2c49d" />
+<img width="1795" height="1010" alt="изображение" src="https://github.com/user-attachments/assets/3f69ba0d-b719-4d9c-94bc-fa1ab111855b" />
